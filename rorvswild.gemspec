@@ -1,0 +1,22 @@
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'rorvswild/version'
+
+Gem::Specification.new do |spec|
+  spec.name          = "rorvswild"
+  spec.version       = Rorvswild::VERSION
+  spec.authors       = ["Alexis Bernard"]
+  spec.email         = ["alexis@bernard.io"]
+  spec.summary       = "RorVsWild tracks response time of Rails applications."
+  spec.description   = "RorVsWild helps to improve the response time, by pointing out any slow request, query and view."
+  spec.homepage      = "http://www.rorvswild.com"
+  spec.license       = "MIT"
+
+  spec.files         = `git ls-files -z`.split("\x0")
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ["lib"]
+
+  spec.add_development_dependency "bundler", "~> 1.6"
+end
