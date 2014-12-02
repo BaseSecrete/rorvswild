@@ -37,7 +37,7 @@ module RorVsWild
     def before_http_request(name, start, finish, id, payload)
       @request = {controller: payload[:controller], action: payload[:action], path: payload[:path]}
       @queries = []
-      @views = []
+      @views = {}
       @error = nil
     end
 
@@ -65,7 +65,14 @@ module RorVsWild
     end
 
     def after_view_rendering(name, start, finish, id, payload)
-      views << {file: relative_path(payload[:identifier]), runtime: compute_duration(start, finish)} if views
+      if views
+        if view = views[file = relative_path(payload[:identifier])]
+          view[:runtime] += compute_duration(start, finish)
+          view[:times] += 1
+        else
+          views[file] = {file: file, runtime: compute_duration(start, finish), times: 1}
+        end
+      end
     end
 
     def after_exception(exception)
@@ -97,7 +104,7 @@ module RorVsWild
     end
 
     def slowest_views
-      views.sort { |h1, h2| h2[:runtime] <=> h1[:runtime] }[0, 25]
+      views.values.sort { |h1, h2| h2[:runtime] <=> h1[:runtime] }[0, 25]
     end
 
     def slowest_queries
@@ -132,7 +139,7 @@ module RorVsWild
     end
 
     def compute_duration(start, finish)
-      ((finish - start) * 1000).round
+      ((finish - start) * 1000)
     end
 
     def relative_path(path)
