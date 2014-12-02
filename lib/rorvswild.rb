@@ -69,14 +69,16 @@ module RorVsWild
     end
 
     def after_exception(exception)
-      file, line = exception.backtrace.first.split(":")
-      @error = {
-        exception: exception.class.to_s,
-        backtrace: exception.backtrace,
-        message: exception.message,
-        file: relative_path(file),
-        line: line.to_i
-      }
+      if !exception.is_a?(ActionController::RoutingError)
+        file, line = exception.backtrace.first.split(":")
+        @error = {
+          exception: exception.class.to_s,
+          backtrace: exception.backtrace,
+          message: exception.message,
+          file: relative_path(file),
+          line: line.to_i
+        }
+      end
       raise exception
     end
 
