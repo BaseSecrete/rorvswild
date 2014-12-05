@@ -27,11 +27,13 @@ module RorVsWild
     end
 
     def setup_callbacks
-      ApplicationController.rescue_from(StandardError, &method(:after_exception))
       ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
       ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
       ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
       ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
+
+      this = self
+      ApplicationController.rescue_from(StandardError) { |exception| this.after_exception(exception, self) }
     end
 
     def before_http_request(name, start, finish, id, payload)
@@ -45,7 +47,7 @@ module RorVsWild
       request[:db_runtime] = (payload[:db_runtime] || 0).round
       request[:view_runtime] = (payload[:view_runtime] || 0).round
       request[:other_runtime] = compute_duration(start, finish) - request[:db_runtime] - request[:view_runtime]
-      request[:params] = params_filter.filter(payload[:params]) if error
+      error[:parameters] = filter_parameters(payload[:params]) if error
       Thread.new { post_request }
     rescue => exception
       log_error(exception)
@@ -75,15 +77,17 @@ module RorVsWild
       end
     end
 
-    def after_exception(exception)
+    def after_exception(exception, controller)
       if !exception.is_a?(ActionController::RoutingError)
         file, line = exception.backtrace.first.split(":")
         @error = {
-          exception: exception.class.to_s,
-          backtrace: exception.backtrace,
-          message: exception.message,
+          line: line.to_i,
           file: relative_path(file),
-          line: line.to_i
+          message: exception.message,
+          backtrace: exception.backtrace,
+          exception: exception.class.to_s,
+          session: controller.session.to_hash,
+          environment_variables: filter_parameters(filter_environment_variables(controller.request.env))
         }
       end
       raise exception
@@ -157,8 +161,13 @@ module RorVsWild
       end
     end
 
-    def params_filter
+    def filter_parameters(hash)
       @params_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+      @params_filter.filter(hash)
+    end
+
+    def filter_environment_variables(hash)
+      hash.clone.keep_if { |key,value| key == key.upcase }
     end
 
     def logger
