@@ -47,7 +47,7 @@ module RorVsWild
       request[:db_runtime] = (payload[:db_runtime] || 0).round
       request[:view_runtime] = (payload[:view_runtime] || 0).round
       request[:other_runtime] = compute_duration(start, finish) - request[:db_runtime] - request[:view_runtime]
-      error[:parameters] = filter_parameters(payload[:params]) if error
+      error[:parameters] = filter_sensitive_data(payload[:params]) if error
       Thread.new { post_request }
     rescue => exception
       log_error(exception)
@@ -87,7 +87,7 @@ module RorVsWild
           backtrace: exception.backtrace,
           exception: exception.class.to_s,
           session: controller.session.to_hash,
-          environment_variables: filter_parameters(filter_environment_variables(controller.request.env))
+          environment_variables: filter_sensitive_data(filter_environment_variables(controller.request.env))
         }
       end
       raise exception
@@ -161,9 +161,9 @@ module RorVsWild
       end
     end
 
-    def filter_parameters(hash)
-      @params_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
-      @params_filter.filter(hash)
+    def filter_sensitive_data(hash)
+      @sensitive_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+      @sensitive_filter.filter(hash)
     end
 
     def filter_environment_variables(hash)
