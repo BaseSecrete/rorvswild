@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Rorvswild::VERSION
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
-  spec.summary       = "RorVsWild tracks response time of Rails applications."
-  spec.description   = "RorVsWild helps to improve the response time, by pointing out any slow request, query and view."
+  spec.summary       = "Simple Ruby on Rails application monitoring for hardcore developers with no time to waste."
+  spec.description   = "RorVsWild points bottlenecks of your app and record errors."
   spec.homepage      = "http://www.rorvswild.com"
   spec.license       = "MIT"
 

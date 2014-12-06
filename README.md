@@ -1,24 +1,10 @@
-# Rorvswild
+# RorVsWild
 
-TODO: Write a gem description
+Simple Ruby on Rails application monitoring for hardcore developers with no time to waste: http://www.rorvswild.com.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-    gem 'rorvswild'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install rorvswild
-
-## Usage
-
-TODO: Write usage instructions here
+Signup to http://www.rorvswild.com.
 
 ## Contributing
 
