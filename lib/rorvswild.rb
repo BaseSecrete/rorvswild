@@ -61,7 +61,7 @@ module RorVsWild
       sql, file, line, method = payload[:sql], "Unknow", 0, "Unknow" if !file
       sql = payload[:sql] if runtime >= log_sql_threshold
       plan = explain(payload[:sql], payload[:binds]) if runtime >= explain_sql_threshold
-      queries << {file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime}
+      push_query(file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime, times: 1)
     rescue => exception
       log_error(exception)
     end
@@ -105,6 +105,19 @@ module RorVsWild
 
     def views
       @views
+    end
+
+    def push_query(query)
+      if query[:sql] || query[:plan]
+        queries << query
+      else
+        if hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
+          hash[:runtime] += query[:runtime]
+          hash[:times] += 1
+        else
+          queries << query
+        end
+      end
     end
 
     def slowest_views
