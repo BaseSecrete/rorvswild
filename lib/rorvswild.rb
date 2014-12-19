@@ -33,7 +33,7 @@ module RorVsWild
       ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
 
       this = self
-      ApplicationController.rescue_from(StandardError) { |exception| this.after_exception(exception, self) }
+      ActionController::Base.rescue_from(StandardError) { |exception| this.after_exception(exception, self) }
     end
 
     def before_http_request(name, start, finish, id, payload)
