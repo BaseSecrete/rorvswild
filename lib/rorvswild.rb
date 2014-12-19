@@ -2,6 +2,7 @@ require "rorvswild/version"
 
 module RorVsWild
   def self.new(*args)
+    warn "WARNING: RorVsWild.new is deprecated. Use RorVsWild::Client.new instead."
     Client.new(*args) # Compatibility with 0.0.1
   end
 
