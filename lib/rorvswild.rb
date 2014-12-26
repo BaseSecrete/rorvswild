@@ -33,8 +33,8 @@ module RorVsWild
       ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
       ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
 
-      this = self
-      ActionController::Base.rescue_from(StandardError) { |exception| this.after_exception(exception, self) }
+      client = self
+      ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
     end
 
     def before_http_request(name, start, finish, id, payload)
@@ -94,6 +94,33 @@ module RorVsWild
       raise exception
     end
 
+    def measure_job(code)
+      @queries = []
+      @job = {name: code}
+      started_at = Time.now
+      cpu_time_offset = cpu_time
+      eval(code)
+    rescue => exception
+      file, line = exception.backtrace.first.split(":")
+      job[:error] = {
+        line: line.to_i,
+        file: relative_path(file),
+        message: exception.message,
+        backtrace: exception.backtrace,
+        exception: exception.class.to_s,
+      }
+      raise
+    ensure
+      job[:runtime] = Time.now - started_at
+      job[:cpu_runtime] = cpu_time -  cpu_time_offset
+      Thread.new { post_job }
+    end
+
+    def cpu_time
+      time = Process.times
+      time.utime + time.stime + time.cutime + time.cstime
+    end
+
     #######################
     ### Private methods ###
     #######################
@@ -106,6 +133,10 @@ module RorVsWild
 
     def views
       @views
+    end
+
+    def job
+      @job
     end
 
     def push_query(query)
@@ -137,6 +168,12 @@ module RorVsWild
 
     def post_request
       post("/requests", request: request.merge(queries: slowest_queries, views: slowest_views, error: error))
+    rescue => exception
+      log_error(exception)
+    end
+
+    def post_job
+      post("/jobs", job: job.merge(queries: slowest_queries))
     rescue => exception
       log_error(exception)
     end
