@@ -10,19 +10,21 @@ require "top_tests"
 class RorVsWildTest < MiniTest::Unit::TestCase
   include TopTests
 
-  def test_measure_task
-    assert_equal(2, client.measure_task("1 + 1"))
-    assert_equal("1 + 1", client.send(:task)[:name])
-    assert(client.send(:task)[:runtime] > 0)
-    assert_equal(0, client.send(:task)[:cpu_runtime])
+  def test_measure_job
+    client.expects(:post_job)
+    assert_equal(2, client.measure_job("1 + 1"))
+    assert_equal("1 + 1", client.send(:job)[:name])
+    assert(client.send(:job)[:runtime] > 0)
+    assert_equal(0, client.send(:job)[:cpu_runtime])
   end
 
-  def test_measure_task_when_raising
-    assert_raises(RuntimeError) { client.measure_task("raise 'error'") }
-    assert_equal(("raise 'error'"), client.send(:task)[:name])
-    assert(client.send(:task)[:cpu_runtime])
-    assert(client.send(:task)[:runtime])
-    assert(client.send(:task)[:error])
+  def test_measure_job_when_raising
+    client.expects(:post_job)
+    assert_raises(RuntimeError) { client.measure_job("raise 'error'") }
+    assert_equal(("raise 'error'"), client.send(:job)[:name])
+    assert(client.send(:job)[:cpu_runtime])
+    assert(client.send(:job)[:runtime])
+    assert(client.send(:job)[:error])
   end
 
   private

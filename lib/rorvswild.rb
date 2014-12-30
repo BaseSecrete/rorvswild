@@ -113,7 +113,7 @@ module RorVsWild
     ensure
       job[:runtime] = Time.now - started_at
       job[:cpu_runtime] = cpu_time -  cpu_time_offset
-      Thread.new { post_job }
+      post_job
     end
 
     def cpu_time
