@@ -6,6 +6,18 @@ module RorVsWild
     Client.new(*args) # Compatibility with 0.0.1
   end
 
+  def self.register_default_client(client)
+    @default_client = client
+  end
+
+  def self.default_client
+    @default_client
+  end
+
+  def self.measure_job(code)
+    default_client ? default_client.measure_job(code) : eval(code)
+  end
+
   class Client
     def self.default_config
       {
@@ -25,6 +37,7 @@ module RorVsWild
       @api_key = config[:api_key]
       @app_id = config[:app_id]
       setup_callbacks
+      RorVsWild.register_default_client(self)
     end
 
     def setup_callbacks
