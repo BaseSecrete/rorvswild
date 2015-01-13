@@ -18,6 +18,14 @@ module RorVsWild
     default_client ? default_client.measure_job(code) : eval(code)
   end
 
+  def self.measure_code(code)
+    default_client ? default_client.measure_code(code) : eval(code)
+  end
+
+  def self.measure_block(name, &block)
+    default_client ? default_client.measure_block(name , &block) : block.call
+  end
+
   class Client
     def self.default_config
       {
@@ -48,6 +56,8 @@ module RorVsWild
 
       client = self
       ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
+
+      Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
     end
 
     def before_http_request(name, start, finish, id, payload)
@@ -107,12 +117,25 @@ module RorVsWild
       raise exception
     end
 
+    def around_delayed_job(job, &block)
+      measure_block(job.name) { block.call(job) }
+    end
+
     def measure_job(code)
+      warn "WARNING: RorVsWild.measure_job is deprecated. Use RorVsWild.measure_code instead."
+      measure_block(code) { eval(code) }
+    end
+
+    def measure_code(code)
+      measure_block(code) { eval(code) }
+    end
+
+    def measure_block(name, &block)
       @queries = []
-      @job = {name: code}
+      @job = {name: name}
       started_at = Time.now
       cpu_time_offset = cpu_time
-      eval(code)
+      block.call
     rescue => exception
       file, line = exception.backtrace.first.split(":")
       job[:error] = {

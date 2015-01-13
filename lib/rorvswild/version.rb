@@ -1,3 +1,3 @@
-class Rorvswild
+module RorVsWild
   VERSION = "0.0.7"
 end
