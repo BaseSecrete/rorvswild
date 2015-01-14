@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
   spec.summary       = "Simple Ruby on Rails application monitoring for hardcore developers with no time to waste."
-  spec.description   = "RorVsWild points bottlenecks of your app and record errors."
+  spec.description   = "Simple Ruby on Rails application monitoring for hardcore developers with no time to waste."
   spec.homepage      = "http://www.rorvswild.com"
   spec.license       = "MIT"
 
