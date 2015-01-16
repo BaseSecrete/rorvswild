@@ -26,6 +26,14 @@ module RorVsWild
     default_client ? default_client.measure_block(name , &block) : block.call
   end
 
+  def self.catch_error(extra_details = nil, &block)
+    default_client.catch_error(extra_details, &block) if default_client
+  end
+
+  def self.record_error(exception, extra_details = nil)
+    default_client.record_error(exception, extra_details) if default_client
+  end
+
   class Client
     def self.default_config
       {
@@ -104,15 +112,10 @@ module RorVsWild
     def after_exception(exception, controller)
       if !exception.is_a?(ActionController::RoutingError)
         file, line = exception.backtrace.first.split(":")
-        @error = {
-          line: line.to_i,
-          file: relative_path(file),
-          message: exception.message,
-          backtrace: exception.backtrace,
-          exception: exception.class.to_s,
+        @error = exception_to_hash(exception).merge(
           session: controller.session.to_hash,
           environment_variables: filter_sensitive_data(filter_environment_variables(controller.request.env))
-        }
+        )
       end
       raise exception
     end
@@ -137,19 +140,25 @@ module RorVsWild
       cpu_time_offset = cpu_time
       block.call
     rescue => exception
-      file, line = exception.backtrace.first.split(":")
-      job[:error] = {
-        line: line.to_i,
-        file: relative_path(file),
-        message: exception.message,
-        backtrace: exception.backtrace,
-        exception: exception.class.to_s,
-      }
+      job[:error] = exception_to_hash(exception)
       raise
     ensure
       job[:runtime] = (Time.now - started_at) * 1000
       job[:cpu_runtime] = cpu_time -  cpu_time_offset
       post_job
+    end
+
+    def catch_error(extra_details = nil, &block)
+      begin
+        block.call
+      rescue => exception
+        record_error(exception, extra_details)
+        exception
+      end
+    end
+
+    def record_error(exception, extra_details = nil)
+      post_error(exception_to_hash(exception, extra_details))
     end
 
     def cpu_time
@@ -214,6 +223,10 @@ module RorVsWild
       log_error(exception)
     end
 
+    def post_error(hash)
+      post("/errors", error: hash)
+    end
+
     def extract_file_and_line_from_call_stack(stack)
       return unless location = stack.find { |str| str.include?(Rails.root.to_s) }
       file, line, method = location.split(":")
@@ -235,6 +248,18 @@ module RorVsWild
 
     def relative_path(path)
       path.sub(Rails.root.to_s, "")
+    end
+
+    def exception_to_hash(exception, extra_details = nil)
+      file, line = exception.backtrace.first.split(":")
+      {
+        line: line.to_i,
+        file: relative_path(file),
+        message: exception.message,
+        backtrace: exception.backtrace,
+        exception: exception.class.to_s,
+        extra_details: extra_details,
+      }
     end
 
     def post(path, data)

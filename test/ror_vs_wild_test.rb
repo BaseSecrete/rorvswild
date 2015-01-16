@@ -39,6 +39,18 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(2, RorVsWild.measure_block("1+1") { 1+1 })
   end
 
+  def test_catch_error
+    client.expects(:post_error)
+    exception = RorVsWild.catch_error { 1 / 0 }
+    assert_equal(ZeroDivisionError, exception.class)
+  end
+
+  def test_catch_error_with_extra_Details
+    client.expects(:post_error)
+    exception = RorVsWild.catch_error(foo: "bar") { 1 / 0 }
+    assert_equal(ZeroDivisionError, exception.class)
+  end
+
   private
 
   def client
