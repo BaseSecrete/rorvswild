@@ -57,14 +57,14 @@ module RorVsWild
     end
 
     def setup_callbacks
+      client = self
       ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
       ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
       ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
       ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
-
-      client = self
       ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
 
+      Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
     end
 
@@ -289,6 +289,12 @@ module RorVsWild
     def log_error(exception)
       logger.error("[RorVsWild] " + exception.inspect)
       logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
+    end
+  end
+
+  module ResquePlugin
+    def around_perform_rorvswild(*args, &block)
+      RorVsWild.measure_block(to_s + "#perform", &block)
     end
   end
 end
