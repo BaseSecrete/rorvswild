@@ -144,7 +144,7 @@ module RorVsWild
       raise
     ensure
       job[:runtime] = (Time.now - started_at) * 1000
-      job[:cpu_runtime] = cpu_time -  cpu_time_offset
+      job[:cpu_runtime] = (cpu_time -  cpu_time_offset) * 1000
       post_job
     end
 
