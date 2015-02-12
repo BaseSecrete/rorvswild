@@ -88,7 +88,7 @@ module RorVsWild
     def after_sql_query(name, start, finish, id, payload)
       return if !queries || payload[:name] == "EXPLAIN".freeze
       runtime, sql, plan = compute_duration(start, finish), nil, nil
-      file, line, method = extract_file_and_line_from_call_stack(caller)
+      file, line, method = extract_query_location(caller)
       # I can't figure out the exact location which triggered the query, so at least the SQL is logged.
       sql, file, line, method = payload[:sql], "Unknow", 0, "Unknow" if !file
       sql = payload[:sql] if runtime >= log_sql_threshold
@@ -227,11 +227,19 @@ module RorVsWild
       post("/errors", error: hash)
     end
 
-    def extract_file_and_line_from_call_stack(stack)
-      return unless location = stack.find { |str| str.include?(Rails.root.to_s) }
+    def extract_query_location(stack)
+      if location = stack.find { |str| str.include?(Rails.root.to_s) }
+        split_file_location(location.sub(Rails.root.to_s, "".freeze))
+      end
+    end
+
+    def extract_error_location(stack)
+      extract_query_location(stack) || split_file_location(stack.first)
+    end
+
+    def split_file_location(location)
       file, line, method = location.split(":")
       method = cleanup_method_name(method)
-      file.sub!(Rails.root.to_s, "")
       [file, line, method]
     end
 
@@ -251,8 +259,9 @@ module RorVsWild
     end
 
     def exception_to_hash(exception, extra_details = nil)
-      file, line = exception.backtrace.first.split(":")
+      file, line, method = extract_error_location(exception.backtrace)
       {
+        method: method,
         line: line.to_i,
         file: relative_path(file),
         message: exception.message,

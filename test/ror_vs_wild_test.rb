@@ -56,6 +56,20 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(2, RorVsWild.catch_error { 1 + 1 })
   end
 
+  def test_extract_query_location
+    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "#{Rails.root}/app/models/user.rb:2:in `method2'"]
+    assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_query_location, callstack))
+    refute(client.send(:extract_query_location, ["/ruby/gems/lib/sql.rb:1:in `method1'", "/foo/bar.rb:2:in `method2'"]))
+  end
+
+  def test_extract_error_location
+    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "#{Rails.root}/app/models/user.rb:2:in `method2'"]
+    assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_error_location, callstack))
+
+    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "/foo/bar.rb:2:in `method2'"]
+    assert_equal(%w[/ruby/gems/lib/sql.rb 1 method1], client.send(:extract_error_location, callstack))
+  end
+
   private
 
   def client
@@ -75,6 +89,6 @@ require "pathname"
 
 module Rails
   def self.root
-    Pathname.new("foo")
+    Pathname.new("/rails/root")
   end
 end
