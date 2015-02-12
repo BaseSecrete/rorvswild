@@ -27,7 +27,7 @@ module RorVsWild
   end
 
   def self.catch_error(extra_details = nil, &block)
-    default_client.catch_error(extra_details, &block) if default_client
+    default_client ? default_client.catch_error(extra_details, &block) : block.call
   end
 
   def self.record_error(exception, extra_details = nil)
