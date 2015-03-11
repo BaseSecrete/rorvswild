@@ -80,6 +80,7 @@ module RorVsWild
       request[:view_runtime] = (payload[:view_runtime] || 0).round
       request[:other_runtime] = compute_duration(start, finish) - request[:db_runtime] - request[:view_runtime]
       error[:parameters] = filter_sensitive_data(payload[:params]) if error
+      attributes = request.merge(queries: slowest_queries, views: slowest_views, error: error)
       Thread.new { post_request }
     rescue => exception
       log_error(exception)
@@ -211,8 +212,8 @@ module RorVsWild
     rescue => ex
     end
 
-    def post_request
-      post("/requests", request: request.merge(queries: slowest_queries, views: slowest_views, error: error))
+    def post_request(attributes)
+      post("/requests", request: attributes)
     rescue => exception
       log_error(exception)
     end
