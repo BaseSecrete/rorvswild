@@ -207,10 +207,10 @@ module RorVsWild
       queries.sort { |h1, h2| h2[:runtime] <=> h1[:runtime] }[0, 25]
     end
 
+    SELECT_REGEX = /\Aselect/i.freeze
+
     def explain(sql, binds)
-      rows = ActiveRecord::Base.connection.exec_query("EXPLAIN " + sql, "EXPLAIN", binds)
-      rows.map { |row| row["QUERY PLAN"] }.join("\n")
-    rescue => ex
+      ActiveRecord::Base.connection.explain(sql, binds) if (sql =~ SELECT_REGEX) == 0
     end
 
     def post_request(attributes)
