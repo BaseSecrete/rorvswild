@@ -66,6 +66,7 @@ module RorVsWild
 
       Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
+      Sidekiq.configure_server { |config| config.server_middleware { |chain| chain.add(SidekiqPlugin) } } if defined?(Sidekiq)
     end
 
     def before_http_request(name, start, finish, id, payload)
@@ -305,6 +306,12 @@ module RorVsWild
   module ResquePlugin
     def around_perform_rorvswild(*args, &block)
       RorVsWild.measure_block(to_s + "#perform", &block)
+    end
+  end
+
+  class SidekiqPlugin
+    def call(worker, item, queue, &block)
+      RorVsWild.measure_block(item["class"] + "#perform", &block)
     end
   end
 end
