@@ -214,19 +214,19 @@ module RorVsWild
     end
 
     def post_request(attributes)
-      post("/requests", request: attributes)
+      post("/requests".freeze, request: attributes)
     rescue => exception
       log_error(exception)
     end
 
     def post_job
-      post("/jobs", job: job.merge(queries: slowest_queries))
+      post("/jobs".freeze, job: job.merge(queries: slowest_queries))
     rescue => exception
       log_error(exception)
     end
 
     def post_error(hash)
-      post("/errors", error: hash)
+      post("/errors".freeze, error: hash)
     end
 
     def extract_query_location(stack)
@@ -246,10 +246,10 @@ module RorVsWild
     end
 
     def cleanup_method_name(method)
-      method.sub!("block in ", "")
-      method.sub!("in `", "")
-      method.sub!("'", "")
-      method.index("_app_views_") == 0 ? nil : method
+      method.sub!("block in ".freeze, "".freeze)
+      method.sub!("in `".freeze, "".freeze)
+      method.sub!("'".freeze, "".freeze)
+      method.index("_app_views_".freeze) == 0 ? nil : method
     end
 
     def compute_duration(start, finish)
@@ -257,7 +257,7 @@ module RorVsWild
     end
 
     def relative_path(path)
-      path.sub(Rails.root.to_s, "")
+      path.sub(Rails.root.to_s, "".freeze)
     end
 
     def exception_to_hash(exception, extra_details = nil)
@@ -277,7 +277,7 @@ module RorVsWild
       uri = URI(api_url + path)
       Net::HTTP.start(uri.host, uri.port) do |http|
         post = Net::HTTP::Post.new(uri.path)
-        post.content_type = "application/json"
+        post.content_type = "application/json".freeze
         post.basic_auth(app_id, api_key)
         post.body = data.to_json
         http.request(post)
@@ -303,15 +303,17 @@ module RorVsWild
     end
   end
 
+  DASH_PERFORM = "#perform".freeze
+
   module ResquePlugin
     def around_perform_rorvswild(*args, &block)
-      RorVsWild.measure_block(to_s + "#perform", &block)
+      RorVsWild.measure_block(to_s + DASH_PERFORM, &block)
     end
   end
 
   class SidekiqPlugin
     def call(worker, item, queue, &block)
-      RorVsWild.measure_block(item["class"] + "#perform", &block)
+      RorVsWild.measure_block(item["class".freeze] + DASH_PERFORM, &block)
     end
   end
 end
