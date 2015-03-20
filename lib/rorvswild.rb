@@ -43,7 +43,7 @@ module RorVsWild
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :error, :request, :explain_sql_threshold, :log_sql_threshold
+    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :log_sql_threshold
 
     def initialize(config)
       config = self.class.default_config.merge(config)
@@ -52,6 +52,7 @@ module RorVsWild
       @api_url = config[:api_url]
       @api_key = config[:api_key]
       @app_id = config[:app_id]
+      @data = {}
       setup_callbacks
       RorVsWild.register_default_client(self)
     end
@@ -70,19 +71,15 @@ module RorVsWild
     end
 
     def before_http_request(name, start, finish, id, payload)
-      @request = {controller: payload[:controller], action: payload[:action], path: payload[:path]}
-      @queries = []
-      @views = {}
-      @error = nil
+      request.merge!(controller: payload[:controller], action: payload[:action], path: payload[:path])
     end
 
     def after_http_request(name, start, finish, id, payload)
       request[:db_runtime] = (payload[:db_runtime] || 0).round
       request[:view_runtime] = (payload[:view_runtime] || 0).round
       request[:other_runtime] = compute_duration(start, finish) - request[:db_runtime] - request[:view_runtime]
-      error[:parameters] = filter_sensitive_data(payload[:params]) if error
-      attributes = request.merge(queries: slowest_queries, views: slowest_views, error: error)
-      Thread.new { post_request(attributes) }
+      request[:error][:parameters] = filter_sensitive_data(payload[:params]) if request[:error]
+      post_request
     rescue => exception
       log_error(exception)
     end
@@ -114,7 +111,7 @@ module RorVsWild
     def after_exception(exception, controller)
       if !exception.is_a?(ActionController::RoutingError)
         file, line = exception.backtrace.first.split(":")
-        @error = exception_to_hash(exception).merge(
+        request[:error] = exception_to_hash(exception).merge(
           session: controller.session.to_hash,
           environment_variables: filter_sensitive_data(filter_environment_variables(controller.request.env))
         )
@@ -136,8 +133,7 @@ module RorVsWild
     end
 
     def measure_block(name, &block)
-      @queries = []
-      @job = {name: name}
+      job[:name] = name
       started_at = Time.now
       cpu_time_offset = cpu_time
       block.call
@@ -175,15 +171,27 @@ module RorVsWild
     private
 
     def queries
-      @queries
+      data[:queries] ||= []
     end
 
     def views
-      @views
+      data[:views] ||= {}
     end
 
     def job
-      @job
+      data
+    end
+
+    def request
+      data
+    end
+
+    def data
+      @data[Thread.current.object_id] ||= {}
+    end
+
+    def cleanup_data
+      @data.delete(Thread.current.object_id)
     end
 
     def push_query(query)
@@ -213,16 +221,19 @@ module RorVsWild
       ActiveRecord::Base.connection.explain(sql, binds) if (sql =~ SELECT_REGEX) == 0
     end
 
-    def post_request(attributes)
-      post("/requests".freeze, request: attributes)
-    rescue => exception
-      log_error(exception)
+    def post_request
+      attributes = request.merge(queries: slowest_queries, views: slowest_views)
+      Thread.new { post("/requests".freeze, request: attributes) }
+    ensure
+      cleanup_data
     end
 
     def post_job
       post("/jobs".freeze, job: job.merge(queries: slowest_queries))
     rescue => exception
       log_error(exception)
+    ensure
+      cleanup_data
     end
 
     def post_error(hash)
