@@ -70,6 +70,10 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(%w[/ruby/gems/lib/sql.rb 1 method1], client.send(:extract_error_location, callstack))
   end
 
+  def test_extract_error_location_when_there_is_no_method_name
+    assert_equal(["/foo/bar.rb", "123", nil], client.send(:extract_error_location, ["/foo/bar.rb:123"]))
+  end
+
   private
 
   def client

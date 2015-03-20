@@ -241,7 +241,7 @@ module RorVsWild
 
     def split_file_location(location)
       file, line, method = location.split(":")
-      method = cleanup_method_name(method)
+      method = cleanup_method_name(method) if method
       [file, line, method]
     end
 
