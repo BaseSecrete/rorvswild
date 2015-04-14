@@ -218,7 +218,7 @@ module RorVsWild
     SELECT_REGEX = /\Aselect/i.freeze
 
     def explain(sql, binds)
-      ActiveRecord::Base.connection.explain(sql, binds) if (sql =~ SELECT_REGEX) == 0
+      ActiveRecord::Base.connection.explain(sql, binds) if sql =~ SELECT_REGEX
     end
 
     def post_request
