@@ -1,4 +1,7 @@
 require "rorvswild/version"
+require "json/ext"
+require "net/http"
+require "uri"
 
 module RorVsWild
   def self.new(*args)
@@ -59,11 +62,13 @@ module RorVsWild
 
     def setup_callbacks
       client = self
-      ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
-      ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
-      ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
-      ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
-      ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
+      if defined?(Rails)
+        ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
+        ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
+        ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
+        ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
+        ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
+      end
 
       Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
@@ -293,21 +298,26 @@ module RorVsWild
     end
 
     def filter_sensitive_data(hash)
-      @sensitive_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
-      @sensitive_filter.filter(hash)
+      if defined?(Rails)
+        @sensitive_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+        @sensitive_filter.filter(hash)
+      else
+        hash
+      end
     end
 
     def filter_environment_variables(hash)
       hash.clone.keep_if { |key,value| key == key.upcase }
     end
 
-    def logger
-      Rails.logger
-    end
-
     def log_error(exception)
-      logger.error("[RorVsWild] " + exception.inspect)
-      logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
+      if defined?(Rails)
+        Rails.logger.error("[RorVsWild] " + exception.inspect)
+        Rails.logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
+      else
+        $stderr.puts("[RorVsWild] " + exception.inspect)
+        $stderr.puts("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
+      end
     end
   end
 
