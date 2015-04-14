@@ -56,22 +56,14 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(2, RorVsWild.catch_error { 1 + 1 })
   end
 
-  def test_extract_query_location
-    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "#{Rails.root}/app/models/user.rb:2:in `method2'"]
-    assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_query_location, callstack))
-    refute(client.send(:extract_query_location, ["/ruby/gems/lib/sql.rb:1:in `method1'", "/foo/bar.rb:2:in `method2'"]))
+  def test_extract_most_relevant_location
+    callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'", "/app/models/user.rb:2:in `method2'"]
+    assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1", "method1"], client.send(:extract_most_relevant_location, ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'"]))
   end
 
-  def test_extract_error_location
-    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "#{Rails.root}/app/models/user.rb:2:in `method2'"]
-    assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_error_location, callstack))
-
-    callstack = ["/ruby/gems/lib/sql.rb:1:in `method1'", "/foo/bar.rb:2:in `method2'"]
-    assert_equal(%w[/ruby/gems/lib/sql.rb 1 method1], client.send(:extract_error_location, callstack))
-  end
-
-  def test_extract_error_location_when_there_is_no_method_name
-    assert_equal(["/foo/bar.rb", "123", nil], client.send(:extract_error_location, ["/foo/bar.rb:123"]))
+  def test_extract_most_relevant_location_when_there_is_no_method_name
+    assert_equal(["/foo/bar.rb", "123", nil], client.send(:extract_most_relevant_location, ["/foo/bar.rb:123"]))
   end
 
   private
