@@ -60,9 +60,14 @@ module RorVsWild
       @logger = config[:logger]
       @data = {}
 
-      @app_root ||= defined?(Rails) ? Rails.root.to_s : nil
+      if defined?(Rails)
+        @logger ||= Rails.logger
+        @app_root ||= Rails.root.to_s
+        @parameter_filter = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+      end
+
+      @logger ||= Logger.new(STDERR)
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
-      @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDERR)
 
       setup_callbacks
       RorVsWild.register_default_client(self)
@@ -307,12 +312,7 @@ module RorVsWild
     end
 
     def filter_sensitive_data(hash)
-      if defined?(Rails)
-        @sensitive_filter ||= ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
-        @sensitive_filter.filter(hash)
-      else
-        hash
-      end
+      @parameter_filter ? @parameter_filter.filter(hash) : hash
     end
 
     def filter_environment_variables(hash)
