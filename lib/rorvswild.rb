@@ -52,12 +52,13 @@ module RorVsWild
       config = self.class.default_config.merge(config)
       @explain_sql_threshold = config[:explain_sql_threshold]
       @log_sql_threshold = config[:log_sql_threshold]
+      @app_root = config[:app_root]
       @api_url = config[:api_url]
       @api_key = config[:api_key]
       @app_id = config[:app_id]
       @data = {}
 
-      @app_root = defined?(Rails) ? Rails.root.to_s : nil
+      @app_root ||= defined?(Rails) ? Rails.root.to_s : nil
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
       setup_callbacks
@@ -252,7 +253,8 @@ module RorVsWild
     GEM_HOME_REGEX = ENV["GEM_HOME"] ? /\A#{ENV["GEM_HOME"]}/.freeze : nil
 
     def extract_most_relevant_location(stack)
-      location = stack.find { |str| !(str =~ GEM_HOME_REGEX) } if GEM_HOME_REGEX
+      location = stack.find { |str| str =~ app_root_regex } if app_root_regex
+      location ||= stack.find { |str| !(str =~ GEM_HOME_REGEX) } if GEM_HOME_REGEX
       split_file_location(relative_path(location || stack.first))
     end
 
