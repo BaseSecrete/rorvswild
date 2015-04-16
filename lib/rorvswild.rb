@@ -1,6 +1,7 @@
 require "rorvswild/version"
 require "json/ext"
 require "net/http"
+require "logger"
 require "uri"
 
 module RorVsWild
@@ -56,10 +57,12 @@ module RorVsWild
       @api_url = config[:api_url]
       @api_key = config[:api_key]
       @app_id = config[:app_id]
+      @logger = config[:logger]
       @data = {}
 
       @app_root ||= defined?(Rails) ? Rails.root.to_s : nil
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
+      @logger ||= defined?(Rails) ? Rails.logger : Logger.new(STDERR)
 
       setup_callbacks
       RorVsWild.register_default_client(self)
@@ -317,13 +320,8 @@ module RorVsWild
     end
 
     def log_error(exception)
-      if defined?(Rails)
-        Rails.logger.error("[RorVsWild] " + exception.inspect)
-        Rails.logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
-      else
-        $stderr.puts("[RorVsWild] " + exception.inspect)
-        $stderr.puts("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
-      end
+      logger.puts("[RorVsWild] " + exception.inspect)
+      logger.puts("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
     end
   end
 
