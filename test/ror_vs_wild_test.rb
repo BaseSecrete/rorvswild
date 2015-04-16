@@ -57,7 +57,7 @@ class RorVsWildTest < MiniTest::Unit::TestCase
   end
 
   def test_extract_most_relevant_location
-    callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'", "/app/models/user.rb:2:in `method2'"]
+    callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'", "/rails/root/app/models/user.rb:2:in `method2'"]
     assert_equal(%w[/app/models/user.rb 2 method2], client.send(:extract_most_relevant_location, callstack))
     assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1", "method1"], client.send(:extract_most_relevant_location, ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'"]))
   end

@@ -46,7 +46,7 @@ module RorVsWild
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :log_sql_threshold
+    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :log_sql_threshold, :app_root, :app_root_regex
 
     def initialize(config)
       config = self.class.default_config.merge(config)
@@ -56,13 +56,17 @@ module RorVsWild
       @api_key = config[:api_key]
       @app_id = config[:app_id]
       @data = {}
+
+      @app_root = defined?(Rails) ? Rails.root.to_s : nil
+      @app_root_regex = app_root ? /\A#{app_root}/ : nil
+
       setup_callbacks
       RorVsWild.register_default_client(self)
     end
 
     def setup_callbacks
       client = self
-      if defined?(Rails)
+      if defined?(ActiveSupport::Notifications)
         ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
         ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
@@ -270,7 +274,7 @@ module RorVsWild
     end
 
     def relative_path(path)
-      defined?(Rails) ? path.sub(Rails.root.to_s, "".freeze) : path
+      app_root_regex ? path.sub(app_root_regex, "".freeze) : path
     end
 
     def exception_to_hash(exception, extra_details = nil)
