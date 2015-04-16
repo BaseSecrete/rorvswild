@@ -73,6 +73,12 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(["/foo/bar.rb", "123", nil], client.send(:extract_most_relevant_location, ["/foo/bar.rb:123"]))
   end
 
+  def test_extract_most_relevant_location_when_gem_home_is_in_heroku_app_root
+    client = initialize_client(app_root: app_root = File.dirname(gem_home = ENV["GEM_HOME"]))
+    callstack = ["#{gem_home}/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "#{app_root}/app/models/user.rb:3:in `method3'"]
+    assert_equal(["/app/models/user.rb", "3", "method3"], client.send(:extract_most_relevant_location, callstack))
+  end
+
   private
 
   def client

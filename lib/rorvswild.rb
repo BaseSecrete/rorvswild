@@ -261,7 +261,7 @@ module RorVsWild
     GEM_HOME_REGEX = ENV["GEM_HOME"] ? /\A#{ENV["GEM_HOME"]}/.freeze : nil
 
     def extract_most_relevant_location(stack)
-      location = stack.find { |str| str =~ app_root_regex } if app_root_regex
+      location = stack.find { |str| str =~ app_root_regex && !(str =~ GEM_HOME_REGEX) } if app_root_regex
       location ||= stack.find { |str| !(str =~ GEM_HOME_REGEX) } if GEM_HOME_REGEX
       split_file_location(relative_path(location || stack.first))
     end
