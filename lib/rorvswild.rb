@@ -43,16 +43,14 @@ module RorVsWild
       {
         api_url: "http://www.rorvswild.com/api",
         explain_sql_threshold: 500,
-        log_sql_threshold: 100,
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :log_sql_threshold, :app_root, :app_root_regex
+    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :app_root_regex
 
     def initialize(config)
       config = self.class.default_config.merge(config)
       @explain_sql_threshold = config[:explain_sql_threshold]
-      @log_sql_threshold = config[:log_sql_threshold]
       @app_root = config[:app_root]
       @api_url = config[:api_url]
       @api_key = config[:api_key]
@@ -103,13 +101,10 @@ module RorVsWild
     end
 
     def after_sql_query(name, start, finish, id, payload)
-      return if !queries || payload[:name] == "EXPLAIN".freeze
-      runtime, sql, plan = compute_duration(start, finish), nil, nil
+      return if !queries || payload[:name] == "EXPLAIN".freeze || payload[:name] == "SCHEMA".freeze
       file, line, method = extract_most_relevant_location(caller)
-      # I can't figure out the exact location which triggered the query, so at least the SQL is logged.
-      sql, file, line, method = payload[:sql], "Unknow", 0, "Unknow" if !file
-      sql = payload[:sql] if runtime >= log_sql_threshold
-      plan = explain(payload[:sql], payload[:binds]) if runtime >= explain_sql_threshold
+      runtime, sql = compute_duration(start, finish), payload[:sql]
+      plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
       push_query(file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime, times: 1)
     rescue => exception
       log_error(exception)
@@ -213,15 +208,12 @@ module RorVsWild
     end
 
     def push_query(query)
-      if query[:sql] || query[:plan]
-        queries << query
+      if hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
+        hash[:runtime] += query[:runtime]
+        hash[:plan] = query[:plan]
+        hash[:times] += 1
       else
-        if hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
-          hash[:runtime] += query[:runtime]
-          hash[:times] += 1
-        else
-          queries << query
-        end
+        queries << query
       end
     end
 
@@ -320,8 +312,8 @@ module RorVsWild
     end
 
     def log_error(exception)
-      logger.puts("[RorVsWild] " + exception.inspect)
-      logger.puts("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
+      @logger.error("[RorVsWild] " + exception.inspect)
+      @logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
     end
   end
 
