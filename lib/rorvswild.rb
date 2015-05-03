@@ -118,7 +118,7 @@ module RorVsWild
       file, line, method = extract_most_relevant_location(caller)
       runtime, sql = compute_duration(start, finish), payload[:sql]
       plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
-      push_query(file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime, times: 1)
+      push_query(file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime)
     rescue => exception
       log_error(exception)
     end
@@ -222,10 +222,16 @@ module RorVsWild
 
     def push_query(query)
       if hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
+        if query[:runtime] > hash[:max_runtime]
+          hash[:max_runtime] = query[:runtime]
+          hash[:plan] = query[:plan]
+          hash[:sql] = query[:sql]
+        end
         hash[:runtime] += query[:runtime]
-        hash[:plan] = query[:plan]
         hash[:times] += 1
       else
+        query[:times] = 1
+        query[:max_runtime] = query[:runtime]
         queries << query
       end
     end

@@ -79,6 +79,13 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal(["/app/models/user.rb", "3", "method3"], client.send(:extract_most_relevant_location, callstack))
   end
 
+  def test_push_query
+    client = initialize_client
+    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
+    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 2", runtime: 11})
+    assert_equal([{file: "file", line: 123, sql: "SELECT 2", runtime: 21, max_runtime: 11, times: 2, plan: nil,}], client.send(:queries))
+  end
+
   private
 
   def client
