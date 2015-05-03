@@ -100,7 +100,7 @@ module RorVsWild
     end
 
     def before_http_request(name, start, finish, id, payload)
-      request.merge!(controller: payload[:controller], action: payload[:action], path: payload[:path])
+      request.merge!(controller: payload[:controller], action: payload[:action], path: payload[:path], queries: [], views: {})
     end
 
     def after_http_request(name, start, finish, id, payload)
@@ -160,6 +160,7 @@ module RorVsWild
 
     def measure_block(name, &block)
       job[:name] = name
+      job[:queries] = []
       started_at = Time.now
       cpu_time_offset = cpu_time
       block.call
@@ -197,11 +198,11 @@ module RorVsWild
     private
 
     def queries
-      data[:queries] ||= []
+      data[:queries]
     end
 
     def views
-      data[:views] ||= {}
+      data[:views]
     end
 
     def job

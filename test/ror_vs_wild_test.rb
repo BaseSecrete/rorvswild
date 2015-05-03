@@ -81,6 +81,7 @@ class RorVsWildTest < MiniTest::Unit::TestCase
 
   def test_push_query
     client = initialize_client
+    client.send(:data)[:queries] = []
     client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
     client.send(:push_query, {file: "file", line: 123, sql: "SELECT 2", runtime: 11})
     assert_equal([{file: "file", line: 123, sql: "SELECT 2", runtime: 21, max_runtime: 11, times: 2, plan: nil,}], client.send(:queries))
