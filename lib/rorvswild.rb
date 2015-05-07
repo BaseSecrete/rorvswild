@@ -164,7 +164,7 @@ module RorVsWild
       started_at = Time.now
       cpu_time_offset = cpu_time
       block.call
-    rescue => exception
+    rescue Exception => exception
       job[:error] = exception_to_hash(exception)
       raise
     ensure
@@ -176,7 +176,7 @@ module RorVsWild
     def catch_error(extra_details = nil, &block)
       begin
         block.call
-      rescue => exception
+      rescue Exception => exception
         record_error(exception, extra_details)
         exception
       end
