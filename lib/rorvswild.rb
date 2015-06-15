@@ -54,7 +54,7 @@ module RorVsWild
   class Client
     def self.default_config
       {
-        api_url: "http://www.rorvswild.com/api",
+        api_url: "https://www.rorvswild.com/api",
         explain_sql_threshold: 500,
       }
     end
@@ -312,15 +312,24 @@ module RorVsWild
       }
     end
 
+    HTTPS = "https".freeze
+    CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../cacert.pem", __FILE__)
+
     def post(path, data)
       uri = URI(api_url + path)
-      Net::HTTP.start(uri.host, uri.port) do |http|
-        post = Net::HTTP::Post.new(uri.path)
-        post.content_type = "application/json".freeze
-        post.basic_auth(app_id, api_key)
-        post.body = data.to_json
-        http.request(post)
+      http = Net::HTTP.new(uri.host, uri.port)
+
+      if uri.scheme == HTTPS
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        http.ca_file = CERTIFICATE_AUTHORITIES_PATH
+        http.use_ssl = true
       end
+
+      post = Net::HTTP::Post.new(uri.path)
+      post.content_type = "application/json".freeze
+      post.basic_auth(app_id, api_key)
+      post.body = data.to_json
+      http.request(post)
     end
 
     def filter_sensitive_data(hash)
