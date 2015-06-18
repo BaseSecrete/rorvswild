@@ -56,14 +56,16 @@ module RorVsWild
       {
         api_url: "https://www.rorvswild.com/api",
         explain_sql_threshold: 500,
+        ignored_exceptions: [],
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :app_root_regex
+    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :app_root_regex, :ignored_exceptions
 
     def initialize(config)
       config = self.class.default_config.merge(config)
       @explain_sql_threshold = config[:explain_sql_threshold]
+      @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
       @api_url = config[:api_url]
       @api_key = config[:api_key]
@@ -74,7 +76,9 @@ module RorVsWild
       if defined?(Rails)
         @logger ||= Rails.logger
         @app_root ||= Rails.root.to_s
-        @parameter_filter = ActionDispatch::Http::ParameterFilter.new(Rails.application.config.filter_parameters)
+        config = Rails.application.config
+        @parameter_filter = ActionDispatch::Http::ParameterFilter.new(config.filter_parameters)
+        @ignored_exceptions = %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
       end
 
       @logger ||= Logger.new(STDERR)
@@ -135,7 +139,7 @@ module RorVsWild
     end
 
     def after_exception(exception, controller)
-      if !exception.is_a?(ActionController::RoutingError)
+      if !ignored_exceptions.include?(exception.class.to_s)
         file, line = exception.backtrace.first.split(":")
         request[:error] = exception_to_hash(exception).merge(
           session: controller.session.to_hash,

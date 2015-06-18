@@ -87,6 +87,21 @@ class RorVsWildTest < MiniTest::Unit::TestCase
     assert_equal([{file: "file", line: 123, sql: "SELECT 2", runtime: 21, max_runtime: 11, times: 2, plan: nil,}], client.send(:queries))
   end
 
+  def test_after_exception
+    exception, controller = nil, stub(session: {}, request: stub(env: ENV))
+    begin; 1/0; rescue => exception; end
+    assert_raises(ZeroDivisionError) { client.after_exception(exception, controller) }
+    assert_equal("ZeroDivisionError", client.send(:request)[:error][:exception])
+  end
+
+  def test_after_exception_when_ignored
+    client = initialize_client(ignored_exceptions: %w[ZeroDivisionError])
+    exception, controller = nil, stub(session: {}, request: stub(env: ENV))
+    begin; raise 1/0; rescue => exception; end
+    assert_raises(ZeroDivisionError) { client.after_exception(exception, controller) }
+    refute(client.send(:request)[:error])
+  end
+
   private
 
   def client
