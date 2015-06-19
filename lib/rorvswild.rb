@@ -92,6 +92,7 @@ module RorVsWild
       client = self
       if defined?(ActiveSupport::Notifications)
         ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
+        ActiveSupport::Notifications.subscribe("render_partial.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
         ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
