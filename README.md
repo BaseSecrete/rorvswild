@@ -1,6 +1,6 @@
 # RorVsWild
 
-Simple Ruby on Rails application monitoring for hardcore developers with no time to waste: http://www.rorvswild.com.
+All-in-one monitoring for Ruby on Rails applications.
 
 ## Installation
 

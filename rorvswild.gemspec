@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = RorVsWild::VERSION
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
-  spec.summary       = "Simple Ruby on Rails application monitoring for hardcore developers with no time to waste."
-  spec.description   = "Simple Ruby on Rails application monitoring for hardcore developers with no time to waste."
+  spec.summary       = "All-in-one monitoring for Ruby on Rails applications."
+  spec.description   = "All-in-one monitoring for Ruby on Rails applications."
   spec.homepage      = "http://www.rorvswild.com"
   spec.license       = "MIT"
 
