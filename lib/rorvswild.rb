@@ -226,19 +226,16 @@ module RorVsWild
       @data.delete(Thread.current.object_id)
     end
 
+    MEANINGLESS_QUERIES = %w[BEGIN  COMMIT].freeze
+
     def push_query(query)
-      if hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
-        if query[:runtime] > hash[:max_runtime]
-          hash[:max_runtime] = query[:runtime]
-          hash[:plan] = query[:plan]
-          hash[:sql] = query[:sql]
-        end
-        hash[:runtime] += query[:runtime]
+      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
+      queries << hash = {file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
+      hash[:runtime] += query[:runtime]
+      if !MEANINGLESS_QUERIES.include?(query[:sql])
         hash[:times] += 1
-      else
-        query[:times] = 1
-        query[:max_runtime] = query[:runtime]
-        queries << query
+        hash[:sql] ||= query[:sql]
+        hash[:plan] ||= query[:plan] if query[:plan]
       end
     end
 

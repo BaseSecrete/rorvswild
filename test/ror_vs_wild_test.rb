@@ -7,7 +7,7 @@ require "minitest/autorun"
 require 'mocha/mini_test'
 require "top_tests"
 
-class RorVsWildTest < MiniTest::Unit::TestCase
+class RorVsWildTest < Minitest::Test
   include TopTests
 
   def test_measure_code
@@ -82,9 +82,11 @@ class RorVsWildTest < MiniTest::Unit::TestCase
   def test_push_query
     client = initialize_client
     client.send(:data)[:queries] = []
+    client.send(:push_query, {file: "file", line: 123, sql: "BEGIN", runtime: 10})
     client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
-    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 2", runtime: 11})
-    assert_equal([{file: "file", line: 123, sql: "SELECT 2", runtime: 21, max_runtime: 11, times: 2, plan: nil,}], client.send(:queries))
+    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
+    client.send(:push_query, {file: "file", line: 123, sql: "COMMIT", runtime: 10})
+    assert_equal([{file: "file", line: 123, sql: "SELECT 1", runtime: 40, times: 2}], client.send(:queries))
   end
 
   def test_after_exception
