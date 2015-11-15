@@ -14,13 +14,15 @@ module RorVsWild
     return if !defined?(Rails)
     Rails::Railtie.initializer "rorvswild.detect_config_file" do
       if !RorVsWild.default_client && (path = Rails.root.join("config/rorvswild.yml")).exist?
-        RorVsWild.load_config_file(path, Rails.env)
+        if config = RorVsWild.load_config_file(path)[Rails.env]
+          RorVsWild::Client.new(config.symbolize_keys)
+        end
       end
     end
   end
 
-  def self.load_config_file(path, environment)
-    config = YAML.load_file(path)[environment.to_s] and Client.new(config.symbolize_keys)
+  def self.load_config_file(path)
+    YAML.load(ERB.new(path.read).result)
   end
 
   def self.register_default_client(client)
