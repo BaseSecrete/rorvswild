@@ -274,11 +274,21 @@ module RorVsWild
       post("/errors".freeze, error: hash)
     end
 
-    GEM_HOME_REGEX = ENV["GEM_HOME"] ? /\A#{ENV["GEM_HOME"]}/.freeze : nil
+    def gem_home
+      if ENV["GEM_HOME"] && !ENV["GEM_HOME"].empty?
+        ENV["GEM_HOME"]
+      elsif ENV["GEM_PATH"] && !(first_gem_path = ENV["GEM_PATH"].split(":").first)
+        first_gem_path if first_gem_path && !first_gem_path.empty?
+      end
+    end
+
+    def gem_home_regex
+      @gem_home_regex ||= gem_home ? /\A#{gem_home}/.freeze : /\/gems\//.freeze
+    end
 
     def extract_most_relevant_location(stack)
-      location = stack.find { |str| str =~ app_root_regex && !(str =~ GEM_HOME_REGEX) } if app_root_regex
-      location ||= stack.find { |str| !(str =~ GEM_HOME_REGEX) } if GEM_HOME_REGEX
+      location = stack.find { |str| str =~ app_root_regex && !(str =~ gem_home_regex) } if app_root_regex
+      location ||= stack.find { |str| !(str =~ gem_home_regex) } if gem_home_regex
       split_file_location(relative_path(location || stack.first))
     end
 

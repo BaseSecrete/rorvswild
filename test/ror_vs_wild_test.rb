@@ -79,6 +79,26 @@ class RorVsWildTest < Minitest::Test
     assert_equal(["/app/models/user.rb", "3", "method3"], client.send(:extract_most_relevant_location, callstack))
   end
 
+  def test_extract_most_relevant_location_when_gem_path_is_set_instead_of_gem_home
+    original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
+    ENV["GEM_HOME"], ENV["GEM_PATH"] = "", "/gem/path"
+
+    callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
+    assert_equal(%w[/app/models/user.rb 3 method3], client.send(:extract_most_relevant_location, callstack))
+  ensure
+    ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
+  end
+
+  def test_extract_most_relevant_location_when_gem_path_and_gem_home_are_undefined
+    original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
+    ENV["GEM_HOME"], ENV["GEM_PATH"] = "", ""
+
+    callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
+    assert_equal(%w[/app/models/user.rb 3 method3], client.send(:extract_most_relevant_location, callstack))
+  ensure
+    ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
+  end
+
   def test_push_query
     client = initialize_client
     client.send(:data)[:queries] = []
