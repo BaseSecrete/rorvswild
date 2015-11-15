@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
   spec.summary       = "All-in-one monitoring for Ruby on Rails applications."
-  spec.description   = "All-in-one monitoring for Ruby on Rails applications."
+  spec.description   = "Track performances & errors for requests & background jobs."
   spec.homepage      = "http://www.rorvswild.com"
   spec.license       = "MIT"
 
