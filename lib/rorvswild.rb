@@ -102,6 +102,7 @@ module RorVsWild
       end
 
       Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
+      ActiveJob::Base.around_perform(&method(:around_active_job)) if defined?(ActiveJob::Base)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
       Sidekiq.configure_server { |config| config.server_middleware { |chain| chain.add(SidekiqPlugin) } } if defined?(Sidekiq)
     end
@@ -120,8 +121,10 @@ module RorVsWild
       log_error(exception)
     end
 
+    IGNORED_QUERIES = %w[EXPLAIN SCHEMA].freeze
+
     def after_sql_query(name, start, finish, id, payload)
-      return if !queries || payload[:name] == "EXPLAIN".freeze || payload[:name] == "SCHEMA".freeze
+      return if !queries || IGNORED_QUERIES.include?(payload[:name])
       file, line, method = extract_most_relevant_location(caller)
       runtime, sql = compute_duration(start, finish), payload[:sql]
       plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
@@ -150,6 +153,10 @@ module RorVsWild
         )
       end
       raise exception
+    end
+
+    def around_active_job(job, block)
+      measure_block(job.class.name, &block)
     end
 
     def around_delayed_job(job, &block)
@@ -263,7 +270,8 @@ module RorVsWild
     end
 
     def post_job
-      post("/jobs".freeze, job: job.merge(queries: slowest_queries))
+      attributes = job.merge(queries: slowest_queries)
+      Thread.new { post("/jobs".freeze, job: attributes) }
     rescue => exception
       log_error(exception)
     ensure
