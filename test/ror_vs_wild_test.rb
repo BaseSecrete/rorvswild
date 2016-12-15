@@ -39,6 +39,14 @@ class RorVsWildTest < Minitest::Test
     assert_equal(2, RorVsWild.measure_block("1+1") { 1+1 })
   end
 
+  def test_measure_block_recursive
+    client.expects(:post_job)
+    result = RorVsWild.measure_block("1") do
+      RorVsWild.measure_block("2") { 1 } + 1
+    end
+    assert_equal(2, result)
+  end
+
   def test_catch_error
     client.expects(:post_error)
     exception = RorVsWild.catch_error { 1 / 0 }

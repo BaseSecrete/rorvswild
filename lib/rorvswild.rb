@@ -173,18 +173,21 @@ module RorVsWild
     end
 
     def measure_block(name, &block)
+      return block.call if job[:name] # Prevent from recursive jobs
       job[:name] = name
       job[:queries] = []
       started_at = Time.now
       cpu_time_offset = cpu_time
-      block.call
-    rescue Exception => exception
-      job[:error] = exception_to_hash(exception)
-      raise
-    ensure
-      job[:runtime] = (Time.now - started_at) * 1000
-      job[:cpu_runtime] = (cpu_time -  cpu_time_offset) * 1000
-      post_job
+      begin
+        block.call
+      rescue Exception => exception
+        job[:error] = exception_to_hash(exception)
+        raise
+      ensure
+        job[:runtime] = (Time.now - started_at) * 1000
+        job[:cpu_runtime] = (cpu_time -  cpu_time_offset) * 1000
+        post_job
+      end
     end
 
     def catch_error(extra_details = nil, &block)
