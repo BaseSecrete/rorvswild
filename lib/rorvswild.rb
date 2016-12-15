@@ -267,14 +267,14 @@ module RorVsWild
 
     def post_request
       attributes = request.merge(queries: slowest_queries, views: slowest_views)
-      Thread.new { post("/requests".freeze, request: attributes) }
+      post_async("/requests".freeze, request: attributes)
     ensure
       cleanup_data
     end
 
     def post_job
       attributes = job.merge(queries: slowest_queries)
-      Thread.new { post("/jobs".freeze, job: attributes) }
+      post_async("/jobs".freeze, job: attributes)
     rescue => exception
       log_error(exception)
     ensure
@@ -282,7 +282,7 @@ module RorVsWild
     end
 
     def post_error(hash)
-      post("/errors".freeze, error: hash)
+      post_async("/errors".freeze, error: hash)
     end
 
     def gem_home
@@ -355,6 +355,10 @@ module RorVsWild
       post.basic_auth(app_id, api_key)
       post.body = data.to_json
       http.request(post)
+    end
+
+    def post_async(path, data)
+      Thread.new { post(path, data) }
     end
 
     def filter_sensitive_data(hash)
