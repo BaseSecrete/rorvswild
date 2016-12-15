@@ -3,6 +3,7 @@ require "json/ext"
 require "net/http"
 require "logger"
 require "uri"
+require "set"
 
 module RorVsWild
   def self.new(*args)
@@ -62,7 +63,9 @@ module RorVsWild
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :app_root_regex, :ignored_exceptions
+    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :ignored_exceptions
+
+    attr_reader :threads, :app_root_regex
 
     def initialize(config)
       config = self.class.default_config.merge(config)
@@ -73,6 +76,7 @@ module RorVsWild
       @api_key = config[:api_key]
       @app_id = config[:app_id]
       @logger = config[:logger]
+      @threads = Set.new
       @data = {}
 
       if defined?(Rails)
@@ -101,6 +105,7 @@ module RorVsWild
         ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
       end
 
+      Kernel.at_exit(&method(:at_exit))
       Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
       ActiveJob::Base.around_perform(&method(:around_active_job)) if defined?(ActiveJob::Base)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
@@ -358,7 +363,18 @@ module RorVsWild
     end
 
     def post_async(path, data)
-      Thread.new { post(path, data) }
+      Thread.new do
+        begin
+          threads.add(Thread.current)
+          post(path, data)
+        ensure
+          threads.delete(Thread.current)
+        end
+      end
+    end
+
+    def at_exit
+      threads.each(&:join)
     end
 
     def filter_sensitive_data(hash)
