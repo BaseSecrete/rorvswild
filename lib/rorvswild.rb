@@ -391,17 +391,15 @@ module RorVsWild
     end
   end
 
-  DASH_PERFORM = "#perform".freeze
-
   module ResquePlugin
     def around_perform_rorvswild(*args, &block)
-      RorVsWild.measure_block(to_s + DASH_PERFORM, &block)
+      RorVsWild.measure_block(to_s, &block)
     end
   end
 
   class SidekiqPlugin
     def call(worker, item, queue, &block)
-      RorVsWild.measure_block(item["class".freeze] + DASH_PERFORM, &block)
+      RorVsWild.measure_block(item["wrapped".freeze] || item["class".freeze], &block)
     end
   end
 end
