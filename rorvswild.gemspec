@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = RorVsWild::VERSION
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
-  spec.summary       = "All-in-one monitoring for Ruby on Rails applications."
-  spec.description   = "Track performances & errors for requests & background jobs."
-  spec.homepage      = "http://www.rorvswild.com"
+  spec.summary       = "Ruby on Rails app monitoring"
+  spec.description   = "Performances & quality insights for rails developers."
+  spec.homepage      = "https://www.rorvswild.com"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
