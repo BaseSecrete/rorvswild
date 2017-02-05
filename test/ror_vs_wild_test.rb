@@ -27,6 +27,13 @@ class RorVsWildTest < Minitest::Test
     assert(client.send(:job)[:error])
   end
 
+  def test_mesure_block_when_exception_is_ignored
+    client = initialize_client(ignored_exceptions: %w[ZeroDivisionError])
+    client.expects(:post_job)
+    assert_raises(ZeroDivisionError) { RorVsWild.measure_code("1/0") }
+    refute(client.send(:job)[:error])
+  end
+
   def test_measure_code_when_no_client
     RorVsWild.register_default_client(nil)
     RorVsWild::Client.any_instance.expects(:post_job).never

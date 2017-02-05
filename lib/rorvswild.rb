@@ -84,7 +84,7 @@ module RorVsWild
         @app_root ||= Rails.root.to_s
         config = Rails.application.config
         @parameter_filter = ActionDispatch::Http::ParameterFilter.new(config.filter_parameters)
-        @ignored_exceptions = %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
+        @ignored_exceptions ||= %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
       end
 
       @logger ||= Logger.new(STDERR)
@@ -150,7 +150,7 @@ module RorVsWild
     end
 
     def after_exception(exception, controller)
-      if !ignored_exceptions.include?(exception.class.to_s)
+      if !ignored_exception?(exception)
         file, line = exception.backtrace.first.split(":")
         request[:error] = exception_to_hash(exception).merge(
           session: controller.session.to_hash,
@@ -185,8 +185,8 @@ module RorVsWild
       cpu_time_offset = cpu_time
       begin
         block.call
-      rescue Exception => exception
-        job[:error] = exception_to_hash(exception)
+      rescue Exception => ex
+        job[:error] = exception_to_hash(ex) if !ignored_exception?(ex)
         raise
       ensure
         job[:runtime] = (Time.now - started_at) * 1000
@@ -198,9 +198,9 @@ module RorVsWild
     def catch_error(extra_details = nil, &block)
       begin
         block.call
-      rescue Exception => exception
-        record_error(exception, extra_details)
-        exception
+      rescue Exception => ex
+        record_error(ex, extra_details) if !ignored_exception?(ex)
+        ex
       end
     end
 
@@ -383,6 +383,10 @@ module RorVsWild
 
     def filter_environment_variables(hash)
       hash.clone.keep_if { |key,value| key == key.upcase }
+    end
+
+    def ignored_exception?(exception)
+      ignored_exceptions.include?(exception.class.to_s)
     end
 
     def log_error(exception)
