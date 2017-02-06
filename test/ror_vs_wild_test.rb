@@ -73,25 +73,25 @@ class RorVsWildTest < Minitest::Test
 
   def test_extract_most_relevant_location
     callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
-    assert_equal(%w[/app/models/user.rb 3 method3], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(%w[/app/models/user.rb 3 method3], client.extract_most_relevant_location(callstack))
 
-    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1", "method1"], client.send(:extract_most_relevant_location, ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'"]))
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1", "method1"], client.extract_most_relevant_location(["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'"]))
   end
 
   def test_extract_most_relevant_location_when_there_is_not_app_root
     client = initialize_client
     callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
-    assert_equal(%w[/usr/lib/ruby/net/http.rb 2 method2], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(%w[/usr/lib/ruby/net/http.rb 2 method2], client.extract_most_relevant_location(callstack))
   end
 
   def test_extract_most_relevant_location_when_there_is_no_method_name
-    assert_equal(["/foo/bar.rb", "123", nil], client.send(:extract_most_relevant_location, ["/foo/bar.rb:123"]))
+    assert_equal(["/foo/bar.rb", "123", nil], client.extract_most_relevant_location(["/foo/bar.rb:123"]))
   end
 
   def test_extract_most_relevant_location_when_gem_home_is_in_heroku_app_root
     client = initialize_client(app_root: app_root = File.dirname(gem_home = ENV["GEM_HOME"]))
     callstack = ["#{gem_home}/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "#{app_root}/app/models/user.rb:3:in `method3'"]
-    assert_equal(["/app/models/user.rb", "3", "method3"], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(["/app/models/user.rb", "3", "method3"], client.extract_most_relevant_location(callstack))
   end
 
   def test_extract_most_relevant_location_when_gem_path_is_set_instead_of_gem_home
@@ -99,7 +99,7 @@ class RorVsWildTest < Minitest::Test
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", "/gem/path"
 
     callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
-    assert_equal(%w[/app/models/user.rb 3 method3], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(%w[/app/models/user.rb 3 method3], client.extract_most_relevant_location(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
@@ -109,7 +109,7 @@ class RorVsWildTest < Minitest::Test
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", ""
 
     callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
-    assert_equal(%w[/app/models/user.rb 3 method3], client.send(:extract_most_relevant_location, callstack))
+    assert_equal(%w[/app/models/user.rb 3 method3], client.extract_most_relevant_location(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end

@@ -5,6 +5,8 @@ require "logger"
 require "uri"
 require "set"
 
+require "rorvswild/location"
+
 module RorVsWild
   def self.new(*args)
     warn "WARNING: RorVsWild.new is deprecated. Use RorVsWild::Client.new instead."
@@ -55,6 +57,8 @@ module RorVsWild
   end
 
   class Client
+    include RorVsWild::Location
+
     def self.default_config
       {
         api_url: "https://www.rorvswild.com/api",
@@ -290,43 +294,8 @@ module RorVsWild
       post_async("/errors".freeze, error: hash)
     end
 
-    def gem_home
-      if ENV["GEM_HOME"] && !ENV["GEM_HOME"].empty?
-        ENV["GEM_HOME"]
-      elsif ENV["GEM_PATH"] && !(first_gem_path = ENV["GEM_PATH"].split(":").first)
-        first_gem_path if first_gem_path && !first_gem_path.empty?
-      end
-    end
-
-    def gem_home_regex
-      @gem_home_regex ||= gem_home ? /\A#{gem_home}/.freeze : /\/gems\//.freeze
-    end
-
-    def extract_most_relevant_location(stack)
-      location = stack.find { |str| str =~ app_root_regex && !(str =~ gem_home_regex) } if app_root_regex
-      location ||= stack.find { |str| !(str =~ gem_home_regex) } if gem_home_regex
-      split_file_location(relative_path(location || stack.first))
-    end
-
-    def split_file_location(location)
-      file, line, method = location.split(":")
-      method = cleanup_method_name(method) if method
-      [file, line, method]
-    end
-
-    def cleanup_method_name(method)
-      method.sub!("block in ".freeze, "".freeze)
-      method.sub!("in `".freeze, "".freeze)
-      method.sub!("'".freeze, "".freeze)
-      method.index("_app_views_".freeze) == 0 ? nil : method
-    end
-
     def compute_duration(start, finish)
       ((finish - start) * 1000)
-    end
-
-    def relative_path(path)
-      app_root_regex ? path.sub(app_root_regex, "".freeze) : path
     end
 
     def exception_to_hash(exception, extra_details = nil)
