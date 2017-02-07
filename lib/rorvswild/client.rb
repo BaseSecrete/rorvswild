@@ -86,7 +86,7 @@ module RorVsWild
       file, line, method = extract_most_relevant_location(caller)
       runtime, sql = compute_duration(start, finish), payload[:sql]
       plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
-      push_query(file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime)
+      push_query(type: "sql", file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime)
     rescue => exception
       log_error(exception)
     end
@@ -143,6 +143,15 @@ module RorVsWild
       end
     end
 
+    def measure_query(type, command, &block)
+      started_at = Time.now.utc
+      result = block.call
+      runtime = (Time.now.utc - started_at) * 1000
+      file, line, method = extract_most_relevant_location(caller)
+      push_query(type: type, command: command, file: file, line: line, method: method, runtime: runtime)
+      result
+    end
+
     def catch_error(extra_details = nil, &block)
       begin
         block.call
@@ -194,8 +203,8 @@ module RorVsWild
     MEANINGLESS_QUERIES = %w[BEGIN  COMMIT].freeze
 
     def push_query(query)
-      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] }
-      queries << hash = {file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
+      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] && hash[:type] == query[:type] }
+      queries << hash = {type: query[:type], file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
       hash[:runtime] += query[:runtime]
       if !MEANINGLESS_QUERIES.include?(query[:sql])
         hash[:times] += 1
