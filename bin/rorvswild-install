@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift(File.expand_path("#{File.dirname(__FILE__)}/../lib"))
+
+require "rorvswild/installer"
+
+if ARGV[0]
+  RorVsWild::Installer.create_rails_config(ARGV[0])
+else
+  puts "You must provide an API key."
+end
