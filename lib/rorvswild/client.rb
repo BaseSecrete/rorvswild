@@ -255,7 +255,7 @@ module RorVsWild
     end
 
     HTTPS = "https".freeze
-    CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../cacert.pem", __FILE__)
+    CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../../cacert.pem", __FILE__)
 
     def post(path, data)
       uri = URI(api_url + path)
