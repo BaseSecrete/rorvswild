@@ -38,7 +38,7 @@ module RorVsWild
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
       setup_callbacks
-      RorVsWild.register_default_client(self)
+      RorVsWild.register_client(self)
     end
 
     def setup_callbacks

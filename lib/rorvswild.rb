@@ -14,32 +14,32 @@ module RorVsWild
     Client.new(*args) # Compatibility with 0.0.1
   end
 
-  def self.register_default_client(client)
-    @default_client = client
-  end
-
-  def self.default_client
-    @default_client
-  end
-
   def self.measure_job(code)
-    default_client ? default_client.measure_job(code) : eval(code)
+    client ? client.measure_job(code) : eval(code)
   end
 
   def self.measure_code(code)
-    default_client ? default_client.measure_code(code) : eval(code)
+    client ? client.measure_code(code) : eval(code)
   end
 
   def self.measure_block(name, &block)
-    default_client ? default_client.measure_block(name , &block) : block.call
+    client ? client.measure_block(name , &block) : block.call
   end
 
   def self.catch_error(extra_details = nil, &block)
-    default_client ? default_client.catch_error(extra_details, &block) : block.call
+    client ? client.catch_error(extra_details, &block) : block.call
   end
 
   def self.record_error(exception, extra_details = nil)
-    default_client.record_error(exception, extra_details) if default_client
+    client.record_error(exception, extra_details) if client
+  end
+
+  def self.register_client(client)
+    @client = client
+  end
+
+  def self.client
+    @client
   end
 
   module ResquePlugin

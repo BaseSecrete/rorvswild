@@ -35,13 +35,13 @@ class RorVsWildTest < Minitest::Test
   end
 
   def test_measure_code_when_no_client
-    RorVsWild.register_default_client(nil)
+    RorVsWild.register_client(nil)
     RorVsWild::Client.any_instance.expects(:post_job).never
     assert_equal(2, RorVsWild.measure_code("1+1"))
   end
 
   def test_measure_block_when_no_client
-    RorVsWild.register_default_client(nil)
+    RorVsWild.register_client(nil)
     RorVsWild::Client.any_instance.expects(:post_job).never
     assert_equal(2, RorVsWild.measure_block("1+1") { 1+1 })
   end
