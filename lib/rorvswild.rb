@@ -6,6 +6,8 @@ require "set"
 
 require "rorvswild/version"
 require "rorvswild/location"
+require "rorvswild/plugin/resque"
+require "rorvswild/plugin/sidekiq"
 require "rorvswild/client"
 
 module RorVsWild
@@ -31,18 +33,6 @@ module RorVsWild
 
   def self.client
     @client
-  end
-
-  module ResquePlugin
-    def around_perform_rorvswild(*args, &block)
-      RorVsWild.measure_block(to_s, &block)
-    end
-  end
-
-  class SidekiqPlugin
-    def call(worker, item, queue, &block)
-      RorVsWild.measure_block(item["wrapped".freeze] || item["class".freeze], &block)
-    end
   end
 end
 

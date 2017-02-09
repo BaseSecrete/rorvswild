@@ -52,11 +52,11 @@ module RorVsWild
         ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
       end
 
+      Plugin::Resque.setup
+      Plugin::Sidekiq.setup
       Kernel.at_exit(&method(:at_exit))
-      Resque::Job.send(:extend, ResquePlugin) if defined?(Resque::Job)
       ActiveJob::Base.around_perform(&method(:around_active_job)) if defined?(ActiveJob::Base)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
-      Sidekiq.configure_server { |config| config.server_middleware { |chain| chain.add(SidekiqPlugin) } } if defined?(Sidekiq)
     end
 
     def before_http_request(name, start, finish, id, payload)
