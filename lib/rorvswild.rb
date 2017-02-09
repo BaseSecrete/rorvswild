@@ -9,15 +9,6 @@ require "rorvswild/location"
 require "rorvswild/client"
 
 module RorVsWild
-  def self.new(*args)
-    warn "WARNING: RorVsWild.new is deprecated. Use RorVsWild::Client.new instead."
-    Client.new(*args) # Compatibility with 0.0.1
-  end
-
-  def self.measure_job(code)
-    client ? client.measure_job(code) : eval(code)
-  end
-
   def self.measure_code(code)
     client ? client.measure_code(code) : eval(code)
   end

@@ -115,11 +115,6 @@ module RorVsWild
       measure_block(job.name) { block.call(job) }
     end
 
-    def measure_job(code)
-      warn "WARNING: RorVsWild.measure_job is deprecated. Use RorVsWild.measure_code instead."
-      measure_block(code) { eval(code) }
-    end
-
     def measure_code(code)
       measure_block(code) { eval(code) }
     end
