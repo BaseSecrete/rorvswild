@@ -14,21 +14,6 @@ module RorVsWild
     Client.new(*args) # Compatibility with 0.0.1
   end
 
-  def self.detect_config_file
-    return if !defined?(Rails)
-    Rails::Railtie.initializer "rorvswild.detect_config_file" do
-      if !RorVsWild.default_client && (path = Rails.root.join("config/rorvswild.yml")).exist?
-        if config = RorVsWild.load_config_file(path)[Rails.env]
-          RorVsWild::Client.new(config.symbolize_keys)
-        end
-      end
-    end
-  end
-
-  def self.load_config_file(path)
-    YAML.load(ERB.new(path.read).result)
-  end
-
   def self.register_default_client(client)
     @default_client = client
   end
@@ -70,4 +55,7 @@ module RorVsWild
   end
 end
 
-RorVsWild.detect_config_file
+if defined?(Rails)
+  require "rorvswild/rails_loader"
+  RorVsWild::RailsLoader.start_on_rails_initialization
+end
