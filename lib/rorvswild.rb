@@ -1,9 +1,3 @@
-require "json/ext"
-require "net/http"
-require "logger"
-require "uri"
-require "set"
-
 require "rorvswild/version"
 require "rorvswild/location"
 require "rorvswild/plugin/resque"
