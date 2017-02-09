@@ -1,10 +1,23 @@
 # RorVsWild
 
-All-in-one monitoring for Ruby on Rails applications.
+Ruby on Rails app monitoring: performances & quality insights for rails developers.
 
 ## Installation
 
-Signup to http://www.rorvswild.com.
+First you need an API key. Signup here https://www.rorvswild.com to get one and a 14 day free trial.
+
+1. Add in your Gemfile `gem "rorvswild"`
+2. Run `bundle install`
+3. Run `rorvswild-setup API_KEY`
+4. Restart / deploy your app !
+
+The `rorvswild-setup` create a `config/rorvswild.yml` file.
+For those who prefer to manually use an initializer, they can do the following.
+
+```ruby
+# config/initializers/rorvswild.rb
+RorVsWild::Client.new(api_key: API_KEY)
+```
 
 ## Contributing
 
