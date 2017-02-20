@@ -4,7 +4,7 @@ module RorVsWild
       def self.setup
         if defined?(::Sidekiq)
           ::Sidekiq.configure_server do |config|
-            config.server_middleware { |chain| chain.add(SidekiqPlugin) }
+            config.server_middleware { |chain| chain.add(Sidekiq) }
           end
         end
       end
