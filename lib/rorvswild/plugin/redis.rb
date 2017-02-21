@@ -3,6 +3,7 @@ module RorVsWild
     class Redis
       def self.setup
         return if !defined?(::Redis)
+        return if ::Redis::Client.method_defined?(:process_without_rorvswild)
         ::Redis::Client.class_eval do
           alias_method :process_without_rorvswild, :process
 
