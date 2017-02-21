@@ -1,13 +1,6 @@
-puts path = File.expand_path("#{File.dirname(__FILE__)}/../../lib")
-$LOAD_PATH.unshift(path)
-
+require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
 require "redis"
-require "rorvswild"
-
-require "minitest/autorun"
-require 'mocha/mini_test'
-require "top_tests"
 
 class RorVsWild::Plugin::RedisTest < Minitest::Test
   def test_callback

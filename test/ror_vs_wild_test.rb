@@ -1,11 +1,4 @@
-root_path = File.expand_path(File.dirname(File.dirname(__FILE__)))
-$LOAD_PATH.unshift(root_path + "/lib")
-
-require "rorvswild"
-
-require "minitest/autorun"
-require 'mocha/mini_test'
-require "top_tests"
+require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWildTest < Minitest::Test
   include TopTests
