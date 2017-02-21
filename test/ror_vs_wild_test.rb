@@ -117,11 +117,11 @@ class RorVsWildTest < Minitest::Test
   def test_push_query
     client = initialize_client
     client.send(:data)[:queries] = []
-    client.send(:push_query, {file: "file", line: 123, sql: "BEGIN", runtime: 10})
-    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
-    client.send(:push_query, {file: "file", line: 123, sql: "SELECT 1", runtime: 10})
-    client.send(:push_query, {file: "file", line: 123, sql: "COMMIT", runtime: 10})
-    assert_equal([{file: "file", line: 123, sql: "SELECT 1", runtime: 40, times: 2}], client.send(:queries))
+    client.send(:push_query, {kind: "sql", file: "file", line: 123, command: "BEGIN", runtime: 10})
+    client.send(:push_query, {kind: "sql", file: "file", line: 123, command: "SELECT 1", runtime: 10})
+    client.send(:push_query, {kind: "sql", file: "file", line: 123, command: "SELECT 1", runtime: 10})
+    client.send(:push_query, {kind: "sql", file: "file", line: 123, command: "COMMIT", runtime: 10})
+    assert_equal([{kind: "sql", file: "file", line: 123, command: "SELECT 1", runtime: 40, times: 2}], client.send(:queries))
   end
 
   def test_after_exception

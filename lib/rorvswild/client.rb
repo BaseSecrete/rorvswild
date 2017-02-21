@@ -58,6 +58,7 @@ module RorVsWild
         ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
       end
 
+      Plugin::Redis.setup
       Plugin::Resque.setup
       Plugin::Sidekiq.setup
       Kernel.at_exit(&method(:at_exit))
@@ -86,7 +87,7 @@ module RorVsWild
       file, line, method = extract_most_relevant_location(caller)
       runtime, sql = compute_duration(start, finish), payload[:sql]
       plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
-      push_query(type: "sql", file: file, line: line, method: method, sql: sql, plan: plan, runtime: runtime)
+      push_query(kind: "sql", file: file, line: line, method: method, command: sql, plan: plan, runtime: runtime)
     rescue => exception
       log_error(exception)
     end
@@ -143,12 +144,12 @@ module RorVsWild
       end
     end
 
-    def measure_query(type, command, &block)
+    def measure_query(kind, command, &block)
       started_at = Time.now.utc
       result = block.call
       runtime = (Time.now.utc - started_at) * 1000
       file, line, method = extract_most_relevant_location(caller)
-      push_query(type: type, command: command, file: file, line: line, method: method, runtime: runtime)
+      push_query(kind: kind, command: command, file: file, line: line, method: method, runtime: runtime)
       result
     end
 
@@ -203,12 +204,13 @@ module RorVsWild
     MEANINGLESS_QUERIES = %w[BEGIN  COMMIT].freeze
 
     def push_query(query)
-      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] && hash[:type] == query[:type] }
-      queries << hash = {type: query[:type], file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
+      return if !queries
+      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] && hash[:kind] == query[:kind] }
+      queries << hash = {kind: query[:kind], file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
       hash[:runtime] += query[:runtime]
-      if !MEANINGLESS_QUERIES.include?(query[:sql])
+      if !MEANINGLESS_QUERIES.include?(query[:command])
         hash[:times] += 1
-        hash[:sql] ||= query[:sql]
+        hash[:command] ||= query[:command]
         hash[:plan] ||= query[:plan] if query[:plan]
       end
     end

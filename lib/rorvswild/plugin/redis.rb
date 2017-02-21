@@ -7,7 +7,8 @@ module RorVsWild
           alias_method :process_without_rorvswild, :process
 
           def process(commands, &block)
-            RorVsWild.default_client.measure_query("redis", commands) do
+            string = commands.map { |command| command.join(" ") }.join("\n")
+            RorVsWild.client.measure_query("redis", string) do
               process_without_rorvswild(commands, &block)
             end
           end

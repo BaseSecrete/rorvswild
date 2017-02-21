@@ -11,10 +11,10 @@ require "top_tests"
 
 class RorVsWild::Plugin::RedisTest < Minitest::Test
   def test_callback
-    RorVsWild::Plugin::Redis.setup
-    client.measure_code("::Redis.new.keys")
+    client.measure_code("::Redis.new.get('foo')")
     assert_equal(1, client.send(:queries).size)
-    assert_equal("redis", client.send(:queries)[0][:type])
+    assert_equal("redis", client.send(:queries)[0][:kind])
+    assert_equal("get foo", client.send(:queries)[0][:command])
   end
 
   private
