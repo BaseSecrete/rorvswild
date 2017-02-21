@@ -10,6 +10,23 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     assert_equal("get foo", client.send(:queries)[0][:command])
   end
 
+  def test_callback_with_pipeline
+    skip
+    client.measure_block("pipeline") do
+      redis = ::Redis.new
+      redis.get("foo")
+      redis.set("foo", "bar")
+    end
+    assert_equal(2, client.send(:queries).size)
+    assert_equal("redis", client.send(:queries)[0][:kind])
+    assert_equal("get foo", client.send(:queries)[0][:command])
+    assert_equal("set foo bar", client.send(:queries)[1][:command])
+  end
+
+  def test_commands_to_string_hide_auth_password
+    assert_equal("auth *****", RorVsWild::Plugin::Redis.commands_to_string([[:auth, "SECRET"]]))
+  end
+
   private
 
   def client

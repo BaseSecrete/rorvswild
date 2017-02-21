@@ -8,12 +8,16 @@ module RorVsWild
           alias_method :process_without_rorvswild, :process
 
           def process(commands, &block)
-            string = commands.map { |command| command.join(" ") }.join("\n")
+            string = RorVsWild::Plugin::Redis.commands_to_string(commands)
             RorVsWild.client.measure_query("redis", string) do
               process_without_rorvswild(commands, &block)
             end
           end
         end
+      end
+
+      def self.commands_to_string(commands)
+        commands.map { |c| c[0] == :auth ? "auth *****" : c.join(" ") }.join("\n")
       end
     end
   end
