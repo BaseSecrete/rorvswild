@@ -9,7 +9,7 @@ module RorVsWild
 
           def process(commands, &block)
             string = RorVsWild::Plugin::Redis.commands_to_string(commands)
-            RorVsWild.client.measure_query("redis", string) do
+            RorVsWild.client.measure_query("redis".freeze, string) do
               process_without_rorvswild(commands, &block)
             end
           end
@@ -17,7 +17,7 @@ module RorVsWild
       end
 
       def self.commands_to_string(commands)
-        commands.map { |c| c[0] == :auth ? "auth *****" : c.join(" ") }.join("\n")
+        commands.map { |c| c[0] == :auth ? "auth *****" : c.join(" ".freeze) }.join("\n".freeze)
       end
     end
   end
