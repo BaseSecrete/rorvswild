@@ -59,6 +59,7 @@ module RorVsWild
       end
 
       Plugin::Redis.setup
+      Plugin::Mongo.setup
       Plugin::Resque.setup
       Plugin::Sidekiq.setup
       Kernel.at_exit(&method(:at_exit))

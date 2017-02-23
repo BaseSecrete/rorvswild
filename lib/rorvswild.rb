@@ -1,10 +1,10 @@
 require "rorvswild/version"
 require "rorvswild/location"
+require "rorvswild/plugin/redis"
+require "rorvswild/plugin/mongo"
 require "rorvswild/plugin/resque"
 require "rorvswild/plugin/sidekiq"
 require "rorvswild/client"
-
-require "rorvswild/plugin/redis"
 
 module RorVsWild
   def self.measure_code(code)
