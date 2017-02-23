@@ -27,7 +27,7 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
   end
 
   def initialize_client(options = {})
-    client ||= RorVsWild::Client.new(options)
+    client = RorVsWild::Client.new(options)
     client.stubs(:post_request)
     client.stubs(:post_job)
     client

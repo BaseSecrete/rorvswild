@@ -2,7 +2,10 @@ module RorVsWild
   module Plugin
     class Mongo
       def self.setup
+        return if @installed
+        return if !defined?(::Mongo::Monitoring::Global)
         ::Mongo::Monitoring::Global.subscribe(::Mongo::Monitoring::COMMAND, Mongo.new)
+        @installed = true
       end
 
       attr_reader :commands
@@ -16,14 +19,14 @@ module RorVsWild
       end
 
       def failed(event)
-        after(event)
+        after_query(event)
       end
 
       def succeeded(event)
-        after(event)
+        after_query(event)
       end
 
-      def after(event)
+      def after_query(event)
         runtime = event.duration * 1000
         command = commands.delete(event.request_id).to_s
         file, line, method = RorVsWild.client.extract_most_relevant_location(caller)
