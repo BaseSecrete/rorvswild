@@ -4,6 +4,7 @@ require "rorvswild/plugin/redis"
 require "rorvswild/plugin/mongo"
 require "rorvswild/plugin/resque"
 require "rorvswild/plugin/sidekiq"
+require "rorvswild/plugin/net_http"
 require "rorvswild/client"
 
 module RorVsWild

@@ -62,6 +62,7 @@ module RorVsWild
       Plugin::Mongo.setup
       Plugin::Resque.setup
       Plugin::Sidekiq.setup
+      Plugin::NetHttp.setup
       Kernel.at_exit(&method(:at_exit))
       ActiveJob::Base.around_perform(&method(:around_active_job)) if defined?(ActiveJob::Base)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
