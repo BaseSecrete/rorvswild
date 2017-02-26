@@ -147,12 +147,17 @@ module RorVsWild
     end
 
     def measure_query(kind, command, &block)
-      started_at = Time.now.utc
-      result = block.call
-      runtime = (Time.now.utc - started_at) * 1000
-      file, line, method = extract_most_relevant_location(caller)
-      push_query(kind: kind, command: command, file: file, line: line, method: method, runtime: runtime)
-      result
+      return block.call if @query_started_at  # Prevent from recursive queries
+      @query_started_at = Time.now.utc
+      begin
+        result = block.call
+        runtime = (Time.now.utc - @query_started_at) * 1000
+        file, line, method = extract_most_relevant_location(caller)
+        push_query(kind: kind, command: command, file: file, line: line, method: method, runtime: runtime)
+        result
+      ensure
+        @query_started_at = nil
+      end
     end
 
     def catch_error(extra_details = nil, &block)

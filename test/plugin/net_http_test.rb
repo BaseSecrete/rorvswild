@@ -8,13 +8,22 @@ class RorVsWild::Plugin::NetHttpTest < Minitest::Test
     assert_equal(1, client.send(:queries).size)
     assert_equal(1, client.send(:queries)[0][:times])
     assert_equal("http", client.send(:queries)[0][:kind])
-    assert_match("GET http://ruby-lang.org", client.send(:queries)[0][:command])
+    assert_match("GET http://ruby-lang.org/index.html", client.send(:queries)[0][:command])
   end
 
   def test_callback_with_https
     client.measure_block("test") { Net::HTTP.get(URI("https://www.ruby-lang.org/index.html")) }
-    assert_match("GET https://www.ruby-lang.org", client.send(:queries)[0][:command])
+    assert_match("GET https://www.ruby-lang.org/index.html", client.send(:queries)[0][:command])
     assert_equal("http", client.send(:queries)[0][:kind])
+  end
+
+  def test_nested_query_because_net_http_request_is_recursive_when_connection_is_not_started
+    client.measure_block("test") do
+      uri = URI("http://www.ruby-lang.org/index.html")
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.request(Net::HTTP::Get.new(uri.path))
+    end
+    assert_equal(1, client.send(:queries)[0][:times])
   end
 
   private

@@ -10,7 +10,8 @@ module RorVsWild
 
           def request(req, body = nil, &block)
             scheme = use_ssl? ? "https".freeze : "http".freeze
-            RorVsWild.client.measure_query("http".freeze, "#{req.method} #{scheme}://#{address}") do
+            url = "#{req.method} #{scheme}://#{address}#{req.path}"
+            RorVsWild.client.measure_query("http".freeze, url) do
               request_without_rorvswild(req, body = nil, &block)
             end
           end
