@@ -12,7 +12,7 @@ module RorVsWild
             scheme = use_ssl? ? "https".freeze : "http".freeze
             url = "#{req.method} #{scheme}://#{address}#{req.path}"
             RorVsWild.client.measure_query("http".freeze, url) do
-              request_without_rorvswild(req, body = nil, &block)
+              request_without_rorvswild(req, body, &block)
             end
           end
         end
