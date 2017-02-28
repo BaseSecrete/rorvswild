@@ -5,3 +5,5 @@ gemspec
 
 gem "mocha"
 gem "top_tests"
+
+gem "activejob", "~> 5.0.1"

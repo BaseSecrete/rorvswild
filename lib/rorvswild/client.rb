@@ -55,7 +55,9 @@ module RorVsWild
         ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
         ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
-        ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
+        if defined?(ActionController)
+          ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
+        end
       end
 
       Plugin::Redis.setup
@@ -63,8 +65,8 @@ module RorVsWild
       Plugin::Resque.setup
       Plugin::Sidekiq.setup
       Plugin::NetHttp.setup
+      Plugin::ActiveJob.setup
       Kernel.at_exit(&method(:at_exit))
-      ActiveJob::Base.around_perform(&method(:around_active_job)) if defined?(ActiveJob::Base)
       Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
     end
 
@@ -114,10 +116,6 @@ module RorVsWild
         )
       end
       raise exception
-    end
-
-    def around_active_job(job, block)
-      measure_block(job.class.name, &block)
     end
 
     def around_delayed_job(job, &block)
