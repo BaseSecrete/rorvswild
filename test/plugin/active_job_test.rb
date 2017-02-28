@@ -2,8 +2,8 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
 require "active_job"
 
-class RorVsWild::Plugin::ActiveTest < Minitest::Test
-  class SampleActiveJob< ::ActiveJob::Base
+class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
+  class SampleJob < ::ActiveJob::Base
     queue_as :default
 
     def perform
@@ -13,7 +13,7 @@ class RorVsWild::Plugin::ActiveTest < Minitest::Test
   def test_callback
     ActiveJob::Base.logger = Logger.new("/dev/null")
     client.expects(:post_job)
-    SampleActiveJob.perform_now
+    SampleJob.perform_now
   end
 
   private
