@@ -66,8 +66,8 @@ module RorVsWild
       Plugin::Sidekiq.setup
       Plugin::NetHttp.setup
       Plugin::ActiveJob.setup
+      Plugin::DelayedJob.setup
       Kernel.at_exit(&method(:at_exit))
-      Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_delayed_job)) if defined?(Delayed::Worker)
     end
 
     def before_http_request(name, start, finish, id, payload)
@@ -116,10 +116,6 @@ module RorVsWild
         )
       end
       raise exception
-    end
-
-    def around_delayed_job(job, &block)
-      measure_block(job.name) { block.call(job) }
     end
 
     def measure_code(code)

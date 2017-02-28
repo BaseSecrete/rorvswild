@@ -7,6 +7,7 @@ require "rorvswild/plugin/resque"
 require "rorvswild/plugin/sidekiq"
 require "rorvswild/plugin/net_http"
 require "rorvswild/plugin/active_job"
+require "rorvswild/plugin/delayed_job"
 
 require "rorvswild/client"
 
