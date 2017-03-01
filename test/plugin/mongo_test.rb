@@ -14,10 +14,10 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
       client = Mongo::Client.new('mongodb://127.0.0.1:27017/test')
       mountains.each { |m| client[:mountains].insert_one(m) }
     end
-    assert_equal(1, client.send(:queries).size)
-    assert_equal(2, client.send(:queries)[0][:times])
-    assert_equal("mongo", client.send(:queries)[0][:kind])
-    assert_match('{"insert"=>"mountains", "documents"=>', client.send(:queries)[0][:command])
+    assert_equal(1, client.send(:sections).size)
+    assert_equal(2, client.send(:sections)[0].calls)
+    assert_equal("mongo", client.send(:sections)[0].kind)
+    assert_match('{"insert"=>"mountains", "documents"=>', client.send(:sections)[0].command)
   end
 
   private

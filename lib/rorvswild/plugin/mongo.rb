@@ -27,10 +27,12 @@ module RorVsWild
       end
 
       def after_query(event)
-        runtime = event.duration * 1000
-        command = commands.delete(event.request_id).to_s
-        file, line, method = RorVsWild.client.extract_most_relevant_location(caller)
-        RorVsWild.client.send(:push_query, kind: "mongo", command: command, file: file, line: line, method: method, runtime: runtime)
+        section = Section.new
+        section.kind = "mongo".freeze
+        section.total_runtime = event.duration * 1000
+        section.command = commands.delete(event.request_id).to_s
+        section.file, section.line = RorVsWild.client.extract_most_relevant_location(caller)
+        RorVsWild.client.send(:add_section, section)
       end
     end
   end
