@@ -50,8 +50,6 @@ module RorVsWild
     def setup_callbacks
       client = self
       if defined?(ActiveSupport::Notifications)
-        ActiveSupport::Notifications.subscribe("render_partial.action_view", &method(:after_view_rendering))
-        ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
         ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
         if defined?(ActionController)
@@ -65,6 +63,7 @@ module RorVsWild
       Plugin::Sidekiq.setup
       Plugin::NetHttp.setup
       Plugin::ActiveJob.setup
+      Plugin::ActionView.setup
       Plugin::DelayedJob.setup
       Kernel.at_exit(&method(:at_exit))
     end
@@ -91,17 +90,6 @@ module RorVsWild
       push_query(kind: "sql", file: file, line: line, method: method, command: sql, plan: plan, runtime: runtime)
     rescue => exception
       log_error(exception)
-    end
-
-    def after_view_rendering(name, start, finish, id, payload)
-      if views
-        if view = views[file = relative_path(payload[:identifier])]
-          view[:runtime] += compute_duration(start, finish)
-          view[:times] += 1
-        else
-          views[file] = {file: file, runtime: compute_duration(start, finish), times: 1}
-        end
-      end
     end
 
     def after_exception(exception, controller)
@@ -175,6 +163,23 @@ module RorVsWild
       time.utime + time.stime + time.cutime + time.cstime
     end
 
+    def push_section(section)
+      data[:section_stack].push(section)
+    end
+
+    def data
+      @data[Thread.current.object_id] ||= {}
+    end
+
+    def add_section(section)
+      last_section.children_runtime += section.total_runtime if last_section
+      if sibling = sections.find { |s| s.sibling?(section) }
+        sibling.merge(section)
+      else
+        sections << section
+      end
+    end
+
     #######################
     ### Private methods ###
     #######################
@@ -189,10 +194,6 @@ module RorVsWild
       data[:sections]
     end
 
-    def views
-      data[:views]
-    end
-
     def job
       data
     end
@@ -201,20 +202,12 @@ module RorVsWild
       data
     end
 
-    def push_section(section)
-      data[:section_stack].push(section)
-    end
-
     def pop_section
       data[:section_stack].pop
     end
 
     def last_section
       data[:section_stack].last
-    end
-
-    def data
-      @data[Thread.current.object_id] ||= {}
     end
 
     def cleanup_data
@@ -233,19 +226,6 @@ module RorVsWild
         hash[:command] ||= query[:command]
         hash[:plan] ||= query[:plan] if query[:plan]
       end
-    end
-
-    def add_section(section)
-      last_section.children_runtime += section.total_runtime if last_section
-      if sibling = sections.find { |s| s.sibling?(section) }
-        sibling.merge(section)
-      else
-        sections << section
-      end
-    end
-
-    def slowest_views
-      views.values.sort { |h1, h2| h2[:runtime] <=> h1[:runtime] }[0, 25]
     end
 
     def slowest_queries
