@@ -4,16 +4,6 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
   include TopTests
 
   def test_measure_nested_block
-    def client.post_job
-      parent, child = sections[1], sections[0]
-      raise child.command if child.command != "child"
-      raise parent.command if parent.command != "parent"
-      raise "#{child.self_runtime} < 100" if child.self_runtime <= 20
-      raise "#{parent.self_runtime} < 100" if parent.self_runtime <= 10
-      raise "#{child.self_runtime} < #{parent.self_runtime}" if child.self_runtime < parent.self_runtime
-      raise "#{child.total_runtime} + #{parent.self_runtime} != #{parent.total_runtime}" if child.total_runtime + parent.self_runtime != parent.total_runtime
-    end
-
     result = client.measure_block("root") do
       client.measure_block("parent") do
         sleep 0.01
@@ -24,13 +14,17 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
       end
     end
     assert_equal(42, result)
+    sections = client.send(:sections)
+    parent, child = sections[1], sections[0]
+    assert_equal("child", child.command)
+    assert_equal("parent", parent.command)
+    assert(child.self_runtime > 20)
+    assert(parent.self_runtime > 10)
+    assert(child.self_runtime > parent.self_runtime)
+    assert_equal(child.total_runtime + parent.self_runtime, parent.total_runtime)
   end
 
   def test_measure_nested_block_with_exception
-    def client.post_job
-      raise sections.size.to_s if sections.size != 2
-    end
-
     assert_raises(ZeroDivisionError) do
       client.measure_block("root") do
         client.measure_block("parent") do
@@ -38,6 +32,7 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
         end
       end
     end
+    assert_equal(2, client.send(:sections).size)
   end
 
   private
@@ -49,7 +44,7 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
   def initialize_client(options = {})
     client ||= RorVsWild::Client.new(options)
     client.stubs(:post_request)
-    client.stubs(:post_task)
+    client.stubs(:post_job)
     client
   end
 end
