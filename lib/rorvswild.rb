@@ -1,5 +1,6 @@
 require "rorvswild/version"
 require "rorvswild/location"
+require "rorvswild/section"
 
 require "rorvswild/plugin/redis"
 require "rorvswild/plugin/mongo"

@@ -122,10 +122,16 @@ module RorVsWild
       measure_block(code) { eval(code) }
     end
 
-    def measure_block(name, &block)
+    def measure_block(name, kind = "code", &block)
+      job[:name] ? measure_nested_block(name, kind, &block) : measure_root_block(name, &block)
+    end
+
+    def measure_root_block(name, &block)
       return block.call if job[:name] # Prevent from recursive jobs
       job[:name] = name
       job[:queries] = []
+      job[:sections] = []
+      data[:section_stack] = []
       started_at = Time.now
       cpu_time_offset = cpu_time
       begin
@@ -138,6 +144,21 @@ module RorVsWild
         job[:cpu_runtime] = (cpu_time -  cpu_time_offset) * 1000
         post_job
       end
+    end
+
+    def measure_nested_block(name, kind = "code", &block)
+      started_at = Time.now.utc
+      push_section(section = Section.new)
+      section.kind = kind || "code"
+      section.command = name
+      result = block.call
+    ensure
+      pop_section
+      section.total_runtime = (Time.now.utc - started_at) * 1000
+      section.file, section.line = extract_most_relevant_location(caller)
+      last_section.children_runtime += section.total_runtime if last_section
+      add_section(section)
+      result
     end
 
     def measure_query(kind, command, &block)
@@ -182,6 +203,10 @@ module RorVsWild
       data[:queries]
     end
 
+    def sections
+      data[:sections]
+    end
+
     def views
       data[:views]
     end
@@ -192,6 +217,18 @@ module RorVsWild
 
     def request
       data
+    end
+
+    def push_section(section)
+      data[:section_stack].push(section)
+    end
+
+    def pop_section
+      data[:section_stack].pop
+    end
+
+    def last_section
+      data[:section_stack].last
     end
 
     def data
@@ -213,6 +250,14 @@ module RorVsWild
         hash[:times] += 1
         hash[:command] ||= query[:command]
         hash[:plan] ||= query[:plan] if query[:plan]
+      end
+    end
+
+    def add_section(section)
+      if sibling = sections.find { |s| s.sibling?(section) }
+        sibling.merge(section)
+      else
+        sections << section
       end
     end
 
