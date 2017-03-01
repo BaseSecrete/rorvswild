@@ -50,7 +50,6 @@ module RorVsWild
     def setup_callbacks
       client = self
       if defined?(ActiveSupport::Notifications)
-        ActiveSupport::Notifications.subscribe("sql.active_record", &method(:after_sql_query))
         ActiveSupport::Notifications.subscribe("render_partial.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("render_template.action_view", &method(:after_view_rendering))
         ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
@@ -83,8 +82,6 @@ module RorVsWild
     rescue => exception
       log_error(exception)
     end
-
-    IGNORED_QUERIES = %w[EXPLAIN SCHEMA].freeze
 
     def after_sql_query(name, start, finish, id, payload)
       return if !queries || IGNORED_QUERIES.include?(payload[:name])
