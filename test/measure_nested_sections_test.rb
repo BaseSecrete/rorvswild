@@ -1,6 +1,7 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
+  include RorVsWildClientHelper
   include TopTests
 
   def test_measure_nested_block
@@ -33,18 +34,5 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
       end
     end
     assert_equal(2, client.send(:sections).size)
-  end
-
-  private
-
-  def client
-    @client ||= initialize_client(app_root: File.dirname(__FILE__))
-  end
-
-  def initialize_client(options = {})
-    client ||= RorVsWild::Client.new(options)
-    client.stubs(:post_request)
-    client.stubs(:post_job)
-    client
   end
 end

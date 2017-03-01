@@ -3,6 +3,8 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "mongo"
 
 class RorVsWild::Plugin::MongoTest < Minitest::Test
+  include RorVsWildClientHelper
+
   Mongo::Logger.logger.level = ::Logger::FATAL
 
   def test_callback
@@ -18,18 +20,5 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
     assert_equal(2, client.send(:sections)[0].calls)
     assert_equal("mongo", client.send(:sections)[0].kind)
     assert_match('{"insert"=>"mountains", "documents"=>', client.send(:sections)[0].command)
-  end
-
-  private
-
-  def client
-    @client ||= initialize_client(app_root: "/rails/root")
-  end
-
-  def initialize_client(options = {})
-    client = RorVsWild::Client.new(options)
-    client.stubs(:post_request)
-    client.stubs(:post_job)
-    client
   end
 end

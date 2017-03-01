@@ -1,6 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::SectionTest < Minitest::Test
+  include RorVsWildClientHelper
+
   def test_sibling?
     refute(section1.sibling?(section2))
     refute(section2.sibling?(section1))
@@ -43,18 +45,5 @@ class RorVsWild::SectionTest < Minitest::Test
       @section2 = s
     end
     @section2
-  end
-
-  private
-
-  def client
-    @client ||= initialize_client(app_root: File.dirname(__FILE__))
-  end
-
-  def initialize_client(options = {})
-    client ||= RorVsWild::Client.new(options)
-    client.stubs(:post_request)
-    client.stubs(:post_job)
-    client
   end
 end

@@ -3,6 +3,8 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "net/http"
 
 class RorVsWild::Plugin::NetHttpTest < Minitest::Test
+  include RorVsWildClientHelper
+
   def test_callback
     client.measure_block("test") { Net::HTTP.get("ruby-lang.org", "/index.html") }
     assert_equal(1, client.send(:sections).size)
@@ -24,18 +26,5 @@ class RorVsWild::Plugin::NetHttpTest < Minitest::Test
       http.request(Net::HTTP::Get.new(uri.path))
     end
     assert_equal(1, client.send(:sections)[0].calls)
-  end
-
-  private
-
-  def client
-    @client ||= initialize_client(app_root: "/rails/root")
-  end
-
-  def initialize_client(options = {})
-    client = RorVsWild::Client.new(options)
-    client.stubs(:post_request)
-    client.stubs(:post_job)
-    client
   end
 end

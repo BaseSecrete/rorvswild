@@ -3,6 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "active_job"
 
 class RorVsWild::Plugin::ActionViewTest < Minitest::Test
+  include RorVsWildClientHelper
 
   def test_render_template_callback
     client.measure_block("test") do
@@ -34,19 +35,6 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
     assert(partial.self_runtime > template.self_runtime)
     assert(partial.total_runtime < template.total_runtime)
     assert(sub_partial.total_runtime < partial.total_runtime)
-  end
-
-  private
-
-  def client
-    @client ||= initialize_client(app_root: File.dirname(__FILE__))
-  end
-
-  def initialize_client(options = {})
-    client ||= RorVsWild::Client.new(options)
-    client.stubs(:post_request)
-    client.stubs(:post_job)
-    client
   end
 end
 
