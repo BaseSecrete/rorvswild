@@ -9,7 +9,7 @@ module RorVsWild
 
           def process(commands, &block)
             string = RorVsWild::Plugin::Redis.commands_to_string(commands)
-            RorVsWild.client.measure_query("redis".freeze, string) do
+            RorVsWild.client.measure_block(string, "redis".freeze) do
               process_without_rorvswild(commands, &block)
             end
           end
