@@ -23,8 +23,7 @@ class RorVsWild::Plugin::NetHttpTest < Minitest::Test
       http = Net::HTTP.new(uri.host, uri.port)
       http.request(Net::HTTP::Get.new(uri.path))
     end
-    # TODO: Find a way to count only 1 time the request
-    assert_equal(2, client.send(:sections)[0].calls)
+    assert_equal(1, client.send(:sections)[0].calls)
   end
 
   private
