@@ -8,14 +8,12 @@ class RorVsWildTest < Minitest::Test
     assert_equal(2, client.measure_code("1 + 1"))
     assert_equal("1 + 1", client.send(:job)[:name])
     assert(client.send(:job)[:runtime] > 0)
-    assert_equal(0, client.send(:job)[:cpu_runtime])
   end
 
   def test_measure_code_when_raising
     client.expects(:post_job)
     assert_raises(RuntimeError) { client.measure_code("raise 'error'") }
     assert_equal(("raise 'error'"), client.send(:job)[:name])
-    assert(client.send(:job)[:cpu_runtime])
     assert(client.send(:job)[:runtime])
     assert(client.send(:job)[:error])
   end
