@@ -44,4 +44,17 @@ class RorVsWild::SectionTest < Minitest::Test
     end
     @section2
   end
+
+  private
+
+  def client
+    @client ||= initialize_client(app_root: File.dirname(__FILE__))
+  end
+
+  def initialize_client(options = {})
+    client ||= RorVsWild::Client.new(options)
+    client.stubs(:post_request)
+    client.stubs(:post_job)
+    client
+  end
 end

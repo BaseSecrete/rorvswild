@@ -17,7 +17,6 @@ module RorVsWild
         RorVsWild::Section.stop do |section|
           section.kind = "view".freeze
           section.command = RorVsWild.client.relative_path(payload[:identifier])
-          section.file, section.line = RorVsWild.client.extract_most_relevant_location(caller)
         end
       end
     end

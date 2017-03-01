@@ -23,7 +23,7 @@ module RorVsWild
           def request_called_twice?
             # Net::HTTP#request calls itself when connection is not started.
             # This condition prevents from counting twice the request.
-            (last_section = RorVsWild.client.send(:last_section)) && last_section.kind == HTTP
+            (current_section = RorVsWild::Section.current) && current_section.kind == HTTP
           end
         end
       end

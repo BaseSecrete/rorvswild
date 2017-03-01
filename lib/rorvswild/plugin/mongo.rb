@@ -15,6 +15,7 @@ module RorVsWild
       end
 
       def started(event)
+        RorVsWild::Section.start
         commands[event.request_id] = event.command
       end
 
@@ -27,12 +28,10 @@ module RorVsWild
       end
 
       def after_query(event)
-        section = Section.new
-        section.kind = "mongo".freeze
-        section.total_runtime = event.duration * 1000
-        section.command = commands.delete(event.request_id).to_s
-        section.file, section.line = RorVsWild.client.extract_most_relevant_location(caller)
-        RorVsWild.client.send(:add_section, section)
+        RorVsWild::Section.stop do |section|
+          section.kind = "mongo".freeze
+          section.command = commands.delete(event.request_id).to_s
+        end
       end
     end
   end

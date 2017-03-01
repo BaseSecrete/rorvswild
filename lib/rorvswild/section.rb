@@ -3,14 +3,18 @@ module RorVsWild
     attr_reader :started_at
     attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime
 
-    def self.start
-      stack.push(section = Section.new)
+    def self.start(&block)
+      section = Section.new
+      block.call(section) if block_given?
+      stack.push(section)
       section
     end
 
     def self.stop(&block)
-      block.call(section = stack.pop)
+      section = stack.pop
+      block.call(section) if block_given?
       section.total_runtime = (Time.now.utc - section.started_at) * 1000
+      current.children_runtime += section.total_runtime if current
       RorVsWild.client.add_section(section)
     end
 
@@ -18,7 +22,7 @@ module RorVsWild
       RorVsWild.client.data[:section_stack] ||= []
     end
 
-    def self.last
+    def self.current
       stack.last
     end
 
@@ -27,6 +31,7 @@ module RorVsWild
       @total_runtime = 0
       @children_runtime = 0
       @started_at = Time.now.utc
+      @file, @line = RorVsWild.client.extract_most_relevant_location(caller)
     end
 
     def sibling?(section)

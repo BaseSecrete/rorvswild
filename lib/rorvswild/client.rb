@@ -132,17 +132,13 @@ module RorVsWild
     end
 
     def measure_nested_block(name, kind = "code", &block)
-      started_at = Time.now.utc
-      push_section(section = Section.new)
-      section.command = name
-      section.kind = kind
-      result = block.call
+      RorVsWild::Section.start do |section|
+        section.command = name
+        section.kind = kind
+      end
+      block.call
     ensure
-      pop_section
-      section.total_runtime = (Time.now.utc - started_at) * 1000
-      section.file, section.line = extract_most_relevant_location(caller)
-      add_section(section)
-      result
+      RorVsWild::Section.stop
     end
 
     def catch_error(extra_details = nil, &block)
@@ -172,7 +168,6 @@ module RorVsWild
     end
 
     def add_section(section)
-      last_section.children_runtime += section.total_runtime if last_section
       if sibling = sections.find { |s| s.sibling?(section) }
         sibling.merge(section)
       else
