@@ -10,17 +10,16 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     assert_equal("get foo", client.send(:sections)[0].command)
   end
 
-  def test_callback_with_pipeline
-    skip
+  def test_callback_when_pipelined
     client.measure_block("pipeline") do
-      redis = ::Redis.new
-      redis.get("foo")
-      redis.set("foo", "bar")
+      (redis = ::Redis.new).pipelined do
+        redis.get("foo")
+        redis.set("foo", "bar")
+      end
     end
-    assert_equal(2, client.send(:sections).size)
-    assert_equal("redis", client.send(:sections)[0][:kind])
-    assert_equal("get foo", client.send(:sections)[0][:command])
-    assert_equal("set foo bar", client.send(:sections)[1][:command])
+    assert_equal(1, client.send(:sections).size)
+    assert_equal("redis", client.send(:sections)[0].kind)
+    assert_equal("get foo\nset foo bar", client.send(:sections)[0].command)
   end
 
   def test_commands_to_string_hide_auth_password
