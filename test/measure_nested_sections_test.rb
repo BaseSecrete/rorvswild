@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/helper")
 class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
   include TopTests
 
-  def test_nested_measure_block
+  def test_measure_nested_block
     def client.post_job
       parent, child = sections[1], sections[0]
       raise child.command if child.command != "child"
@@ -24,6 +24,20 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
       end
     end
     assert_equal(42, result)
+  end
+
+  def test_measure_nested_block_with_exception
+    def client.post_job
+      raise sections.size.to_s if sections.size != 2
+    end
+
+    assert_raises(ZeroDivisionError) do
+      client.measure_block("root") do
+        client.measure_block("parent") do
+          client.measure_block("child") { 1 / 0 }
+        end
+      end
+    end
   end
 
   private
