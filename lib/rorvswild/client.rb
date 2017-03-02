@@ -11,18 +11,16 @@ module RorVsWild
     def self.default_config
       {
         api_url: "https://www.rorvswild.com/api",
-        explain_sql_threshold: 500,
         ignored_exceptions: [],
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :explain_sql_threshold, :app_root, :ignored_exceptions
+    attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
 
     attr_reader :threads, :app_root_regex
 
     def initialize(config)
       config = self.class.default_config.merge(config)
-      @explain_sql_threshold = config[:explain_sql_threshold]
       @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
       @api_url = config[:api_url]
@@ -50,7 +48,6 @@ module RorVsWild
 
     def setup_plugins
       if defined?(ActiveSupport::Notifications)
-        ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
         if defined?(ActionController)
           ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
         end
@@ -66,10 +63,6 @@ module RorVsWild
       Plugin::ActionView.setup
       Plugin::ActionController.setup
       Plugin::DelayedJob.setup
-    end
-
-    def before_http_request(name, start, finish, id, payload)
-      request.merge!(controller: payload[:controller], action: payload[:action], path: payload[:path], queries: [], views: {})
     end
 
     def after_http_request(name, start, finish, id, payload)
@@ -164,10 +157,6 @@ module RorVsWild
 
     private
 
-    def queries
-      data[:queries]
-    end
-
     def sections
       data[:sections]
     end
@@ -190,30 +179,6 @@ module RorVsWild
 
     def cleanup_data
       @data.delete(Thread.current.object_id)
-    end
-
-    MEANINGLESS_QUERIES = %w[BEGIN  COMMIT].freeze
-
-    def push_query(query)
-      return if !queries
-      hash = queries.find { |hash| hash[:line] == query[:line] && hash[:file] == query[:file] && hash[:kind] == query[:kind] }
-      queries << hash = {kind: query[:kind], file: query[:file], line: query[:line], runtime: 0, times: 0} if !hash
-      hash[:runtime] += query[:runtime]
-      if !MEANINGLESS_QUERIES.include?(query[:command])
-        hash[:times] += 1
-        hash[:command] ||= query[:command]
-        hash[:plan] ||= query[:plan] if query[:plan]
-      end
-    end
-
-    def slowest_queries
-      queries.sort { |h1, h2| h2[:runtime] <=> h1[:runtime] }[0, 25]
-    end
-
-    SELECT_REGEX = /\Aselect/i.freeze
-
-    def explain(sql, binds)
-      ActiveRecord::Base.connection.explain(sql, binds) if sql =~ SELECT_REGEX
     end
 
     def post_request

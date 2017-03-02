@@ -23,7 +23,6 @@ development:
 
 production:
   api_key: #{api_key}
-  # explain_sql_threshold: 500  # Execute EXPLAIN for queries above the specified time in ms.
   # ignored_exceptions:
   #   - ActionController::RoutingError
   #   - UncommentToIgnoreAnyExceptionNameListedHere
