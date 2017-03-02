@@ -43,12 +43,12 @@ module RorVsWild
       @logger ||= Logger.new(STDERR)
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
-      setup_callbacks
+      setup_plugins
       RorVsWild.register_client(self)
+      Kernel.at_exit(&method(:at_exit))
     end
 
-    def setup_callbacks
-      client = self
+    def setup_plugins
       if defined?(ActiveSupport::Notifications)
         ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
         if defined?(ActionController)
@@ -66,7 +66,6 @@ module RorVsWild
       Plugin::ActionView.setup
       Plugin::ActionController.setup
       Plugin::DelayedJob.setup
-      Kernel.at_exit(&method(:at_exit))
     end
 
     def before_http_request(name, start, finish, id, payload)
