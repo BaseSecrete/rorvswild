@@ -82,16 +82,6 @@ module RorVsWild
       log_error(exception)
     end
 
-    def after_sql_query(name, start, finish, id, payload)
-      return if !queries || IGNORED_QUERIES.include?(payload[:name])
-      file, line, method = extract_most_relevant_location(caller)
-      runtime, sql = compute_duration(start, finish), payload[:sql]
-      plan = runtime >= explain_sql_threshold ? explain(payload[:sql], payload[:binds]) : nil
-      push_query(kind: "sql", file: file, line: line, method: method, command: sql, plan: plan, runtime: runtime)
-    rescue => exception
-      log_error(exception)
-    end
-
     def after_exception(exception, controller)
       if !ignored_exception?(exception)
         file, line = exception.backtrace.first.split(":")
