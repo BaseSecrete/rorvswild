@@ -1,8 +1,4 @@
-require "json/ext"
-require "net/http"
 require "logger"
-require "uri"
-require "set"
 
 module RorVsWild
   class Agent

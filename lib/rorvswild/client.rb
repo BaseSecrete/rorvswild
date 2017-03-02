@@ -1,3 +1,8 @@
+require "set"
+require "uri"
+require "net/http"
+require "json/ext"
+
 module RorVsWild
   class Client
     HTTPS = "https".freeze
