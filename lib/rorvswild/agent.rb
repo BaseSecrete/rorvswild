@@ -72,9 +72,7 @@ module RorVsWild
 
     def measure_job(name, &block)
       return block.call if data[:name] # Prevent from recursive jobs
-      data[:name] = name
-      data[:sections] = []
-      data[:section_stack] = []
+      initialize_data(name)
       started_at = Time.now
       begin
         block.call
@@ -89,9 +87,7 @@ module RorVsWild
 
     def start_request(payload)
       return if data[:name]
-      data[:name] = payload[:name]
-      data[:sections] = []
-      data[:section_stack] = []
+      initialize_data(payload[:name])
       data[:started_at] = Time.now.utc
     end
 
@@ -136,6 +132,12 @@ module RorVsWild
     #######################
 
     private
+
+    def initialize_data(name)
+      data[:name] = name
+      data[:sections] = []
+      data[:section_stack] = []
+    end
 
     def cleanup_data
       @data.delete(Thread.current.object_id)
