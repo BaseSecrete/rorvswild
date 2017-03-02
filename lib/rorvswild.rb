@@ -13,31 +13,31 @@ require "rorvswild/plugin/active_record"
 require "rorvswild/plugin/action_controller"
 require "rorvswild/plugin/delayed_job"
 
-require "rorvswild/client"
+require "rorvswild/agent"
 
 module RorVsWild
   def self.start(config)
-    @client = Client.new(config)
+    @agent = Agent.new(config)
   end
 
-  def self.client
-    @client
+  def self.agent
+    @agent
   end
 
   def self.measure_code(code)
-    client ? client.measure_code(code) : eval(code)
+    agent ? agent.measure_code(code) : eval(code)
   end
 
   def self.measure_block(name, &block)
-    client ? client.measure_block(name , &block) : block.call
+    agent ? agent.measure_block(name , &block) : block.call
   end
 
   def self.catch_error(extra_details = nil, &block)
-    client ? client.catch_error(extra_details, &block) : block.call
+    agent ? agent.catch_error(extra_details, &block) : block.call
   end
 
   def self.record_error(exception, extra_details = nil)
-    client.record_error(exception, extra_details) if client
+    agent.record_error(exception, extra_details) if agent
   end
 end
 

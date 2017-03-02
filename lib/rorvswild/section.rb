@@ -15,11 +15,11 @@ module RorVsWild
       block.call(section) if block_given?
       section.total_runtime = (Time.now.utc - section.started_at) * 1000
       current.children_runtime += section.total_runtime if current
-      RorVsWild.client.add_section(section)
+      RorVsWild.agent.add_section(section)
     end
 
     def self.stack
-      RorVsWild.client.data[:section_stack] ||= []
+      RorVsWild.agent.data[:section_stack] ||= []
     end
 
     def self.current
@@ -31,7 +31,7 @@ module RorVsWild
       @total_runtime = 0
       @children_runtime = 0
       @started_at = Time.now.utc
-      @file, @line = RorVsWild.client.extract_most_relevant_location(caller)
+      @file, @line = RorVsWild.agent.extract_most_relevant_location(caller)
     end
 
     def sibling?(section)

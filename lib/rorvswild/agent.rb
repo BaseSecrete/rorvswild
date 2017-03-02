@@ -5,7 +5,7 @@ require "uri"
 require "set"
 
 module RorVsWild
-  class Client
+  class Agent
     include RorVsWild::Location
 
     def self.default_config

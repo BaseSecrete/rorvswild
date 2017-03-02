@@ -12,7 +12,7 @@ module RorVsWild
       end
 
       def self.after_exception(exception, controller)
-        if hash = RorVsWild.client.push_exception(exception)
+        if hash = RorVsWild.agent.push_exception(exception)
           hash[:session] = controller.session.to_hash
           hash[:environment_variables] = controller.request.filtered_env
         end
@@ -22,11 +22,11 @@ module RorVsWild
       # Payload: controller, action, params, format, method, path
       def start(name, id, payload)
         payload = payload.merge(name: "#{payload[:controller]}##{payload[:action]}")
-        RorVsWild.client.start_request(payload)
+        RorVsWild.agent.start_request(payload)
       end
 
       def finish(name, id, payload)
-        RorVsWild::client.stop_request
+        RorVsWild.agent.stop_request
       end
     end
   end

@@ -16,7 +16,7 @@ module RorVsWild
       def finish(name, id, payload)
         RorVsWild::Section.stop do |section|
           section.kind = "view".freeze
-          section.command = RorVsWild.client.relative_path(payload[:identifier])
+          section.command = RorVsWild.agent.relative_path(payload[:identifier])
         end
       end
     end
