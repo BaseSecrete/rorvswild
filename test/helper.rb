@@ -12,7 +12,7 @@ module RorVsWildClientHelper
   end
 
   def initialize_client(options = {})
-    client ||= RorVsWild::Client.new(options)
+    client ||= RorVsWild.start(options)
     client.stubs(:post_request)
     client.stubs(:post_job)
     client

@@ -13,7 +13,7 @@ module RorVsWild
       return if @started
       if (path = Rails.root.join("config/rorvswild.yml")).exist?
         if config = RorVsWild::RailsLoader.load_config_file(path)[Rails.env]
-          RorVsWild::Client.new(config.symbolize_keys)
+          RorVsWild.start(config.symbolize_keys)
           @started = true
         end
       end

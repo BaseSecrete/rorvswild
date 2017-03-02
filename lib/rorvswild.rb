@@ -16,6 +16,14 @@ require "rorvswild/plugin/delayed_job"
 require "rorvswild/client"
 
 module RorVsWild
+  def self.start(config)
+    @client = Client.new(config)
+  end
+
+  def self.client
+    @client
+  end
+
   def self.measure_code(code)
     client ? client.measure_code(code) : eval(code)
   end
@@ -30,14 +38,6 @@ module RorVsWild
 
   def self.record_error(exception, extra_details = nil)
     client.record_error(exception, extra_details) if client
-  end
-
-  def self.register_client(client)
-    @client = client
-  end
-
-  def self.client
-    @client
   end
 end
 

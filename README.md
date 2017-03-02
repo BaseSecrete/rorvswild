@@ -16,7 +16,7 @@ For those who prefer to manually use an initializer, they can do the following.
 
 ```ruby
 # config/initializers/rorvswild.rb
-RorVsWild::Client.new(api_key: API_KEY)
+RorVsWild.start(api_key: API_KEY)
 ```
 
 ## Contributing

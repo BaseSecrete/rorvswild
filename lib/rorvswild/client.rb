@@ -42,7 +42,6 @@ module RorVsWild
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
       setup_plugins
-      RorVsWild.register_client(self)
       Kernel.at_exit(&method(:at_exit))
     end
 
