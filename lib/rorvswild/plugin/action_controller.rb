@@ -10,14 +10,12 @@ module RorVsWild
 
       # Payload: controller, action, params, format, method, path
       def start(name, id, payload)
-        RorVsWild::Section.start do |section|
-          section.command = "#{payload[:controller]}##{payload[:action]}"
-          section.kind = "action_controller"
-        end
+        payload = payload.merge(name: "#{payload[:controller]}##{payload[:action]}")
+        RorVsWild.client.start_request(payload)
       end
 
       def finish(name, id, payload)
-        RorVsWild::Section.stop
+        RorVsWild::client.stop_request
       end
     end
   end

@@ -6,16 +6,16 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
   include RorVsWildClientHelper
 
   def test_callback
-    client.measure_block("test") do
-      payload = {controller: "UsersController", action: "show"}
-      ActiveSupport::Notifications.instrument("process_action.action_controller", payload) do
-        sleep 0.1
-      end
+    client.expects(:post_request)
+    payload = {controller: "UsersController", action: "show"}
+    ActiveSupport::Notifications.instrument("process_action.action_controller", payload) do
+      sleep 0.01
     end
 
-    sections = client.send(:sections)
-    assert_equal(1, sections.size)
-    assert_equal("UsersController#show", sections[0].command)
+    data = client.send(:data)
+    assert_equal(0, data[:sections].size)
+    assert_equal("UsersController#show", data[:name])
+    assert(data[:runtime] > 10)
   end
 end
 

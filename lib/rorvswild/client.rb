@@ -94,6 +94,16 @@ module RorVsWild
       job[:name] ? measure_nested_block(name, kind, &block) : measure_root_block(name, &block)
     end
 
+    def measure_nested_block(name, kind = "code", &block)
+      RorVsWild::Section.start do |section|
+        section.command = name
+        section.kind = kind
+      end
+      block.call
+    ensure
+      RorVsWild::Section.stop
+    end
+
     def measure_root_block(name, &block)
       return block.call if job[:name] # Prevent from recursive jobs
       job[:name] = name
@@ -112,14 +122,18 @@ module RorVsWild
       end
     end
 
-    def measure_nested_block(name, kind = "code", &block)
-      RorVsWild::Section.start do |section|
-        section.command = name
-        section.kind = kind
-      end
-      block.call
-    ensure
-      RorVsWild::Section.stop
+    def start_request(payload)
+      return if data[:name]
+      data[:name] = payload[:name]
+      data[:sections] = []
+      data[:section_stack] = []
+      data[:started_at] = Time.now.utc
+    end
+
+    def stop_request
+      return unless data[:name]
+      data[:runtime] = (Time.now.utc - data[:started_at]) * 1000
+      post_request
     end
 
     def catch_error(extra_details = nil, &block)
@@ -182,8 +196,7 @@ module RorVsWild
     end
 
     def post_request
-      attributes = request.merge(sections: sections)
-      post_async("/requests".freeze, request: attributes)
+      post_async("/requests".freeze, request: data)
     ensure
       cleanup_data
     end
