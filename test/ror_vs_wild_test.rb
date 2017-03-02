@@ -105,21 +105,6 @@ class RorVsWildTest < Minitest::Test
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
 
-  def test_after_exception
-    exception, controller = nil, stub(session: {}, request: stub(env: ENV))
-    begin; 1/0; rescue => exception; end
-    assert_raises(ZeroDivisionError) { client.after_exception(exception, controller) }
-    assert_equal("ZeroDivisionError", client.send(:request)[:error][:exception])
-  end
-
-  def test_after_exception_when_ignored
-    client = initialize_client(ignored_exceptions: %w[ZeroDivisionError])
-    exception, controller = nil, stub(session: {}, request: stub(env: ENV))
-    begin; raise 1/0; rescue => exception; end
-    assert_raises(ZeroDivisionError) { client.after_exception(exception, controller) }
-    refute(client.send(:request)[:error])
-  end
-
   private
 
   def client

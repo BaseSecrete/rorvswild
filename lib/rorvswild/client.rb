@@ -65,27 +65,6 @@ module RorVsWild
       Plugin::DelayedJob.setup
     end
 
-    def after_http_request(name, start, finish, id, payload)
-      request[:db_runtime] = (payload[:db_runtime] || 0).round
-      request[:view_runtime] = (payload[:view_runtime] || 0).round
-      request[:other_runtime] = compute_duration(start, finish) - request[:db_runtime] - request[:view_runtime]
-      request[:error][:parameters] = filter_sensitive_data(payload[:params]) if request[:error]
-      post_request
-    rescue => exception
-      log_error(exception)
-    end
-
-    def after_exception(exception, controller)
-      if !ignored_exception?(exception)
-        file, line = exception.backtrace.first.split(":")
-        request[:error] = exception_to_hash(exception).merge(
-          session: controller.session.to_hash,
-          environment_variables: filter_sensitive_data(filter_environment_variables(controller.request.env))
-        )
-      end
-      raise exception
-    end
-
     def measure_code(code)
       measure_block(code) { eval(code) }
     end
@@ -151,6 +130,11 @@ module RorVsWild
 
     def push_section(section)
       data[:section_stack].push(section)
+    end
+
+    def push_exception(exception)
+      return if ignored_exception?(exception)
+      data[:error] = exception_to_hash(exception)
     end
 
     def data
@@ -264,14 +248,6 @@ module RorVsWild
 
     def at_exit
       threads.each(&:join)
-    end
-
-    def filter_sensitive_data(hash)
-      @parameter_filter ? @parameter_filter.filter(hash) : hash
-    end
-
-    def filter_environment_variables(hash)
-      hash.clone.keep_if { |key,value| key == key.upcase }
     end
 
     def ignored_exception?(exception)
