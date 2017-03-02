@@ -47,22 +47,19 @@ module RorVsWild
     end
 
     def setup_plugins
-      if defined?(ActiveSupport::Notifications)
-        if defined?(ActionController)
-          ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
-        end
-      end
+      Plugin::NetHttp.setup
 
       Plugin::Redis.setup
       Plugin::Mongo.setup
+
       Plugin::Resque.setup
       Plugin::Sidekiq.setup
-      Plugin::NetHttp.setup
       Plugin::ActiveJob.setup
-      Plugin::ActiveRecord.setup
-      Plugin::ActionView.setup
-      Plugin::ActionController.setup
       Plugin::DelayedJob.setup
+
+      Plugin::ActionView.setup
+      Plugin::ActiveRecord.setup
+      Plugin::ActionController.setup
     end
 
     def measure_code(code)
@@ -70,7 +67,7 @@ module RorVsWild
     end
 
     def measure_block(name, kind = "code", &block)
-      job[:name] ? measure_nested_block(name, kind, &block) : measure_root_block(name, &block)
+      data[:name] ? measure_nested_block(name, kind, &block) : measure_root_block(name, &block)
     end
 
     def measure_nested_block(name, kind = "code", &block)
