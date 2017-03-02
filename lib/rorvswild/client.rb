@@ -63,6 +63,7 @@ module RorVsWild
       Plugin::Sidekiq.setup
       Plugin::NetHttp.setup
       Plugin::ActiveJob.setup
+      Plugin::ActiveRecord.setup
       Plugin::ActionView.setup
       Plugin::DelayedJob.setup
       Kernel.at_exit(&method(:at_exit))
