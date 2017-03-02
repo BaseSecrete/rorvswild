@@ -3,12 +3,12 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "active_job"
 
 class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
-  include RorVsWildClientHelper
+  include RorVsWildAgentHelper
 
   def test_render_template_callback
     line1, line2 = nil
-    client = initialize_client(app_root: File.dirname(__FILE__))
-    client.measure_block("test") do
+    agent = initialize_agent(app_root: File.dirname(__FILE__))
+    agent.measure_block("test") do
       ActiveSupport::Notifications.instrument("sql.active_record", {sql: "SELECT COUNT(*) FROM users"}) do line1 = __LINE__
         sleep 0.01
       end
@@ -19,7 +19,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
       end
     end
 
-    sections = client.send(:sections)
+    sections = agent.send(:sections)
     sql1, sql2 = sections[0], sections[1]
     assert_equal(2, sections.size)
 

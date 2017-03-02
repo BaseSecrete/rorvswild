@@ -3,10 +3,10 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "active_job"
 
 class RorVsWild::Plugin::ActionViewTest < Minitest::Test
-  include RorVsWildClientHelper
+  include RorVsWildAgentHelper
 
   def test_render_template_callback
-    client.measure_block("test") do
+    agent.measure_block("test") do
       ActiveSupport::Notifications.instrument("render_template.action_view", {identifier: "template.html.erb"}) do
         ActiveSupport::Notifications.instrument("render_partial.action_view", {identifier: "_partial.html.erb"}) do
           ActiveSupport::Notifications.instrument("render_partial.action_view", {identifier: "_sub_partial.html.erb"}) do
@@ -18,7 +18,7 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
       end
     end
 
-    sections = client.send(:sections)
+    sections = agent.send(:sections)
     sub_partial, partial, template = sections[0], sections[1], sections[2]
     assert_equal(3, sections.size)
 

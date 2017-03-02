@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "delayed_job"
 
 class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
-  include RorVsWildClientHelper
+  include RorVsWildAgentHelper
 
   class SampleJob
     def perform
@@ -27,7 +27,7 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
   end
 
   def test_callback
-    client.expects(:post_job)
+    agent.expects(:post_job)
     Delayed::Worker.delay_jobs = false
     SampleBackend.enqueue(SampleJob.new)
   end

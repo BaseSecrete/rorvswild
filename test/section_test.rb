@@ -1,10 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::SectionTest < Minitest::Test
-  include RorVsWildClientHelper
+  include RorVsWildAgentHelper
 
   def setup
-    client
+    agent
   end
 
   def test_sibling?
