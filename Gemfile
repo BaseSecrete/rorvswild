@@ -6,5 +6,10 @@ gemspec
 gem "mocha"
 gem "top_tests"
 
-gem "activejob", "~> 5.0.1"
-gem "delayed_job", "~> 4.1.1"
+gem "mongo"
+gem "redis"
+
+gem "actionpack"
+gem "activejob"
+
+gem "delayed_job"
