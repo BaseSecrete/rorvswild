@@ -15,7 +15,7 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
       end
     end
     assert_equal(42, result)
-    sections = agent.send(:sections)
+    sections = agent.data[:sections]
     parent, child = sections[1], sections[0]
     assert_equal("child", child.command)
     assert_equal("parent", parent.command)
@@ -33,6 +33,6 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
         end
       end
     end
-    assert_equal(2, agent.send(:sections).size)
+    assert_equal(2, agent.data[:sections].size)
   end
 end

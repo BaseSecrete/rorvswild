@@ -19,7 +19,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
       end
     end
 
-    sections = agent.send(:sections)
+    sections = agent.data[:sections]
     sql1, sql2 = sections[0], sections[1]
     assert_equal(2, sections.size)
 

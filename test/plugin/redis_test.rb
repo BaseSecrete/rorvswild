@@ -7,9 +7,9 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
 
   def test_callback
     agent.measure_code("::Redis.new.get('foo')")
-    assert_equal(1, agent.send(:sections).size)
-    assert_equal("redis", agent.send(:sections)[0].kind)
-    assert_equal("get foo", agent.send(:sections)[0].command)
+    assert_equal(1, agent.data[:sections].size)
+    assert_equal("redis", agent.data[:sections][0].kind)
+    assert_equal("get foo", agent.data[:sections][0].command)
   end
 
   def test_callback_when_pipelined
@@ -19,9 +19,9 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
         redis.set("foo", "bar")
       end
     end
-    assert_equal(1, agent.send(:sections).size)
-    assert_equal("redis", agent.send(:sections)[0].kind)
-    assert_equal("get foo\nset foo bar", agent.send(:sections)[0].command)
+    assert_equal(1, agent.data[:sections].size)
+    assert_equal("redis", agent.data[:sections][0].kind)
+    assert_equal("get foo\nset foo bar", agent.data[:sections][0].command)
   end
 
   def test_commands_to_string_hide_auth_password

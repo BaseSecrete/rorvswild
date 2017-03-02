@@ -27,7 +27,6 @@ module RorVsWild
         @logger ||= Rails.logger
         @app_root ||= Rails.root.to_s
         config = Rails.application.config
-        @parameter_filter = ActionDispatch::Http::ParameterFilter.new(config.filter_parameters)
         @ignored_exceptions ||= %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
       end
 
@@ -74,7 +73,6 @@ module RorVsWild
     def measure_job(name, &block)
       return block.call if data[:name] # Prevent from recursive jobs
       data[:name] = name
-      data[:queries] = []
       data[:sections] = []
       data[:section_stack] = []
       started_at = Time.now
@@ -116,10 +114,6 @@ module RorVsWild
       post_error(exception_to_hash(exception, extra_details))
     end
 
-    def push_section(section)
-      data[:section_stack].push(section)
-    end
-
     def push_exception(exception)
       return if ignored_exception?(exception)
       data[:error] = exception_to_hash(exception)
@@ -130,10 +124,10 @@ module RorVsWild
     end
 
     def add_section(section)
-      if sibling = sections.find { |s| s.sibling?(section) }
+      if sibling = data[:sections].find { |s| s.sibling?(section) }
         sibling.merge(section)
       else
-        sections << section
+        data[:sections] << section
       end
     end
 
@@ -142,18 +136,6 @@ module RorVsWild
     #######################
 
     private
-
-    def sections
-      data[:sections]
-    end
-
-    def pop_section
-      data[:section_stack].pop
-    end
-
-    def last_section
-      data[:section_stack].last
-    end
 
     def cleanup_data
       @data.delete(Thread.current.object_id)
