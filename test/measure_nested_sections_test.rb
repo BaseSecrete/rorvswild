@@ -4,7 +4,7 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
   include RorVsWildClientHelper
   include TopTests
 
-  def test_measure_nested_block
+  def test_measure_section
     result = client.measure_block("root") do
       client.measure_block("parent") do
         sleep 0.01
@@ -25,7 +25,7 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
     assert_equal(child.total_runtime + parent.self_runtime, parent.total_runtime)
   end
 
-  def test_measure_nested_block_with_exception
+  def test_measure_section_with_exception
     assert_raises(ZeroDivisionError) do
       client.measure_block("root") do
         client.measure_block("parent") do

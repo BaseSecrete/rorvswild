@@ -67,10 +67,10 @@ module RorVsWild
     end
 
     def measure_block(name, kind = "code", &block)
-      data[:name] ? measure_nested_block(name, kind, &block) : measure_root_block(name, &block)
+      data[:name] ? measure_section(name, kind, &block) : measure_job(name, &block)
     end
 
-    def measure_nested_block(name, kind = "code", &block)
+    def measure_section(name, kind = "code", &block)
       RorVsWild::Section.start do |section|
         section.command = name
         section.kind = kind
@@ -80,7 +80,7 @@ module RorVsWild
       RorVsWild::Section.stop
     end
 
-    def measure_root_block(name, &block)
+    def measure_job(name, &block)
       return block.call if job[:name] # Prevent from recursive jobs
       job[:name] = name
       job[:queries] = []
