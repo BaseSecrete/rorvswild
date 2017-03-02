@@ -17,18 +17,15 @@ module RorVsWild
 
     attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
 
-    attr_reader :threads, :app_root_regex
+    attr_reader :app_root_regex, :client
 
     def initialize(config)
       config = self.class.default_config.merge(config)
       @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
-      @api_url = config[:api_url]
-      @api_key = config[:api_key]
-      @app_id = config[:app_id]
       @logger = config[:logger]
-      @threads = Set.new
       @data = {}
+      @client = Client.new(config)
 
       if defined?(Rails)
         @logger ||= Rails.logger
@@ -42,7 +39,6 @@ module RorVsWild
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
       setup_plugins
-      Kernel.at_exit(&method(:at_exit))
     end
 
     def setup_plugins
@@ -182,20 +178,13 @@ module RorVsWild
     end
 
     def post_job
-      attributes = job.merge(sections: sections)
-      post_async("/jobs".freeze, job: attributes)
-    rescue => exception
-      log_error(exception)
+      client.post_async("/jobs".freeze, job: data)
     ensure
       cleanup_data
     end
 
     def post_error(hash)
       post_async("/errors".freeze, error: hash)
-    end
-
-    def compute_duration(start, finish)
-      ((finish - start) * 1000)
     end
 
     def exception_to_hash(exception, extra_details = nil)
@@ -211,48 +200,8 @@ module RorVsWild
       }
     end
 
-    HTTPS = "https".freeze
-    CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../../cacert.pem", __FILE__)
-
-    def post(path, data)
-      uri = URI(api_url + path)
-      http = Net::HTTP.new(uri.host, uri.port)
-
-      if uri.scheme == HTTPS
-        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.ca_file = CERTIFICATE_AUTHORITIES_PATH
-        http.use_ssl = true
-      end
-
-      post = Net::HTTP::Post.new(uri.path)
-      post.content_type = "application/json".freeze
-      post.basic_auth(app_id, api_key)
-      post.body = data.to_json
-      http.request(post)
-    end
-
-    def post_async(path, data)
-      Thread.new do
-        begin
-          threads.add(Thread.current)
-          post(path, data)
-        ensure
-          threads.delete(Thread.current)
-        end
-      end
-    end
-
-    def at_exit
-      threads.each(&:join)
-    end
-
     def ignored_exception?(exception)
       ignored_exceptions.include?(exception.class.to_s)
-    end
-
-    def log_error(exception)
-      @logger.error("[RorVsWild] " + exception.inspect)
-      @logger.error("[RorVsWild] " + exception.backtrace.join("\n[RorVsWild] "))
     end
   end
 end
