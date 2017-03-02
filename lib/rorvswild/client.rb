@@ -50,7 +50,6 @@ module RorVsWild
     def setup_callbacks
       client = self
       if defined?(ActiveSupport::Notifications)
-        ActiveSupport::Notifications.subscribe("process_action.action_controller", &method(:after_http_request))
         ActiveSupport::Notifications.subscribe("start_processing.action_controller", &method(:before_http_request))
         if defined?(ActionController)
           ActionController::Base.rescue_from(StandardError) { |exception| client.after_exception(exception, self) }
@@ -65,6 +64,7 @@ module RorVsWild
       Plugin::ActiveJob.setup
       Plugin::ActiveRecord.setup
       Plugin::ActionView.setup
+      Plugin::ActionController.setup
       Plugin::DelayedJob.setup
       Kernel.at_exit(&method(:at_exit))
     end
@@ -218,14 +218,14 @@ module RorVsWild
     end
 
     def post_request
-      attributes = request.merge(queries: slowest_queries, views: slowest_views)
+      attributes = request.merge(sections: sections)
       post_async("/requests".freeze, request: attributes)
     ensure
       cleanup_data
     end
 
     def post_job
-      attributes = job.merge(queries: slowest_queries)
+      attributes = job.merge(sections: sections)
       post_async("/jobs".freeze, job: attributes)
     rescue => exception
       log_error(exception)
