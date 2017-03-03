@@ -15,7 +15,7 @@ module RorVsWild
             return request_without_rorvswild(req, body, &block) if request_called_twice?
             scheme = use_ssl? ? HTTPS : HTTP
             url = "#{req.method} #{scheme}://#{address}#{req.path}"
-            RorVsWild.agent.measure_block(url, HTTP) do
+            RorVsWild.agent.measure_section(url, HTTP) do
               request_without_rorvswild(req, body, &block)
             end
           end

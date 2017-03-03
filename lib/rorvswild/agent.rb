@@ -61,13 +61,16 @@ module RorVsWild
     end
 
     def measure_section(name, kind = "code", &block)
-      RorVsWild::Section.start do |section|
-        section.command = name
-        section.kind = kind
+      return block.call unless data[:name]
+      begin
+        RorVsWild::Section.start do |section|
+          section.command = name
+          section.kind = kind
+        end
+        block.call
+      ensure
+        RorVsWild::Section.stop
       end
-      block.call
-    ensure
-      RorVsWild::Section.stop
     end
 
     def measure_job(name, &block)
@@ -120,6 +123,7 @@ module RorVsWild
     end
 
     def add_section(section)
+      return unless data[:sections]
       if sibling = data[:sections].find { |s| s.sibling?(section) }
         sibling.merge(section)
       else
@@ -144,15 +148,11 @@ module RorVsWild
     end
 
     def post_request
-      post_async("/requests".freeze, request: data)
-    ensure
-      cleanup_data
+      client.post_async("/requests".freeze, request: cleanup_data)
     end
 
     def post_job
-      client.post_async("/jobs".freeze, job: data)
-    ensure
-      cleanup_data
+      client.post_async("/jobs".freeze, job: cleanup_data)
     end
 
     def post_error(hash)

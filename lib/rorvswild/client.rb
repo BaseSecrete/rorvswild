@@ -14,7 +14,6 @@ module RorVsWild
       Kernel.at_exit(&method(:at_exit))
       @api_url = config[:api_url]
       @api_key = config[:api_key]
-      @app_id = config[:app_id]
       @threads = Set.new
     end
 
@@ -30,7 +29,7 @@ module RorVsWild
 
       post = Net::HTTP::Post.new(uri.path)
       post.content_type = "application/json".freeze
-      post.basic_auth(app_id, api_key)
+      post.basic_auth(nil, api_key)
       post.body = data.to_json
       http.request(post)
     end
