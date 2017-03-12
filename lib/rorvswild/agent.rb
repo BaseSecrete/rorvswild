@@ -76,14 +76,13 @@ module RorVsWild
     def measure_job(name, &block)
       return block.call if data[:name] # Prevent from recursive jobs
       initialize_data(name)
-      started_at = Time.now
       begin
         block.call
       rescue Exception => ex
         data[:error] = exception_to_hash(ex) if !ignored_exception?(ex)
         raise
       ensure
-        data[:runtime] = (Time.now - started_at) * 1000
+        data[:runtime] = (Time.now - data[:started_at]) * 1000
         post_job
       end
     end
@@ -91,7 +90,7 @@ module RorVsWild
     def start_request(payload)
       return if data[:name]
       initialize_data(payload[:name])
-      data[:started_at] = Time.now.utc
+      data[:path] = payload[:path]
     end
 
     def stop_request
@@ -141,6 +140,7 @@ module RorVsWild
       data[:name] = name
       data[:sections] = []
       data[:section_stack] = []
+      data[:started_at] = Time.now.utc
     end
 
     def cleanup_data
