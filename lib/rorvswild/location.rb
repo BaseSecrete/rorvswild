@@ -14,9 +14,10 @@ module RorVsWild
     end
 
     def extract_most_relevant_location(stack)
-      location = stack.find { |str| str =~ app_root_regex && !(str =~ gem_home_regex) } if app_root_regex
-      location ||= stack.find { |str| !(str =~ gem_home_regex) } if gem_home_regex
-      RorVsWild::Location.split_file_location(relative_path(location || stack.first))
+      location = stack.find { |l| l.path =~ app_root_regex && !(l.path =~ gem_home_regex) } if app_root_regex
+      location ||= stack.find { |l| !(l.path =~ gem_home_regex) } if gem_home_regex
+      location ||= stack.first
+      [relative_path(location.path), location.lineno]
     end
 
     def app_root_regex
