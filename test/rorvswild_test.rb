@@ -95,7 +95,6 @@ class RorVsWildTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "#{app_root}/app/models/user.rb", lineno: 3)
     ]
-    #callstack = ["#{gem_home}/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "#{app_root}/app/models/user.rb:3:in `method3'"]
     assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
   end
 
@@ -108,7 +107,6 @@ class RorVsWildTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb",lineno: 3),
     ]
-    #callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
     assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
@@ -123,7 +121,6 @@ class RorVsWildTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    #callstack = ["/gem/path/lib/sql.rb:1:in `method1'", "/usr/lib/ruby/net/http.rb:2:in `method2'", "/rails/root/app/models/user.rb:3:in `method3'"]
     assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
