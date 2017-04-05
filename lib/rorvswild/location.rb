@@ -1,8 +1,12 @@
 module RorVsWild
   module Location
-    def extract_most_relevant_location(stack)
-      location = stack.find { |l| l.path.index(app_root) == 0 && !(l.path =~ gem_home_regex) } if app_root
-      location ||= stack.find { |l| !(l.path =~ gem_home_regex) } || stack.first
+    def find_most_relevant_location(locations)
+      result = locations.find { |l| l.path.index(app_root) == 0 && !(l.path =~ gem_home_regex) } if app_root
+      result || locations.find { |l| !(l.path =~ gem_home_regex) } || locations.first
+    end
+
+    def extract_most_relevant_file_and_line(stack)
+      location = find_most_relevant_location(stack)
       [relative_path(location.path), location.lineno]
     end
 

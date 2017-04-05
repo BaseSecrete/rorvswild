@@ -62,43 +62,43 @@ class RorVsWildTest < Minitest::Test
     assert_equal(2, RorVsWild.catch_error { 1 + 1 })
   end
 
-  def test_extract_most_relevant_location
+  def test_extract_most_relevant_file_and_line
     callstack = [
       stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
 
     locations = [stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1)]
-    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", 1], agent.extract_most_relevant_location(locations))
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", 1], agent.extract_most_relevant_file_and_line(locations))
   end
 
-  def test_extract_most_relevant_location_when_there_is_not_app_root
+  def test_extract_most_relevant_file_and_line_when_there_is_not_app_root
     agent = initialize_agent
     callstack = [
       stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/usr/lib/ruby/net/http.rb", 2], agent.extract_most_relevant_location(callstack))
+    assert_equal(["/usr/lib/ruby/net/http.rb", 2], agent.extract_most_relevant_file_and_line(callstack))
   end
 
-  def test_extract_most_relevant_location_when_there_is_no_method_name
-    assert_equal(["/foo/bar.rb", 123], agent.extract_most_relevant_location([stub(path: "/foo/bar.rb", lineno:123)]))
+  def test_extract_most_relevant_file_and_line_when_there_is_no_method_name
+    assert_equal(["/foo/bar.rb", 123], agent.extract_most_relevant_file_and_line([stub(path: "/foo/bar.rb", lineno:123)]))
   end
 
-  def test_extract_most_relevant_location_when_gem_home_is_in_heroku_app_root
+  def test_extract_most_relevant_file_and_line_when_gem_home_is_in_heroku_app_root
     agent = initialize_agent(app_root: app_root = File.dirname(gem_home = ENV["GEM_HOME"]))
     callstack = [
       stub(path: "#{gem_home}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "#{app_root}/app/models/user.rb", lineno: 3)
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
   end
 
-  def test_extract_most_relevant_location_when_gem_path_is_set_instead_of_gem_home
+  def test_extract_most_relevant_file_and_line_when_gem_path_is_set_instead_of_gem_home
     original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", "/gem/path"
 
@@ -107,12 +107,12 @@ class RorVsWildTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb",lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
 
-  def test_extract_most_relevant_location_when_gem_path_and_gem_home_are_undefined
+  def test_extract_most_relevant_file_and_line_when_gem_path_and_gem_home_are_undefined
     original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", ""
 
@@ -121,7 +121,7 @@ class RorVsWildTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_location(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end

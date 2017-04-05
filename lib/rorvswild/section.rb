@@ -31,7 +31,9 @@ module RorVsWild
       @total_runtime = 0
       @children_runtime = 0
       @started_at = Time.now.utc
-      @file, @line = RorVsWild.agent.extract_most_relevant_location(caller_locations)
+      location = RorVsWild.agent.find_most_relevant_location(caller_locations)
+      @file = RorVsWild.agent.relative_path(location.path)
+      @line = location.lineno
     end
 
     def sibling?(section)
