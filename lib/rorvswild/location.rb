@@ -14,14 +14,9 @@ module RorVsWild
     end
 
     def extract_most_relevant_location(stack)
-      location = stack.find { |l| l.path =~ app_root_regex && !(l.path =~ gem_home_regex) } if app_root_regex
-      location ||= stack.find { |l| !(l.path =~ gem_home_regex) } if gem_home_regex
-      location ||= stack.first
+      location = stack.find { |l| l.path.index(app_root) == 0 && !(l.path =~ gem_home_regex) } if app_root
+      location ||= stack.find { |l| !(l.path =~ gem_home_regex) } || stack.first
       [relative_path(location.path), location.lineno]
-    end
-
-    def app_root_regex
-      @app_root_regex ||= RorVsWild.default_client.app_root ? /\A#{RorVsWild.default_client.app_root}/ : nil
     end
 
     def gem_home_regex
@@ -29,6 +24,10 @@ module RorVsWild
     end
 
     def gem_home
+      @gem_home ||= guess_gem_home
+    end
+
+    def guess_gem_home
       if ENV["GEM_HOME"] && !ENV["GEM_HOME"].empty?
         ENV["GEM_HOME"]
       elsif ENV["GEM_PATH"] && !(first_gem_path = ENV["GEM_PATH"].split(":").first)
