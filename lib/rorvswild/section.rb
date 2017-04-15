@@ -44,6 +44,7 @@ module RorVsWild
       self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
+      self.command ||= section.command
     end
 
     def self_runtime

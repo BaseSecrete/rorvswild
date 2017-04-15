@@ -21,8 +21,8 @@ module RorVsWild
 
       # Payload: controller, action, params, format, method, path
       def start(name, id, payload)
-        payload = payload.merge(name: "#{payload[:controller]}##{payload[:action]}")
-        RorVsWild.agent.start_request(payload)
+        name = "#{payload[:controller]}##{payload[:action]}"
+        RorVsWild.agent.start_request(name: name, path: payload[:path])
       end
 
       def finish(name, id, payload)
