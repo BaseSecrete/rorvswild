@@ -38,5 +38,22 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal({id: "session"}, data[:error][:session])
     assert_equal({header: "env"}, data[:error][:environment_variables])
   end
+
+  class SampleController
+    def index
+    end
+  end
+
+  def test_before_and_after_action
+    controller = SampleController.new
+    controller.stubs(action_name: "index", controller_name: "SampleController", method_for_action: "index")
+    agent.measure_block("test") do
+      RorVsWild::Plugin::ActionController.before_action(controller)
+      RorVsWild::Plugin::ActionController.after_action(controller)
+    end
+    assert_equal(1, agent.data[:sections].size)
+    assert_equal(__FILE__, agent.data[:sections][0].file)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.data[:sections][0].command)
+  end
 end
 
