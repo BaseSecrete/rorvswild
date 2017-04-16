@@ -49,6 +49,7 @@ module RorVsWild
 
       Plugin::ActionView.setup
       Plugin::ActiveRecord.setup
+      Plugin::ActionMailer.setup
       Plugin::ActionController.setup
     end
 

@@ -10,4 +10,5 @@ require "rorvswild/plugin/delayed_job"
 
 require "rorvswild/plugin/action_view"
 require "rorvswild/plugin/active_record"
+require "rorvswild/plugin/action_mailer"
 require "rorvswild/plugin/action_controller"
