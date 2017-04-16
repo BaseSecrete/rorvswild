@@ -27,7 +27,7 @@ module RorVsWild
         http.use_ssl = true
       end
 
-      post = Net::HTTP::Post.new(uri.path)
+      post = Net::HTTP::Post.new(uri.path, "X-Gem-Version".freeze => RorVsWild::VERSION)
       post.content_type = "application/json".freeze
       post.basic_auth(nil, api_key)
       post.body = data.to_json
