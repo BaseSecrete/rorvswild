@@ -44,12 +44,11 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     end
   end
 
-  def test_before_and_after_action
+  def test_around_action
     controller = SampleController.new
     controller.stubs(action_name: "index", controller_name: "SampleController", method_for_action: "index")
     agent.measure_block("test") do
-      RorVsWild::Plugin::ActionController.before_action(controller)
-      RorVsWild::Plugin::ActionController.after_action(controller)
+      RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
     end
     assert_equal(1, agent.data[:sections].size)
     assert_equal(__FILE__, agent.data[:sections][0].file)
