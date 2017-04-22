@@ -1,3 +1,3 @@
 module RorVsWild
-  VERSION = "1.0.0-alpha".freeze
+  VERSION = "1.0.0-alpha2".freeze
 end
