@@ -161,7 +161,7 @@ module RorVsWild
     end
 
     def exception_to_hash(exception, extra_details = nil)
-      file, line, method = extract_most_relevant_file_and_line(exception.backtrace_locations)
+      file, line, method = extract_most_relevant_file_and_line_from_exception(exception)
       {
         method: method,
         line: line.to_i,

@@ -126,6 +126,14 @@ class RorVsWildTest < Minitest::Test
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
 
+  def test_extract_most_relevant_file_and_line_from_array_of_strings
+    callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1", "/usr/lib/ruby/net/http.rb:2", "/rails/root/app/models/user.rb:3"]
+    assert_equal(["/app/models/user.rb", "3"], agent.extract_most_relevant_file_and_line_from_array_of_strings(callstack))
+
+    locations = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1"]
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1"], agent.extract_most_relevant_file_and_line_from_array_of_strings(locations))
+  end
+
   private
 
   def agent

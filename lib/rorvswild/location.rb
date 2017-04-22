@@ -1,13 +1,29 @@
 module RorVsWild
   module Location
+    def extract_most_relevant_file_and_line(locations)
+      location = find_most_relevant_location(locations)
+      [relative_path(location.path), location.lineno]
+    end
+
     def find_most_relevant_location(locations)
       result = locations.find { |l| l.path.index(app_root) == 0 && !(l.path =~ gem_home_regex) } if app_root
       result || locations.find { |l| !(l.path =~ gem_home_regex) } || locations.first
     end
 
-    def extract_most_relevant_file_and_line(stack)
-      location = find_most_relevant_location(stack)
-      [relative_path(location.path), location.lineno]
+    def extract_most_relevant_file_and_line_from_exception(exception)
+      # Exception#backtrace_locations is faster but exists since 2.1.0.
+      # Sometime Exception#backtrace_locations returns nil for an unknow reason. So we fallback to the old way.
+      if exception.respond_to?(:backtrace_locations) && locations = exception.backtrace_locations
+        extract_most_relevant_file_and_line(locations)
+      else
+        extract_most_relevant_file_and_line_from_array_of_strings(exception.backtrace)
+      end
+    end
+
+    def extract_most_relevant_file_and_line_from_array_of_strings(stack)
+      location = stack.find { |str| str =~ app_root_regex && !(str =~ gem_home_regex) } if app_root_regex
+      location ||= stack.find { |str| !(str =~ gem_home_regex) } if gem_home_regex
+      relative_path(location || stack.first).split(":".freeze)
     end
 
     def gem_home_regex
