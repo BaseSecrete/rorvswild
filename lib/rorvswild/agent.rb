@@ -20,8 +20,8 @@ module RorVsWild
       @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
       @logger = config[:logger]
-      @data = {}
       @client = Client.new(config)
+      cleanup_data
 
       if defined?(Rails)
         @logger ||= Rails.logger
@@ -119,7 +119,7 @@ module RorVsWild
     end
 
     def data
-      @data[Thread.current.object_id] ||= {}
+      Thread.current[:rorvswild_data] ||= {}
     end
 
     def add_section(section)
@@ -145,7 +145,9 @@ module RorVsWild
     end
 
     def cleanup_data
-      @data.delete(Thread.current.object_id)
+      result = Thread.current[:rorvswild_data]
+      Thread.current[:rorvswild_data] = nil
+      result
     end
 
     def post_request
