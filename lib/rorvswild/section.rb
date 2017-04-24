@@ -40,11 +40,17 @@ module RorVsWild
       kind == section.kind && line == section.line && file == section.file
     end
 
+    MAX_COMMAND_HISTORY = 5
+
     def merge(section)
       self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
-      self.command ||= section.command
+      if !command
+        self.command = section.command
+      elsif calls <= MAX_COMMAND_HISTORY
+        self.command += "\n".freeze + section.command
+      end
     end
 
     def self_runtime

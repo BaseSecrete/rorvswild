@@ -21,6 +21,10 @@ class RorVsWild::SectionTest < Minitest::Test
     assert_equal(3, section1.calls)
     assert_equal(3, section1.total_runtime)
     assert_equal(3, section1.children_runtime)
+    assert_equal("command1\ncommand2\ncommand2", section1.command)
+
+    10.times { section1.merge(section2) }
+    assert_equal("command1\ncommand2\ncommand2\ncommand2\ncommand2", section1.command)
   end
 
   def section1
@@ -32,6 +36,7 @@ class RorVsWild::SectionTest < Minitest::Test
       s.calls = 1
       s.total_runtime = 1
       s.children_runtime = 1
+      s.command = "command1"
       @section1 = s
     end
     @section1
@@ -46,6 +51,7 @@ class RorVsWild::SectionTest < Minitest::Test
       s.calls = 2
       s.total_runtime = 2
       s.children_runtime = 2
+      s.command = "command2\ncommand2"
       @section2 = s
     end
     @section2

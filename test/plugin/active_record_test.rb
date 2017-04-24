@@ -30,7 +30,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert(sql1.self_runtime > 10)
 
     assert_equal("sql", sql2.kind)
-    assert_equal("SELECT * FROM users", sql2.command)
+    assert_equal("SELECT * FROM users\nSELECT * FROM users", sql2.command)
     assert_equal(line2, sql2.line.to_i)
     assert(sql2.self_runtime > 40)
     assert_equal(2, sql2.calls)
