@@ -58,10 +58,10 @@ module RorVsWild
     end
 
     def measure_block(name, kind = "code".freeze, &block)
-      data[:name] ? measure_section(name, kind, &block) : measure_job(name, &block)
+      data[:name] ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
-    def measure_section(name, kind = "code", &block)
+    def measure_section(name, kind: "code", &block)
       return block.call unless data[:name]
       begin
         RorVsWild::Section.start do |section|
