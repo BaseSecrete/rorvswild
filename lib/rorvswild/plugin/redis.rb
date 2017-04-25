@@ -10,7 +10,7 @@ module RorVsWild
           def process(commands, &block)
             string = RorVsWild::Plugin::Redis.commands_to_string(commands)
             appendable = RorVsWild::Plugin::Redis.appendable_commands?(commands)
-            RorVsWild.agent.measure_section(string, kind: "redis".freeze) do
+            RorVsWild.agent.measure_section(string, appendable_command: appendable, kind: "redis".freeze) do
               process_without_rorvswild(commands, &block)
             end
           end

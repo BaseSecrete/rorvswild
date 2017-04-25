@@ -6,10 +6,11 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
   include RorVsWildAgentHelper
 
   def test_callback
-    agent.measure_code("::Redis.new.get('foo')")
+    url = "redis://localhost:6379/1"
+    agent.measure_code("::Redis.new(url: '#{url}').get('foo')")
     assert_equal(1, agent.data[:sections].size)
     assert_equal("redis", agent.data[:sections][0].kind)
-    assert_equal("get foo", agent.data[:sections][0].command)
+    assert_equal("select 1\nget foo", agent.data[:sections][0].command)
   end
 
   def test_callback_when_pipelined
