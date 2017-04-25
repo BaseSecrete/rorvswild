@@ -1,7 +1,7 @@
 module RorVsWild
   class Section
     attr_reader :started_at
-    attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime
+    attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime, :appendable_command
 
     def self.start(&block)
       section = Section.new
@@ -34,6 +34,7 @@ module RorVsWild
       location = RorVsWild.agent.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.relative_path(location.path)
       @line = location.lineno
+      @appendable_command = false
     end
 
     def sibling?(section)
@@ -46,11 +47,12 @@ module RorVsWild
       self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
-      if !command
+      if section
+        self.command << "\n".freeze + section.command if appendable_command
+      else
         self.command = section.command
-      elsif calls <= MAX_COMMAND_HISTORY
-        self.command += "\n".freeze + section.command
       end
+      self.appendable_command = appendable_command && section.appendable_command
     end
 
     def self_runtime

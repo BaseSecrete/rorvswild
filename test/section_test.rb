@@ -21,10 +21,12 @@ class RorVsWild::SectionTest < Minitest::Test
     assert_equal(3, section1.calls)
     assert_equal(3, section1.total_runtime)
     assert_equal(3, section1.children_runtime)
-    assert_equal("command1\ncommand2\ncommand2", section1.command)
+    assert_equal("command1", section1.command)
+  end
 
-    10.times { section1.merge(section2) }
-    assert_equal("command1\ncommand2\ncommand2\ncommand2\ncommand2", section1.command)
+  def test_merge_with_appendable_command
+    section3.merge(section1)
+    assert_equal("command3\ncommand1", section3.command)
   end
 
   def section1
@@ -51,9 +53,25 @@ class RorVsWild::SectionTest < Minitest::Test
       s.calls = 2
       s.total_runtime = 2
       s.children_runtime = 2
-      s.command = "command2\ncommand2"
+      s.command = "command2"
       @section2 = s
     end
     @section2
+  end
+
+  def section3
+    unless @section3
+      s = RorVsWild::Section.new
+      s.kind = "test"
+      s.file = "file"
+      s.line = 3
+      s.calls = 0
+      s.total_runtime = 3
+      s.children_runtime = 3
+      s.command = "command3"
+      s.appendable_command = true
+      @section3 = s
+    end
+    @section3
   end
 end
