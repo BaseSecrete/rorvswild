@@ -9,6 +9,7 @@ module RorVsWild
 
           def process(commands, &block)
             string = RorVsWild::Plugin::Redis.commands_to_string(commands)
+            appendable = RorVsWild::Plugin::Redis.appendable_commands?(commands)
             RorVsWild.agent.measure_section(string, kind: "redis".freeze) do
               process_without_rorvswild(commands, &block)
             end
@@ -18,6 +19,12 @@ module RorVsWild
 
       def self.commands_to_string(commands)
         commands.map { |c| c[0] == :auth ? "auth *****".freeze : c.join(" ".freeze) }.join("\n".freeze)
+      end
+
+      APPENDABLE_COMMANDS = [:auth, :select]
+
+      def self.appendable_commands?(commands)
+        commands.size == 1 && APPENDABLE_COMMANDS.include?(commands.first.first)
       end
     end
   end

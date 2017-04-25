@@ -27,4 +27,10 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
   def test_commands_to_string_hide_auth_password
     assert_equal("auth *****", RorVsWild::Plugin::Redis.commands_to_string([[:auth, "SECRET"]]))
   end
+
+  def test_appendable_commands?
+    assert(RorVsWild::Plugin::Redis.appendable_commands?([[:select, 1]]))
+    assert(RorVsWild::Plugin::Redis.appendable_commands?([[:auth, "SECRET"]]))
+    refute(RorVsWild::Plugin::Redis.appendable_commands?([[:get, "KEY"]]))
+  end
 end
