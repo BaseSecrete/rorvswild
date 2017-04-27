@@ -160,7 +160,7 @@ module RorVsWild
     end
 
     def post_error(hash)
-      post_async("/errors".freeze, error: hash)
+      client.post_async("/errors".freeze, error: hash)
     end
 
     def exception_to_hash(exception, extra_details = nil)
@@ -169,7 +169,7 @@ module RorVsWild
         line: line.to_i,
         file: relative_path(file),
         message: exception.message,
-        backtrace: exception.backtrace,
+        backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
         extra_details: extra_details,
       }

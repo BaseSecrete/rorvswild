@@ -134,6 +134,10 @@ class RorVsWildTest < Minitest::Test
     assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1"], agent.extract_most_relevant_file_and_line_from_array_of_strings(locations))
   end
 
+  def test_extract_most_relevant_file_and_line_from_exception_when_exception_has_no_backtrace
+    assert_equal(["No backtrace", 1], agent.extract_most_relevant_file_and_line_from_exception(StandardError.new))
+  end
+
   private
 
   def agent
