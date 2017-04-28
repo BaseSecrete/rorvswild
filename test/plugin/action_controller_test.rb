@@ -20,7 +20,8 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
 
   def test_callback_when_exception_is_raised
     agent.expects(:post_request)
-    controller = stub(session: {id: "session"}, request: stub(filtered_env: {header: "env"}))
+    request = stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"})
+    controller = stub(session: {id: "session"}, request: request)
     payload = {controller: "UsersController", action: "show"}
     assert_raises(ZeroDivisionError) do
       ActiveSupport::Notifications.instrument("process_action.action_controller", payload) do
@@ -36,7 +37,8 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal("UsersController#show", data[:name])
     assert_equal("ZeroDivisionError", data[:error][:exception])
     assert_equal({id: "session"}, data[:error][:session])
-    assert_equal({header: "env"}, data[:error][:environment_variables])
+    assert_equal({foo: "bar"}, data[:error][:parameters])
+    assert_equal({"Content-Type" => "HTML"}, data[:error][:environment_variables])
   end
 
   class SampleController
@@ -53,6 +55,10 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal(1, agent.data[:sections].size)
     assert_equal(__FILE__, agent.data[:sections][0].file)
     assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.data[:sections][0].command)
+  end
+
+  def test_format_header_name
+    assert_equal("Content-Type", RorVsWild::Plugin::ActionController.format_header_name("HTTP_CONTENT_TYPE"))
   end
 end
 
