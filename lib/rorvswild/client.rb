@@ -7,6 +7,7 @@ module RorVsWild
   class Client
     HTTPS = "https".freeze
     CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../../cacert.pem", __FILE__)
+    DEFAULT_TIMEOUT = 1
 
     attr_reader :api_url, :api_key, :threads
 
@@ -20,6 +21,7 @@ module RorVsWild
     def post(path, data)
       uri = URI(api_url + path)
       http = Net::HTTP.new(uri.host, uri.port)
+      http.open_timeout = config[:timeout] || DEFAULT_TIMEOUT
 
       if uri.scheme == HTTPS
         http.verify_mode = OpenSSL::SSL::VERIFY_PEER
