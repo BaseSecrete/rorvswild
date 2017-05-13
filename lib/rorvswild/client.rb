@@ -25,7 +25,7 @@ module RorVsWild
       post.content_type = "application/json".freeze
       post.basic_auth(nil, api_key)
       post.body = data.to_json
-      http.request(uri, post)
+      http.request(post)
     end
 
     def http
