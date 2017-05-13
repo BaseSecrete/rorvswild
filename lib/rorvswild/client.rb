@@ -2,7 +2,6 @@ require "set"
 require "uri"
 require "json/ext"
 require "net/http"
-require "net/http/persistent"
 
 module RorVsWild
   class Client
@@ -30,11 +29,21 @@ module RorVsWild
     end
 
     def http
-      return @http if @http
-      http = Net::HTTP::Persistent.new
-      http.retry_change_requests = true
+      @http ||= new_http
+    end
+
+    def new_http
+      uri = URI(api_url)
+      http = Net::HTTP.new(uri.host, uri.port)
       http.open_timeout = timeout
-      @http = http
+
+      if uri.scheme == HTTPS
+        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        http.ca_file = CERTIFICATE_AUTHORITIES_PATH
+        http.use_ssl = true
+      end
+
+      http
     end
 
     def post_async(path, data)
