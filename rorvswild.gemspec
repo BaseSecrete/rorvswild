@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alexis Bernard"]
   spec.email         = ["alexis@bernard.io"]
   spec.summary       = "Ruby on Rails app monitoring"
-  spec.description   = "Performances & quality insights for rails developers."
+  spec.description   = "Performances and quality insights for rails developers."
   spec.homepage      = "https://www.rorvswild.com"
   spec.license       = "MIT"
 
