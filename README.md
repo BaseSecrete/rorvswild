@@ -81,7 +81,7 @@ production:
 
 ```ruby
 # config/initializers/rorvswild.rb
-RorVsWild::Client.new(
+RorVsWild.start(
   api_key: "API_KEY",
   ignored_exceptions: ["ActionController::RoutingError", "ZeroDivisionError"])
 ```
