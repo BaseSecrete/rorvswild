@@ -17,6 +17,8 @@ module RorVsWild
       @api_key = config[:api_key]
       @timeout ||= config[:timeout] || DEFAULT_TIMEOUT
       @threads = Set.new
+      @connections = []
+      @mutex = Mutex.new
     end
 
     def post(path, data)
@@ -25,11 +27,22 @@ module RorVsWild
       post.content_type = "application/json".freeze
       post.basic_auth(nil, api_key)
       post.body = data.to_json
-      http.request(post)
+      transmit(post)
     end
 
-    def http
-      @http ||= new_http
+    def take_connection
+      @mutex.synchronize { @connections.shift }
+    end
+
+    def release_connection(http)
+      @mutex.synchronize { @connections.push(http) }
+    end
+
+    def transmit(request)
+      http = take_connection || new_http
+      http.request(request)
+    ensure
+      release_connection(http)
     end
 
     def new_http
