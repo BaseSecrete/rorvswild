@@ -18,6 +18,7 @@ module RorVsWild
       @timeout ||= config[:timeout] || DEFAULT_TIMEOUT
       @threads = Set.new
       @connections = []
+      @connection_count = 0
       @mutex = Mutex.new
     end
 
@@ -35,12 +36,26 @@ module RorVsWild
     end
 
     def release_connection(http)
-      @mutex.synchronize { @connections.push(http) }
+      @mutex.synchronize { @connections.push(http) } if http
+    end
+
+    def max_connections
+      @max_connections ||= [Process.getrlimit(Process::RLIMIT_NOFILE).first / 10, 10].max
+    end
+
+    def take_or_create_connection
+      if http = take_connection
+        http
+      elsif @connection_count < max_connections
+        @connection_count += 1
+        new_http
+      end
     end
 
     def transmit(request)
-      http = take_connection || new_http
-      http.request(request)
+      if http = take_or_create_connection
+        http.request(request)
+      end
     ensure
       release_connection(http)
     end
