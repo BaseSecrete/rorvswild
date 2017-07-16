@@ -25,6 +25,7 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
     agent.expects(:post_job)
     SampleJob.perform_now(false)
   rescue
+  ensure
     assert_equal([false], agent.data[:error][:parameters])
   end
 end

@@ -13,3 +13,4 @@ gem "actionpack"
 gem "activejob"
 
 gem "delayed_job"
+gem "sidekiq"
