@@ -6,7 +6,7 @@ module RorVsWild
       end
 
       def around_perform_rorvswild(*args, &block)
-        RorVsWild.measure_block(to_s, &block)
+        RorVsWild.agent.measure_job(to_s, parameters: args, &block)
       end
     end
   end
