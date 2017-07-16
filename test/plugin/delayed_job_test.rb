@@ -6,30 +6,39 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
   include RorVsWildAgentHelper
 
   class SampleJob
+    def initialize(arg)
+      @arg = arg
+    end
+
     def perform
+      raise "Exception" unless @arg
     end
   end
+
+  Delayed::Worker.delay_jobs = false
 
   class SampleBackend
     include Delayed::Backend::Base
 
-    attr_accessor :id,  :attempts
+    attr_accessor :handler
 
     def initialize(options)
-    end
-
-    def payload_object
-      SampleJob.new
-    end
-
-    def destroy
+      @payload_object = options[:payload_object]
     end
   end
 
   def test_callback
     agent.expects(:post_job)
-    Delayed::Worker.delay_jobs = false
-    SampleBackend.enqueue(SampleJob.new)
+    SampleBackend.enqueue(SampleJob.new(true))
+    assert_equal("RorVsWild::Plugin::DelayedJobTest::SampleJob", agent.data[:name])
+  end
+
+  def test_callback_on_exception
+    agent.expects(:post_job)
+    SampleBackend.enqueue(job = SampleJob.new(false))
+  rescue
+  ensure
+    assert_equal(job, agent.data[:error][:parameters])
   end
 end
 
