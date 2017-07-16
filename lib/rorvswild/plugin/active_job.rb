@@ -9,7 +9,7 @@ module RorVsWild
       end
 
       def self.around_perform(job, block)
-        RorVsWild.measure_block(job.class.name, &block)
+        RorVsWild.agent.measure_job(job.class.name, parameters: job.arguments, &block)
       end
     end
   end

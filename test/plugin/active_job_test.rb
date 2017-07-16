@@ -8,14 +8,24 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
   class SampleJob < ::ActiveJob::Base
     queue_as :default
 
-    def perform
+    def perform(arg)
+      raise "Exception" unless arg
     end
   end
 
   def test_callback
     ActiveJob::Base.logger = Logger.new("/dev/null")
     agent.expects(:post_job)
-    SampleJob.perform_now
+    SampleJob.perform_now(1)
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.data[:name])
+  end
+
+  def test_callback_on_exception
+    ActiveJob::Base.logger = Logger.new("/dev/null")
+    agent.expects(:post_job)
+    SampleJob.perform_now(false)
+  rescue
+    assert_equal([false], agent.data[:error][:parameters])
   end
 end
 

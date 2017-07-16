@@ -75,13 +75,13 @@ module RorVsWild
       end
     end
 
-    def measure_job(name, &block)
+    def measure_job(name, parameters: nil, &block)
       return block.call if data[:name] # Prevent from recursive jobs
       initialize_data(name)
       begin
         block.call
       rescue Exception => ex
-        data[:error] = exception_to_hash(ex) if !ignored_exception?(ex)
+        push_exception(ex, parameters: parameters)
         raise
       ensure
         data[:runtime] = (Time.now - data[:started_at]) * 1000
@@ -114,9 +114,11 @@ module RorVsWild
       post_error(exception_to_hash(exception, extra_details))
     end
 
-    def push_exception(exception)
+    def push_exception(exception, options = nil)
       return if ignored_exception?(exception)
       data[:error] = exception_to_hash(exception)
+      data[:error].merge!(options) if options
+      data[:error]
     end
 
     def data
