@@ -3,6 +3,7 @@ require "rorvswild/location"
 require "rorvswild/section"
 require "rorvswild/client"
 require "rorvswild/plugins"
+require "rorvswild/queue"
 require "rorvswild/agent"
 
 module RorVsWild

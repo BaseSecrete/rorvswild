@@ -13,7 +13,7 @@ module RorVsWild
 
     attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
 
-    attr_reader :app_root_regex, :client
+    attr_reader :app_root_regex, :client, :queue
 
     def initialize(config)
       config = self.class.default_config.merge(config)
@@ -21,6 +21,7 @@ module RorVsWild
       @app_root = config[:app_root]
       @logger = config[:logger]
       @client = Client.new(config)
+      @queue = Queue.new(client)
       cleanup_data
 
       if defined?(Rails)
@@ -158,7 +159,7 @@ module RorVsWild
     end
 
     def post_job
-      client.post_async("/jobs".freeze, job: cleanup_data)
+      queue.push_job(cleanup_data)
     end
 
     def post_error(hash)
