@@ -51,6 +51,9 @@ module RorVsWild
 
     def flush_indefinetly
       sleep(SLEEP_TIME) and flush while true
+    rescue => ex
+      RorVsWild.agent.logger.error(ex.inspect)
+      retry
     end
 
     def flush

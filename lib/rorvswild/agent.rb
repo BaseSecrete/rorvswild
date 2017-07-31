@@ -13,7 +13,7 @@ module RorVsWild
 
     attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
 
-    attr_reader :app_root_regex, :client, :queue
+    attr_reader :app_root_regex, :client, :queue, :logger
 
     def initialize(config)
       config = self.class.default_config.merge(config)
