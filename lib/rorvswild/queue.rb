@@ -35,7 +35,7 @@ module RorVsWild
     end
 
     def flush
-      data = pull_jobs and client.post("/api/v1/jobs", data)
+      data = pull_jobs and client.post("/jobs", jobs: data)
     end
   end
 end

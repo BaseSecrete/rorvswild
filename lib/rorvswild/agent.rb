@@ -6,7 +6,7 @@ module RorVsWild
 
     def self.default_config
       {
-        api_url: "https://www.rorvswild.com/api",
+        api_url: "https://www.rorvswild.com/api/v1",
         ignored_exceptions: [],
       }
     end
