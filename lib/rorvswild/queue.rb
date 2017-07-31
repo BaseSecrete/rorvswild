@@ -11,7 +11,7 @@ module RorVsWild
       @requests = []
       @client = client
       @mutex = Mutex.new
-      @thread = Thread.new { flush_indefinetly }
+      @thread = Thread.new { flush_indefinetely }
     end
 
     def push_job(data)
@@ -49,7 +49,7 @@ module RorVsWild
       end
     end
 
-    def flush_indefinetly
+    def flush_indefinetely
       sleep(SLEEP_TIME) and flush while true
     rescue => ex
       RorVsWild.agent.logger.error(ex.inspect)
