@@ -1,8 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class QueueTest < Minitest::Test
-  include TopTests
-
   def test_push_job
     queue.thread.expects(:wakeup)
     10.times { queue.push_job(1) }

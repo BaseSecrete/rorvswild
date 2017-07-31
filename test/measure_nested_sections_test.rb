@@ -2,7 +2,6 @@ require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
   include RorVsWildAgentHelper
-  include TopTests
 
   def test_measure_section
     result = agent.measure_block("root") do
