@@ -155,7 +155,7 @@ module RorVsWild
     end
 
     def post_request
-      client.post_async("/requests".freeze, request: cleanup_data)
+      queue.push_request(cleanup_data)
     end
 
     def post_job
