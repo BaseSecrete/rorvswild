@@ -57,7 +57,7 @@ module RorVsWild
     def flush
       RorVsWild.logger.info("flush")
       data = pull_jobs and client.post("/jobs", jobs: data)
-      data = pull_requests and client.post("/jobs", requests: data)
+      data = pull_requests and client.post("/requests", requests: data)
     end
 
     def start_thread
