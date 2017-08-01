@@ -13,27 +13,25 @@ module RorVsWild
 
     attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
 
-    attr_reader :app_root_regex, :client, :queue, :logger
+    attr_reader :app_root_regex, :client, :queue
 
     def initialize(config)
       config = self.class.default_config.merge(config)
       @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
-      @logger = config[:logger]
       @client = Client.new(config)
       @queue = Queue.new(client)
       cleanup_data
 
       if defined?(Rails)
-        @logger ||= Rails.logger
         @app_root ||= Rails.root.to_s
         config = Rails.application.config
         @ignored_exceptions ||= %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
       end
 
-      @logger ||= Logger.new(STDERR)
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
+      RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION} from #{app_root}")
       setup_plugins
     end
 

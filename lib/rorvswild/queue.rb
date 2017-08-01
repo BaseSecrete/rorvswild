@@ -11,7 +11,6 @@ module RorVsWild
       @requests = []
       @client = client
       @mutex = Mutex.new
-      @thread = Thread.new { flush_indefinetely }
     end
 
     def push_job(data)
@@ -24,8 +23,7 @@ module RorVsWild
 
     def push_to(array, data)
       mutex.synchronize do
-        array.push(data)
-        thread.wakeup if array.size >= FLUSH_TRESHOLD
+        wakeup_thread if array.push(data).size >= FLUSH_TRESHOLD
       end
     end
 
@@ -51,14 +49,23 @@ module RorVsWild
 
     def flush_indefinetely
       sleep(SLEEP_TIME) and flush while true
-    rescue => ex
-      RorVsWild.agent.logger.error(ex.inspect)
-      retry
+    rescue Exception => ex
+      RorVsWild.logger.error(ex)
+      raise
     end
 
     def flush
+      RorVsWild.logger.info("flush")
       data = pull_jobs and client.post("/jobs", jobs: data)
       data = pull_requests and client.post("/jobs", requests: data)
+    end
+
+    def start_thread
+      @thread = Thread.new { flush_indefinetely }
+    end
+
+    def wakeup_thread
+      (thread && thread.alive?) ? thread.wakeup : start_thread
     end
   end
 end

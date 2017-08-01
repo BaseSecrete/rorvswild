@@ -8,11 +8,19 @@ require "rorvswild/agent"
 
 module RorVsWild
   def self.start(config)
+    @logger = initialize_logger(config[:logger])
     @agent = Agent.new(config)
+  rescue Exception => ex
+    logger.error(ex)
+    raise
   end
 
   def self.agent
     @agent
+  end
+
+  def self.logger
+    @logger ||= Logger.new(STDOUT)
   end
 
   def self.measure_code(code)
@@ -29,6 +37,14 @@ module RorVsWild
 
   def self.record_error(exception, extra_details = nil)
     agent.record_error(exception, extra_details) if agent
+  end
+
+  def self.initialize_logger(destination)
+    if destination
+      Logger.new(destination)
+    elsif defined?(Rails)
+      Logger.new(Rails.root + "log/rorvswild.log")
+    end
   end
 end
 
