@@ -23,7 +23,7 @@ module RorVsWild
 
     def push_to(array, data)
       mutex.synchronize do
-        wakeup_thread if array.push(data).size >= FLUSH_TRESHOLD
+        wakeup_thread if array.push(data).size >= FLUSH_TRESHOLD || !thread
       end
     end
 
