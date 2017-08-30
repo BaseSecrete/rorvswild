@@ -55,12 +55,13 @@ module RorVsWild
     end
 
     def flush
-      RorVsWild.logger.info("flush")
+      RorVsWild.logger.info("RorVsWild::Queue#flush".freeze)
       data = pull_jobs and client.post("/jobs", jobs: data)
       data = pull_requests and client.post("/requests", requests: data)
     end
 
     def start_thread
+      RorVsWild.logger.info("RorVsWild::Queue#start_thread".freeze)
       @thread = Thread.new { flush_indefinetely }
     end
 
