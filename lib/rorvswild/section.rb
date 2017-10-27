@@ -41,8 +41,6 @@ module RorVsWild
       kind == section.kind && line == section.line && file == section.file
     end
 
-    MAX_COMMAND_HISTORY = 5
-
     def merge(section)
       self.calls += section.calls
       self.total_runtime += section.total_runtime

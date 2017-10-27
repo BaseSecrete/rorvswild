@@ -8,6 +8,7 @@ gem "top_tests"
 
 gem "mongo"
 gem "redis"
+gem "elasticsearch"
 
 gem "actionpack"
 gem "activejob"
