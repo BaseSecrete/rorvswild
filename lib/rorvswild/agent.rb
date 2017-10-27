@@ -40,6 +40,7 @@ module RorVsWild
 
       Plugin::Redis.setup
       Plugin::Mongo.setup
+      Plugin::Elasticsearch.setup
 
       Plugin::Resque.setup
       Plugin::Sidekiq.setup

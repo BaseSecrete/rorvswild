@@ -2,6 +2,7 @@ require "rorvswild/plugin/net_http"
 
 require "rorvswild/plugin/redis"
 require "rorvswild/plugin/mongo"
+require "rorvswild/plugin/elasticsearch"
 
 require "rorvswild/plugin/resque"
 require "rorvswild/plugin/sidekiq"
