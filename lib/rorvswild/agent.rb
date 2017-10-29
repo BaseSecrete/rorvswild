@@ -36,6 +36,7 @@ module RorVsWild
     end
 
     def setup_plugins
+      Plugin::Rake.setup
       Plugin::NetHttp.setup
 
       Plugin::Redis.setup

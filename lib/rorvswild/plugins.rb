@@ -1,3 +1,4 @@
+require "rorvswild/plugin/rake"
 require "rorvswild/plugin/net_http"
 
 require "rorvswild/plugin/redis"
