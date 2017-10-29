@@ -1,13 +1,17 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class QueueTest < Minitest::Test
+  include RorVsWildAgentHelper
+
   def test_push_job
+    queue.start_thread
     queue.thread.expects(:wakeup)
     10.times { queue.push_job(1) }
     assert_equal(10, queue.jobs.size)
   end
 
   def test_push_request
+    queue.start_thread
     queue.thread.expects(:wakeup)
     10.times { queue.push_request(1) }
     assert_equal(10, queue.requests.size)
@@ -43,10 +47,10 @@ class QueueTest < Minitest::Test
   end
 
   def queue
-    @queue ||= RorVsWild::Queue.new(client)
+    @queue ||= agent.instance_variable_get(:@queue)
   end
 
   def client
-    @client ||= RorVsWild::Client.new({})
+    @client ||= agent.instance_variable_get(:@client)
   end
 end
