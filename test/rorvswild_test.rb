@@ -145,7 +145,7 @@ class RorVsWildTest < Minitest::Test
   end
 
   def initialize_agent(options = {})
-    agent ||= RorVsWild.start(options)
+    agent ||= RorVsWild.start({logger: "/dev/null"}.merge(options))
     agent.stubs(:post_request)
     agent.stubs(:post_task)
     agent
