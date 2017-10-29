@@ -12,6 +12,14 @@ module RorVsWild
           alias_method :request_without_rorvswild, :request
 
           def request(req, body = nil, &block)
+            if Thread.current[:rorvswild_ignore_net_http]
+              request_without_rorvswild(req, body, &block)
+            else
+              request_with_rorvswild(req, body, &block)
+            end
+          end
+
+          def request_with_rorvswild(req, body = nil, &block)
             return request_without_rorvswild(req, body, &block) if request_called_twice?
             scheme = use_ssl? ? HTTPS : HTTP
             url = "#{req.method} #{scheme}://#{address}#{req.path}"
@@ -26,6 +34,14 @@ module RorVsWild
             (current_section = RorVsWild::Section.current) && current_section.kind == HTTP
           end
         end
+      end
+
+      def self.ignore(&block)
+        old_value = Thread.current[:rorvswild_ignore_net_http]
+        Thread.current[:rorvswild_ignore_net_http] = true
+        block.call
+      ensure
+        Thread.current[:rorvswild_ignore_net_http] = old_value
       end
     end
   end
