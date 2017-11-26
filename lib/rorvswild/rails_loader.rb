@@ -15,6 +15,11 @@ module RorVsWild
         if config = RorVsWild::RailsLoader.load_config_file(path)[Rails.env]
           RorVsWild.start(config.symbolize_keys)
           @started = true
+        elsif Rails.env.development?
+          require "rorvswild/live"
+          RorVsWild::Live.start
+          RorVsWild.start({})
+          @started = true
         end
       end
     end

@@ -1,0 +1,18 @@
+.rorvswild-live-toggler {
+  background: yellow;
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.rorvswild-live-panel {
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  background: yellow;
+  z-index: 1000;
+  height: 90%;
+  width: 90%;
+  overflow-y: scroll;
+}

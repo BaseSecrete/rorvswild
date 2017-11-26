@@ -1,0 +1,18 @@
+<div data-barber="RorVsWild.Live" data-json="%{data}">
+  <div class="rorvswild-live-toggler" data-events="click->expand">{{runtime}}</div>
+
+  <div id="rorvswild-live-request" class="rorvswild-live-panel" style="display: none;">
+    <div data-events="click->collapse">X</div>
+    {{#sections}}
+      <div>
+        <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} {{impact}}</p>
+        <p>{{kind}} {{command}}</p>
+      </div>
+    {{/sections}}
+  </div>
+</div>
+
+<script>
+  %{javascript_source}
+  Barber.launch()
+</script>
