@@ -23,7 +23,7 @@ module RorVsWild
       def inject_html_into(response)
         html = response.instance_variable_get(:@response).body
         if index = html.index("</body>")
-          html.insert(index, html_markup(RorVsWild.agent.queue.requests.last))
+          html.insert(index, html_markup(RorVsWild.agent.queue.requests))
           response.instance_variable_get(:@response).body = html
         end
         if index = html.index("</head>")

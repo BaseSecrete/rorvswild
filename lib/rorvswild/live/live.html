@@ -1,16 +1,44 @@
 <div data-barber="RorVsWild.Live" data-json="%{data}">
-  <div class="rorvswild-live-toggler" data-events="click->expand">{{runtime}}</div>
+</div>
 
-  <div id="rorvswild-live-request" class="rorvswild-live-panel" style="display: none;">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Live">
+  <div class="rorvswild-live-toggler" data-events="click->expand">{{lastRuntime}}</div>
+  <div id="rorvswild-live-requests" class="rorvswild-live-panel" style="{{containerStyle}}">
     <div data-events="click->collapse">X</div>
+    {{#currentRequest}}
+      <div data-events="click->goBackToSummary">&lt;-</div>
+      {{> RorVsWild.Live.RequestDetails}}
+    {{/currentRequest}}
+
+    {{^currentRequest}}
+      {{#requests}}
+        {{> RorVsWild.Live.RequestSummary}}
+      {{/requests}}
+    {{/currentRequest}}
+  </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestSummary">
+  <div data-events="click->showRequest" data-request-id="{{id}}">
+    {{name}} {{path}} {{runtime}} {{started_at}}
+  </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestDetails">
+  <div>
+    {{name}} {{path}} {{runtime}} {{started_at}}
     {{#sections}}
-      <div>
-        <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} {{impact}}</p>
-        <p>{{kind}} {{command}}</p>
-      </div>
+      {{> RorVsWild.Live.Section}}
     {{/sections}}
   </div>
-</div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.Section">
+  <div>
+    <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} {{impact}}</p>
+    <p>{{kind}} {{command}}</p>
+  </div>
+</script>
 
 <script>
   %{javascript_source}
