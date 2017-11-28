@@ -2,41 +2,95 @@
 </div>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live">
-  <div class="rorvswild-live-toggler" data-events="click->expand">{{lastRuntime}}</div>
+  <div class="rorvswild-live-toggler" data-events="click->expand">{{lastRuntime}}<small>ms</small></div>
   <div id="rorvswild-live-requests" class="rorvswild-live-panel" style="{{containerStyle}}">
-    <div data-events="click->collapse">X</div>
-    {{#currentRequest}}
-      <div data-events="click->goBackToSummary">&lt;-</div>
-      {{> RorVsWild.Live.RequestDetails}}
-    {{/currentRequest}}
 
-    {{^currentRequest}}
-      {{#requests}}
-        {{> RorVsWild.Live.RequestSummary}}
-      {{/requests}}
-    {{/currentRequest}}
+    <div class="rorvswild-live-panel__header">
+      <div data-events="click->collapse" class="rorvswild-live-panel__close">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </div>
+      <a href="https://rorvswild.com" class="rorvswild-live-panel__logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34.83 30.83">
+          <polygon points="17.41 9.41 13.41 9.41 9.41 13.41 17.41 21.41 25.41 13.41 21.41 9.41 17.41 9.41"/>
+          <polyline points="1.41 21.41 9.41 29.41 17.41 21.41 25.41 29.41 33.41 21.41"/>
+          <polyline points="9.41 5.41 5.41 1.41 1.41 5.41"/>
+          <polyline points="33.41 5.41 29.41 1.41 25.41 5.41"/>
+        </svg>
+      </a>
+    </div>
+    <div class="rorvswild-live-panel__content">
+      {{#currentRequest}}
+        <div data-events="click->goBackToSummary" class="rorvswild-live-panel__back-button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+          </svg>
+        </div>
+        {{> RorVsWild.Live.RequestDetails}}
+      {{/currentRequest}}
+
+      {{^currentRequest}}
+        {{#requests}}
+          {{> RorVsWild.Live.RequestSummary}}
+        {{/requests}}
+      {{/currentRequest}}
+    </div>
+    <div class="rorvswild-live-panel__footer">
+      <a href="https://rorvswild.com">Monitor your production environment, background jobs, errors and more on RoRvsWild.com</a>.
+    </div>
   </div>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestSummary">
-  <div data-events="click->goToRequestDetails" data-request-id="{{id}}">
-    {{name}} {{path}} {{runtime}} {{started_at}}
+  <div data-events="click->goToRequestDetails" data-request-id="{{id}}" class="rorvswild-live-panel__request">
+    <span class="rorvswild-live-panel__request__name">
+      {{name}}
+      <span class="rorvswild-live-panel__request__path">
+        {{path}}
+      </span>
+    </span>
+    <span class="rorvswild-live-panel__request__runtime">{{runtime}}<small>ms</small></span>
+    <span class="rorvswild-live-panel__request__started-at">{{started_at}}</span>
   </div>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestDetails">
-  <div>
-    {{name}} {{path}} {{runtime}} {{started_at}}
-    {{#sections}}
-      {{> RorVsWild.Live.Section}}
-    {{/sections}}
+  <div class="rorvswild-live-panel__request-details">
+    <div class="rorvswild-live-panel__request-details__request">
+      <span class="rorvswild-live-panel__request__name">
+        <h2>{{name}}</h2>
+        <span class="rorvswild-live-panel__request__path">
+          {{path}}
+        </span>
+      </span>
+      <span class="rorvswild-live-panel__request__runtime">{{runtime}}<small>ms</small></span>
+      <span class="rorvswild-live-panel__request__started-at">{{started_at}}</span>
+    </div>
+    <div class="rorvswild-live-panel__request-details__sections">
+      {{#sections}}
+        {{> RorVsWild.Live.Section}}
+      {{/sections}}
+    </div>
   </div>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live.Section">
-  <div>
-    <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} calls {{impact}}</p>
-    <p>{{kind}} {{command}}</p>
+  <div class="rorvswild-live-panel__request-details__section">
+    <div class="rorvswild-live-panel__request-details__section__main">
+      <span class="rorvswild-live-panel__request-details__section__file">
+        {{file}}:{{line}}
+        <div class="rorvswild-live-panel__request-details__section__code">
+          <span class="rorvswild-live-panel__request-details__section__kind">{{kind}}</span>
+          <span class="rorvswild-live-panel__request-details__section__command">{{command}}</span>
+        </div>
+      </span>
+      <span class="rorvswild-live-panel__request-details__section__average" title="average runtime">{{averageRuntime}}<small>ms</small></span>
+      <span class="rorvswild-live-panel__request-details__section__calls" title="calls">x{{calls}}</span>
+      <span class="rorvswild-live-panel__request-details__section__impact" title="impact">{{impact}}<small>&#37;</small></span>
+    </div>
+
   </div>
 </script>
 

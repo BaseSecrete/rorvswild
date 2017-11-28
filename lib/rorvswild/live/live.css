@@ -1,18 +1,265 @@
+/********************************************/
+/************* TOGGLER **********************/
+/********************************************/
+
 .rorvswild-live-toggler {
-  background: yellow;
+  background: #202630;
+  color: #61b8ff;
+  box-shadow: 0 1px 4px 0px #2a2f3b;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 15px;
+  line-height: 24px;
   position: fixed;
-  bottom: 10px;
-  left: 10px;
-  z-index: 1000;
+  bottom: 12px;
+  left: 12px;
+  padding:0 12px;
+  cursor: pointer;
+  z-index: 100001;
+}
+.rorvswild-live-toggler small {
+  color: #afbecc;
+  font-size: 12px;
+  margin-left: 4px;
 }
 
+/********************************************/
+/*************** PANEL **********************/
+/********************************************/
+
 .rorvswild-live-panel {
+  background: #202630;
+  box-shadow: 0 0 0 48px rgba(0,0,0,.9);
+  color: #ebf5ff;
+  font-family: monospace;
+  font-size: 15px;
+  line-height: 24px;
   position: fixed;
-  top: 5%;
-  left: 5%;
-  background: yellow;
-  z-index: 1000;
-  height: 90%;
-  width: 90%;
-  overflow-y: scroll;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 48px;
+  z-index: 100000;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.rorvswild-live-panel::-moz-selection {
+  background: #ebf5ff;
+  color: #202630;
+}
+
+.rorvswild-live-panel::selection {
+  background: #ebf5ff;
+  color: #202630;
+}
+
+.rorvswild-live-panel a,
+.rorvswild-live-panel a:hover,
+.rorvswild-live-panel a:visited {
+  text-decoration: underline;
+  color: inherit;
+}
+.rorvswild-live-panel small {
+  color: #afbecc;
+  font-size: 12px;
+  margin-left: 4px;
+}
+
+/* Panel Header */
+.rorvswild-live-panel__header {
+  background: #2a2f3b;
+  padding: 12px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+  z-index: 100002;
+}
+.rorvswild-live-panel svg {
+  height: 24px;
+  width: 24px;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: square;
+  stroke: #ebf5ff;
+  stroke-miterlimit: 10;
+  vertical-align: middle;
+}
+.rorvswild-live-panel__close {
+  float: right;
+  cursor: pointer;
+}
+
+/* Panel Content */
+
+.rorvswild-live-panel__content {
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  height: calc(100% - 48px);
+  overflow-x: auto;
+}
+.rorvswild-live-panel__content::-webkit-scrollbar { width: 3px; }
+.rorvswild-live-panel__content::-webkit-scrollbar-corner { background: transparent; }
+.rorvswild-live-panel__content::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0 rgba(0,0,0,0.3);
+  background: transparent;
+}
+.rorvswild-live-panel__content::-webkit-scrollbar-thumb {
+  background-color: #afbecc;
+  outline: 1px solid #afbecc;
+}
+
+/* Panel request summary */
+
+.rorvswild-live-panel__request {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 12px 12px 11px;
+  border-bottom: 1px solid #2a2f3b;
+  cursor: pointer;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.rorvswild-live-panel__request:hover { background: #2a2f3b; }
+.rorvswild-live-panel__request__name {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+.rorvswild-live-panel__request__path {
+  color: #afbecc;
+  display: block;
+}
+.rorvswild-live-panel__request__started-at {
+  color: #afbecc;
+  margin-left: 12px;
+}
+.rorvswild-live-panel__request__runtime { color: #61b8ff; }
+
+/* Panel request details */
+
+.rorvswild-live-panel__back-button {
+  margin: 24px 12px 18px;
+  cursor: pointer;
+}
+.rorvswild-live-panel__request-details__request {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-bottom: 48px;
+  padding: 12px 12px 0;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.rorvswild-live-panel__request__name h2 {
+  margin:-18px 0 0;
+  padding:0;
+  font-size: 31px;
+  line-height: 48px;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+/* details sections */
+
+.rorvswild-live-panel__request-details__section {
+  padding: 12px 12px 11px;
+  border-bottom: 1px solid #2a2f3b;
+}
+.rorvswild-live-panel__request-details__section:hover { background: #2a2f3b; }
+
+.rorvswild-live-panel__request-details__section__main {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.rorvswild-live-panel__request-details__section__file {
+  width: 100%;
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+.rorvswild-live-panel__request-details__section__average {
+  color: #61b8ff;
+  width: 48px;
+  margin:0 12px 0 0;
+}
+.rorvswild-live-panel__request-details__section__calls {
+  color: #afbecc;
+  width: 48px;
+  margin:0 12px 0 0;
+}
+.rorvswild-live-panel__request-details__section__impact {
+  width: 48px;
+  margin:0 12px 0 0;
+}
+.rorvswild-live-panel__request-details__section__code {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.rorvswild-live-panel__request-details__section__kind {
+  background: #181c26;
+  font-size: 10px;
+  text-transform: uppercase;
+  text-align: center;
+  letter-spacing: 2px;
+  width: 72px;
+  height: 24px;
+  display: inline-block;
+}
+.rorvswild-live-panel__request-details__section__command {
+  color: #afbecc;
+  margin-left: 12px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+/* Panel Footer */
+
+.rorvswild-live-panel__footer {
+  width: 100%;
+  background: #2a2f3b;
+  color: #7ce356;
+  padding: 12px;
+  text-align: center;
+}
+
+
+/* MEDIA QUERIES */
+
+@media screen and (min-width: 720px) {
+  .rorvswild-live-panel__request__name {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+  }
+  .rorvswild-live-panel__request__runtime { margin-left: 12px; }
+
+  .rorvswild-live-panel__request-details__section__file {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+  }
+  .rorvswild-live-panel__request-details__section__average {
+    text-align: right;
+    margin:0 0 0 12px;
+  }
+  .rorvswild-live-panel__request-details__section__calls {
+    text-align: right;
+    margin:0 0 0 12px;
+  }
+  .rorvswild-live-panel__request-details__section__impact {
+    text-align: right;
+    margin:0 0 0 12px;
+  }
 }
