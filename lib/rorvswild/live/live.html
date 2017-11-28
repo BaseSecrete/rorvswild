@@ -19,7 +19,7 @@
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestSummary">
-  <div data-events="click->showRequest" data-request-id="{{id}}">
+  <div data-events="click->goToRequestDetails" data-request-id="{{id}}">
     {{name}} {{path}} {{runtime}} {{started_at}}
   </div>
 </script>
@@ -35,7 +35,7 @@
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Live.Section">
   <div>
-    <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} {{impact}}</p>
+    <p>{{file}}:{{line}} {{averageRuntime}} {{calls}} calls {{impact}}</p>
     <p>{{kind}} {{command}}</p>
   </div>
 </script>
