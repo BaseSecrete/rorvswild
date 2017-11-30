@@ -1,4 +1,5 @@
 require "rorvswild/live/middleware"
+require "rorvswild/live/queue"
 
 module RorVsWild
   module Live

@@ -11,7 +11,7 @@
           <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
       </div>
-      <a href="https://rorvswild.com" class="rorvswild-live-panel__logo">
+      <a href="https://www.rorvswild.com" class="rorvswild-live-panel__logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34.83 30.83">
           <polygon points="17.41 9.41 13.41 9.41 9.41 13.41 17.41 21.41 25.41 13.41 21.41 9.41 17.41 9.41"/>
           <polyline points="1.41 21.41 9.41 29.41 17.41 21.41 25.41 29.41 33.41 21.41"/>
@@ -19,10 +19,12 @@
           <polyline points="33.41 5.41 29.41 1.41 25.41 5.41"/>
         </svg>
       </a>
+      <span data-events="click->goToHistory">History</span>
+      <a href="https://github.com/BaseSecrete/rorvswild">Help</a>
     </div>
     <div class="rorvswild-live-panel__content">
       {{#currentRequest}}
-        <div data-events="click->goBackToSummary" class="rorvswild-live-panel__back-button">
+        <div data-events="click->goToHistory" class="rorvswild-live-panel__back-button">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <line x1="20" y1="12" x2="4" y2="12"></line>
             <polyline points="10 18 4 12 10 6"></polyline>
@@ -38,7 +40,7 @@
       {{/currentRequest}}
     </div>
     <div class="rorvswild-live-panel__footer">
-      <a href="https://rorvswild.com">Monitor your production environment, background jobs, errors and more on RoRvsWild.com</a>.
+      <a href="https://www.rorvswild.com">Monitor your production environment, background jobs, errors and more on RoRvsWild.com</a>.
     </div>
   </div>
 </script>
