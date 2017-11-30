@@ -60,12 +60,6 @@
   color: #202630;
 }
 
-.rorvswild-live-panel a,
-.rorvswild-live-panel a:hover,
-.rorvswild-live-panel a:visited {
-  text-decoration: underline;
-  color: inherit;
-}
 .rorvswild-live-panel small {
   color: #afbecc;
   font-size: 12px;
@@ -182,7 +176,7 @@
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
-.rorvswild-live-panel__request__name h2 {
+.rorvswild-live-panel__request__name__title {
   margin:-18px 0 0;
   padding:0;
   font-size: 31px;
@@ -255,11 +249,15 @@
 .rorvswild-live-panel__footer {
   width: 100%;
   background: #2a2f3b;
-  color: #7ce356;
+  color: #afbecc;
   padding: 12px;
   text-align: center;
 }
-
+a.rorvswild-live-panel__footer__link {
+  color: #ebf5ff;
+  text-decoration: underline;
+  line-height: inherit;
+}
 
 /* MEDIA QUERIES */
 
