@@ -101,8 +101,8 @@
   float: left;
 }
 .rorvswild-live-panel__github {
-  float: right;
-  margin-right: 12px;
+  position: absolute;
+  right: 48px;
 }
 .rorvswild-live-panel__github svg {
   stroke: none;
