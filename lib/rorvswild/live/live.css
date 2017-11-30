@@ -176,7 +176,7 @@
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
-.rorvswild-live-panel__request__name__title {
+h2.rorvswild-live-panel__request__name__title {
   margin:-18px 0 0;
   padding:0;
   font-size: 31px;
