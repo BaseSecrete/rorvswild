@@ -78,6 +78,13 @@
   padding: 12px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
   z-index: 100002;
+  text-align: center;
+}
+.rorvswild-live-panel__header__title {
+  color: #afbecc;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
 }
 .rorvswild-live-panel svg {
   height: 24px;
@@ -85,13 +92,31 @@
   stroke-width: 1.5;
   fill: none;
   stroke-linecap: square;
-  stroke: #ebf5ff;
+  stroke: #afbecc;
   stroke-miterlimit: 10;
   vertical-align: middle;
+}
+.rorvswild-live-panel svg:hover {
+  stroke: #ebf5ff;
 }
 .rorvswild-live-panel__close {
   float: right;
   cursor: pointer;
+}
+.rorvswild-live-panel__logo {
+  float: left;
+}
+.rorvswild-live-panel__github {
+  float: right;
+  margin-right: 12px;
+}
+.rorvswild-live-panel__github svg {
+  stroke: none;
+  fill: #afbecc;
+}
+.rorvswild-live-panel__github svg:hover {
+  stroke: none;
+  fill: #ebf5ff;
 }
 
 /* Panel Content */
