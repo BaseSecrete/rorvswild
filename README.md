@@ -1,7 +1,7 @@
 
 # RorVsWild
 
-<img align="right" src="https://www.rorvswild.com/images/rorvswild_github/rorvswild_logo.jpg">
+<img align="right" src="/images/rorvswild_logo.jpg">
 
 *RoRvsWild* is a free ruby gem to monitor performances and quality in Ruby on Rails applications.
 
@@ -21,7 +21,7 @@ By default, when you install the RoRvsWild gem, RoRvsWild Local is automatically
 * Run `bundle install`
 * Launch your local server and you’ll see a small button in the bottom left corner of your page.
 
-![RoRvsWild Local Button](https://www.rorvswild.com/images/rorvswild_github/rorvswild_local_button.jpg)
+![RoRvsWild Local Button](/images/rorvswild_local_button.jpg)
 
 This is all what you need to do to monitor your local environment requests.
 
@@ -29,10 +29,11 @@ This is all what you need to do to monitor your local environment requests.
 
 **To monitor your production or staging environment, you need an API key.**
 Signup on https://www.rorvswild.com and create an app to get one.
+
 Install the gem and then:
 
 * Run `rorvswild-setup API_KEY` in you terminal
-* Deploy/Restart your app!
+* Deploy/Restart your app
 * Make a few requests and refresh your app page on rorvswild.com to view the dashboard.
 
 The `rorvswild-setup` create a `config/rorvswild.yml` file.
@@ -44,10 +45,11 @@ For those who prefer to manually use an initializer, they can do the following.
 RorVsWild.start(api_key: API_KEY)
 ```
 
+You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production. If you want to add a staging server you have to edit your gemfile.
 
 ## Development mode: *RoRvsWild Local*
 
-![RoRvsWild Local](https://www.rorvswild.com/images/rorvswild_github/rorvswild_local.jpg)
+![RoRvsWild Local](/images/rorvswild_local.jpg)
 
 *RorVsWild Local* monitors the performances of requests in development environment.
 It shows most of the requests performances insights *RoRvsWild.com* displays. **A big difference is everything works locally and no data is sent and recorded on our servers**. You don’t even need an account to use it.
@@ -65,7 +67,7 @@ end
 
 ## Production mode: *RoRvsWild.com*
 
-![RoRvsWild.com](https://www.rorvswild.com/images/rorvswild_github/rorvswild_prod.jpg)
+![RoRvsWild.com](/images/rorvswild_prod.jpg)
 
 *RoRvsWild.com* makes it easy to monitor requests, background jobs and errors in your production and staging environment.
 It also comes with some extra options listed below.
