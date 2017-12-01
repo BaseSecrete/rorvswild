@@ -12,14 +12,11 @@ It can also be used in your production and staging environments with an account 
 
 ## Installation
 
-Both local and development modes live in the same gem.
-By default, when you install the RoRvsWild gem, RoRvsWild Local is automatically added to the development section of your gemfile, and RoRvsWild to your production environment. You can disable one or the other by editing your gemfile.
-
 #### Install the gem
 
 * Add in your Gemfile `gem "rorvswild"`
-* Run `bundle install`
-* Launch your local server and you’ll see a small button in the bottom left corner of your page.
+* Run `bundle install` in you terminal
+* Restart your local server and you’ll see a small button in the bottom left corner of your page.
 
 ![RoRvsWild Local Button](/images/rorvswild_local_button.jpg)
 
@@ -30,13 +27,13 @@ This is all what you need to do to monitor your local environment requests.
 **To monitor your production or staging environment, you need an API key.**
 Signup on https://www.rorvswild.com and create an app to get one.
 
-Install the gem and then:
-
+* Add in your Gemfile `gem "rorvswild"`
+* Run `bundle install` in you terminal
 * Run `rorvswild-setup API_KEY` in you terminal
 * Deploy/Restart your app
 * Make a few requests and refresh your app page on rorvswild.com to view the dashboard.
 
-The `rorvswild-setup` create a `config/rorvswild.yml` file.
+The `rorvswild-setup` command creates a `config/rorvswild.yml` file.
 
 For those who prefer to manually use an initializer, they can do the following.
 
@@ -45,7 +42,7 @@ For those who prefer to manually use an initializer, they can do the following.
 RorVsWild.start(api_key: API_KEY)
 ```
 
-You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production. If you want to add a staging server you have to edit your gemfile.
+You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production. If you want to add a staging server you have to edit your Gemfile.
 
 ## Development mode: *RoRvsWild Local*
 
@@ -57,7 +54,7 @@ It shows most of the requests performances insights *RoRvsWild.com* displays. **
 *RoRvsWild Local* renders a small button in the bottom left corner of your page showing the runtime of the current request. If you click on it, you get all the profiled sections ordered by impact, which is depending on the sections average runtime and the calls count. As on RoRvsWild.com, the bottleneck is always on the top of the list.
 
 Be aware that the performances on your development machine may vary from the production server. Obviously because of the different hardware and database size. Also, Rails is reloading all the code in development environment and this takes quite a lot of time.
-To prevent this behavior and better match the production, turn on cache_classes in your config/environments/development.rb:
+To prevent this behaviour and better match the production, turn on cache_classes in your config/environments/development.rb:
 
 ```
 Rails.application.configure do
@@ -86,7 +83,7 @@ Or like that:
 RorVsWild.measure_block("A great job name") { User.all.do_something_great }
 ```
 
-Then it will appears in the jobs page.
+Then it will appear in the jobs page.
 
 Note that Calling `measure_code` or `measure_block` inside or a request or a job will add a section.
 That is convenient to profile finely parts of your code.
