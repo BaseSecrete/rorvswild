@@ -108,9 +108,14 @@
 </script>
 
 <script>
-  RoRvsWild = {};
-  (function() {
+  var RorVsWild = {};
+  var startRorVsWild = function() {
     %{javascript_source}
     Barber.launch(document.rootElement, this)
-  }.bind(RoRvsWild))()
+  }.bind(RorVsWild)
+
+  if (document.readyState != "loading")
+    startRorVsWild()
+  else
+    document.addEventListener("DOMContentLoaded", startRorVsWild)
 </script>
