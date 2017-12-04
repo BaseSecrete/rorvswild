@@ -1,7 +1,5 @@
 module RorVsWild
   class RailsLoader
-    @started = false
-
     def self.start_on_rails_initialization
       return if !defined?(Rails)
       Rails::Railtie.initializer "rorvswild.detect_config_file" do
@@ -10,17 +8,17 @@ module RorVsWild
     end
 
     def self.start
-      return if @started
+      return if RorVsWild.agent
+
       if (path = Rails.root.join("config/rorvswild.yml")).exist?
         if config = RorVsWild::RailsLoader.load_config_file(path)[Rails.env]
           RorVsWild.start(config.symbolize_keys)
-          @started = true
-        elsif Rails.env.development?
-          require "rorvswild/local"
-          RorVsWild::Local.start
-          RorVsWild.start({})
-          @started = true
         end
+      end
+
+      if !RorVsWild.agent && Rails.env.development?
+        require "rorvswild/local"
+        RorVsWild::Local.start
       end
     end
 

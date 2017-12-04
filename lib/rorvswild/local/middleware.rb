@@ -6,7 +6,6 @@ module RorVsWild
       attr_reader :app, :config
 
       def initialize(app, config)
-        Rails.logger.info("initialize")
         @app, @config = app, config
       end
 
