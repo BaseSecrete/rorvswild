@@ -12,7 +12,7 @@ module RorVsWild
 
       def call(env)
         status, headers, response = app.call(env)
-        if headers["Content-Type"].include?("text/html")
+        if headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           inject_html_into(response)
           [status, headers, response]
         else
