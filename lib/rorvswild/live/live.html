@@ -108,6 +108,9 @@
 </script>
 
 <script>
-  %{javascript_source}
-  Barber.launch()
+  RoRvsWild = {};
+  (function() {
+    %{javascript_source}
+    Barber.launch(document.rootElement, this)
+  }.bind(RoRvsWild))()
 </script>
