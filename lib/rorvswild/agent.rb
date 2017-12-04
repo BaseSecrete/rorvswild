@@ -20,7 +20,7 @@ module RorVsWild
       @ignored_exceptions = config[:ignored_exceptions]
       @app_root = config[:app_root]
       @client = Client.new(config)
-      @queue = defined?(RorVsWild::Live::Queue) ? Live::Queue.new : Queue.new(client)
+      @queue = defined?(RorVsWild::Local::Queue) ? Local::Queue.new : Queue.new(client)
       cleanup_data
 
       if defined?(Rails)

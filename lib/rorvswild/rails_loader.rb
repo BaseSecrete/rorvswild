@@ -16,8 +16,8 @@ module RorVsWild
           RorVsWild.start(config.symbolize_keys)
           @started = true
         elsif Rails.env.development?
-          require "rorvswild/live"
-          RorVsWild::Live.start
+          require "rorvswild/local"
+          RorVsWild::Local.start
           RorVsWild.start({})
           @started = true
         end

@@ -1,5 +1,5 @@
 module RorVsWild
-  module Live
+  module Local
     class Middleware
       include ERB::Util
 
@@ -33,11 +33,11 @@ module RorVsWild
       end
 
       DIRECTORY = File.expand_path(File.dirname(__FILE__))
-      JS_FILES = ["mustache.js", "barber.js", "live.js"]
-      CSS_FILES = ["live.css"]
+      JS_FILES = ["mustache.js", "barber.js", "local.js"]
+      CSS_FILES = ["local.css"]
 
       def html_markup(data)
-        html = File.read(File.join(DIRECTORY, "live.html"))
+        html = File.read(File.join(DIRECTORY, "local.html"))
         html % {data: html_escape(data.to_json), javascript_source: concatenate_javascript}
       end
 

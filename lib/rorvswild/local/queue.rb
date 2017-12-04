@@ -1,5 +1,5 @@
 module RorVsWild
-  module Live
+  module Local
     class Queue
       attr_reader :requests
       def initialize

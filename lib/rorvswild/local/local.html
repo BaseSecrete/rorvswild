@@ -1,7 +1,7 @@
-<div data-barber="RorVsWild.Live" data-json="%{data}">
+<div data-barber="RorVsWild.Local" data-json="%{data}">
 </div>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Live">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local">
   <div class="rorvswild-live-toggler" data-events="click->toggle">{{lastRuntime}}<small>ms</small></div>
   <div id="rorvswild-live-requests" class="rorvswild-live-panel" style="{{containerStyle}}">
 
@@ -41,12 +41,12 @@
             <polyline points="10 18 4 12 10 6"></polyline>
           </svg>
         </div>
-        {{> RorVsWild.Live.RequestDetails}}
+        {{> RorVsWild.Local.RequestDetails}}
       {{/currentRequest}}
 
       {{^currentRequest}}
         {{#requests}}
-          {{> RorVsWild.Live.RequestSummary}}
+          {{> RorVsWild.Local.RequestSummary}}
         {{/requests}}
       {{/currentRequest}}
     </div>
@@ -57,7 +57,7 @@
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestSummary">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestSummary">
   <div data-events="click->goToRequestDetails" data-request-id="{{id}}" class="rorvswild-live-panel__request">
     <span class="rorvswild-live-panel__request__name">
       {{name}}
@@ -70,7 +70,7 @@
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.RequestDetails">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestDetails">
   <div class="rorvswild-live-panel__request-details">
     <div class="rorvswild-live-panel__request-details__request">
       <span class="rorvswild-live-panel__request__name">
@@ -84,13 +84,13 @@
     </div>
     <div class="rorvswild-live-panel__request-details__sections">
       {{#sections}}
-        {{> RorVsWild.Live.Section}}
+        {{> RorVsWild.Local.Section}}
       {{/sections}}
     </div>
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Live.Section">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
   <div class="rorvswild-live-panel__request-details__section">
     <div class="rorvswild-live-panel__request-details__section__main">
       <span class="rorvswild-live-panel__request-details__section__file">
