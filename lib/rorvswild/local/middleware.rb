@@ -10,24 +10,24 @@ module RorVsWild
       end
 
       def call(env)
-        status, headers, response = app.call(env)
-        if headers["Content-Type"] && headers["Content-Type"].include?("text/html")
-          inject_html_into(response)
-          [status, headers, response]
-        else
-          [status, headers, response]
+        status, headers, rack_body = app.call(env)
+        if response = rack_body.instance_variable_get(:@response)
+          if headers["Content-Type"] && headers["Content-Type"].include?("text/html")
+            inject_html_into(response)
+          end
         end
+        [status, headers, rack_body]
       end
 
       def inject_html_into(response)
-        html = response.instance_variable_get(:@response).body
+        html = response.body
         if index = html.index("</body>")
           html.insert(index, html_markup(RorVsWild.agent.queue.requests))
-          response.instance_variable_get(:@response).body = html
+          response.body = html
         end
         if index = html.index("</head>")
           html.insert(index, "<style type='text/css'> #{concatenate_stylesheet}</style>")
-          response.instance_variable_get(:@response).body = html
+          response.body = html
         end
       end
 
