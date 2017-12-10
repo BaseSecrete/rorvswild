@@ -10,6 +10,15 @@ module RorVsWild
       end
 
       def call(env)
+        env["REQUEST_URI"] == "/rorvswild" ? standalone_profiler(env) : embed_profiler(env)
+      end
+
+      def standalone_profiler(env)
+        html = "<!DOCTYPE html>\n<html><head></head><body></body></html>"
+        [200, {"Content-Type:" => "text/html; charset=utf-8"}, StringIO.new(inject_into(html))]
+      end
+
+      def embed_profiler(env)
         status, headers, body = app.call(env)
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           if headers["Content-Encoding"]
@@ -53,8 +62,9 @@ module RorVsWild
       end
 
       def log_incompatible_middleware_warning
-        RorVsWild.logger.warn("RorVsWild::Local cannot inject into your HTML response because of compression." +
-          " Try to disable Rack::Deflater in development only.")
+        RorVsWild.logger.warn("RorVsWild::Local cannot be embeded into your HTML page because of compression." +
+          " Try to disable Rack::Deflater in development only." +
+          " In the meantime just visit the /rorvswild page to see the profiler.")
       end
     end
   end
