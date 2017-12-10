@@ -10,25 +10,25 @@ module RorVsWild
       end
 
       def call(env)
-        status, headers, rack_body = app.call(env)
-        if response = rack_body.instance_variable_get(:@response)
-          if headers["Content-Type"] && headers["Content-Type"].include?("text/html")
-            inject_html_into(response)
+        status, headers, body = app.call(env)
+        if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
+          if headers["Content-Encoding"]
+            log_incompatible_middleware_warning
+          else
+            body.each { |string| inject_into(string) }
           end
         end
-        [status, headers, rack_body]
+        [status, headers, body]
       end
 
-      def inject_html_into(response)
-        html = response.body
+      def inject_into(html)
         if index = html.index("</body>")
           html.insert(index, html_markup(RorVsWild.agent.queue.requests))
-          response.body = html
         end
         if index = html.index("</head>")
           html.insert(index, "<style type='text/css'> #{concatenate_stylesheet}</style>")
-          response.body = html
         end
+        html
       end
 
       DIRECTORY = File.expand_path(File.dirname(__FILE__))
@@ -50,6 +50,11 @@ module RorVsWild
 
       def concatenate_assets(directory, files)
         files.map { |file| File.read(File.join(directory, file)) }.join("\n")
+      end
+
+      def log_incompatible_middleware_warning
+        RorVsWild.logger.warn("RorVsWild::Local cannot inject into your HTML response because of compression." +
+          " Try to disable Rack::Deflater in development only.")
       end
     end
   end
