@@ -80,13 +80,19 @@
   padding: 12px !important;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.2) !important;
   z-index: 100002 !important;
-  text-align: center !important;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 .rorvswild-local-panel__header__title {
   color: #afbecc !important;
   text-transform: uppercase !important;
   font-size: 12px !important;
   letter-spacing: 2px !important;
+  text-align: center !important;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 .rorvswild-local-panel svg {
   height: 24px !important;
@@ -101,16 +107,21 @@
 .rorvswild-local-panel svg:hover {
   stroke: #ebf5ff !important;
 }
-.rorvswild-local-panel__close {
-  float: right !important;
-  cursor: pointer !important;
-}
 .rorvswild-local-panel__logo {
-  float: left !important;
+  width: 60px !important;
 }
-.rorvswild-local-panel__github {
-  position: absolute !important;
-  right: 48px !important;
+.rorvswild-local-panel__header__icons {
+  width: 60px !important;
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-pack: end !important;
+  -ms-flex-pack: end !important;
+  justify-content: flex-end !important;
+}
+.rorvswild-local-panel__close {
+  cursor: pointer !important;
+  margin-left: 12px !important;
 }
 .rorvswild-local-panel__github svg {
   stroke: none !important;
