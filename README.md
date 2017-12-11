@@ -62,6 +62,8 @@ Rails.application.configure do
 end
 ```
 
+If you are using `Rack::Deflater` middleware then you won't see the small button in the corner. Because of the compression it's not possible to inject some JavaScript into the page. In that case just visit http://localhost:3000/rorvswild to see all the profilings.
+
 ## Production mode: *RoRvsWild.com*
 
 ![RoRvsWild.com](/images/rorvswild_prod.jpg)
