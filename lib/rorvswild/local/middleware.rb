@@ -40,21 +40,23 @@ module RorVsWild
         html
       end
 
-      DIRECTORY = File.expand_path(File.dirname(__FILE__))
+      LOCAL_FOLDER = File.expand_path(File.dirname(__FILE__))
+      JS_FOLDER = File.join(LOCAL_FOLDER, "javascript")
+      CSS_FOLDER = File.join(LOCAL_FOLDER, "stylesheet")
       JS_FILES = ["mustache.js", "barber.js", "prism.js", "local.js"]
       CSS_FILES = ["prism.css", "local.css", "coloration.css"]
 
       def html_markup(data)
-        html = File.read(File.join(DIRECTORY, "local.html"))
+        html = File.read(File.join(LOCAL_FOLDER, "local.html"))
         html % {data: html_escape(data.to_json), javascript_source: concatenate_javascript}
       end
 
       def concatenate_javascript
-        concatenate_assets(DIRECTORY, JS_FILES)
+        concatenate_assets(JS_FOLDER, JS_FILES)
       end
 
       def concatenate_stylesheet
-        concatenate_assets(DIRECTORY, CSS_FILES)
+        concatenate_assets(CSS_FOLDER, CSS_FILES)
       end
 
       def concatenate_assets(directory, files)
