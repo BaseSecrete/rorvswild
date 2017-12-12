@@ -117,14 +117,16 @@
 </script>
 
 <script>
-  var RorVsWild = {};
-  var startRorVsWild = function() {
-    %{javascript_source}
-    Barber.launch(document.rootElement, this)
-  }.bind(RorVsWild)
+  (function() {
+    var RorVsWild = {};
+    var startRorVsWild = function() {
+      %{javascript_source}
+      Barber.launch(document.rootElement, this)
+    }.bind(RorVsWild)
 
-  if (document.readyState != "loading")
-    startRorVsWild()
-  else
-    document.addEventListener("DOMContentLoaded", startRorVsWild)
+    if (document.readyState != "loading")
+      startRorVsWild()
+    else
+      document.addEventListener("DOMContentLoaded", startRorVsWild)
+  })()
 </script>
