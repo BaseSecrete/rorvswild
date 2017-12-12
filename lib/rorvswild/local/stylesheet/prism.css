@@ -5,196 +5,143 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
  * Based (more or less) on the Twilight theme originally of Textmate fame.
  * @author Remy Bach
  */
-code[class*="language-"],
-pre[class*="language-"] {
-  color: white;
-  background: none;
-  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-  text-align: left;
-  text-shadow: 0 -.1em .2em black;
-  white-space: pre;
-  word-spacing: normal;
-  word-break: normal;
-  word-wrap: normal;
-  line-height: 1.5;
+.rorvswild-local-panel code[class*="language-"],
+.rorvswild-local-panel pre[class*="language-"] {
+  color: #afbecc !important;
+  background: none !important;
+  font-family: monospace !important;
+  text-align: left !important;
+  text-shadow: 0 0 0 !important;
+  white-space: inherit !important;
+  word-spacing: normal !important;
 
-  -moz-tab-size: 4;
-  -o-tab-size: 4;
-  tab-size: 4;
+  word-break: break-all !important;
+  overflow-wrap: break-word !important;
 
-  -webkit-hyphens: none;
-  -moz-hyphens: none;
-  -ms-hyphens: none;
-  hyphens: none;
+  font-size: 15px !important;
+  line-height: 24px !important;
+
+  -moz-tab-size: 4 !important;
+  -o-tab-size: 4 !important;
+  tab-size: 4 !important;
+
+  -webkit-hyphens: none !important;
+  -moz-hyphens: none !important;
+  -ms-hyphens: none !important;
+  hyphens: none !important;
+
+  -webkit-filter: saturate(75%) !important; /* Safari 6.0 - 9.0 */
+  filter: saturate(75%) !important;
 }
 
-pre[class*="language-"],
-:not(pre) > code[class*="language-"] {
-  background: hsl(0, 0%, 8%); /* #141414 */
+.rorvswild-local-panel pre[class*="language-"],
+.rorvswild-local-panel :not(pre) > code[class*="language-"] {
+  background: transparent !important;
 }
 
 /* Code blocks */
-pre[class*="language-"] {
-  border-radius: .5em;
-  border: .3em solid hsl(0, 0%, 33%); /* #282A2B */
-  box-shadow: 1px 1px .5em black inset;
-  margin: .5em 0;
-  overflow: auto;
-  padding: 1em;
-}
-
-pre[class*="language-"]::-moz-selection {
-  /* Firefox */
-  background: hsl(200, 4%, 16%); /* #282A2B */
-}
-
-pre[class*="language-"]::selection {
-  /* Safari */
-  background: hsl(200, 4%, 16%); /* #282A2B */
+.rorvswild-local-panel pre[class*="language-"] {
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
 }
 
 /* Text Selection colour */
-pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
-code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
-  text-shadow: none;
-  background: hsla(0, 0%, 93%, 0.15); /* #EDEDED */
+.rorvswild-local-panel pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+.rorvswild-local-panel code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+  text-shadow: none !important;
 }
 
-pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
-code[class*="language-"]::selection, code[class*="language-"] ::selection {
-  text-shadow: none;
-  background: hsla(0, 0%, 93%, 0.15); /* #EDEDED */
+.rorvswild-local-panel pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+.rorvswild-local-panel code[class*="language-"]::selection, code[class*="language-"] ::selection {
+  text-shadow: none !important;
 }
 
 /* Inline code */
-:not(pre) > code[class*="language-"] {
-  border-radius: .3em;
-  border: .13em solid hsl(0, 0%, 33%); /* #545454 */
-  box-shadow: 1px 1px .3em -.1em black inset;
-  padding: .15em .2em .05em;
-  white-space: normal;
+.rorvswild-local-panel :not(pre) > code[class*="language-"] {
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 !important;
+  padding: 0 !important;
+  white-space: normal !important;
 }
 
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
-  color: hsl(0, 0%, 47%); /* #777777 */
+.rorvswild-local-panel .token.comment,
+.rorvswild-local-panel .token.prolog,
+.rorvswild-local-panel .token.doctype,
+.rorvswild-local-panel .token.cdata {
+  color: #465b70 !important;
 }
 
-.token.punctuation {
-  opacity: .7;
+.rorvswild-local-panel .token.punctuation {
+  opacity: .7 !important;
 }
 
-.namespace {
-  opacity: .7;
+.rorvswild-local-panel .namespace {
+  opacity: .7 !important;
 }
 
-.token.tag,
-.token.boolean,
-.token.number,
-.token.deleted {
-  color: hsl(14, 58%, 55%); /* #CF6A4C */
+.rorvswild-local-panel .token.tag,
+.rorvswild-local-panel .token.boolean,
+.rorvswild-local-panel .token.number,
+.rorvswild-local-panel .token.deleted {
+  color: #fc8660 !important;
 }
 
-.token.keyword,
-.token.property,
-.token.selector,
-.token.constant,
-.token.symbol,
-.token.builtin {
-  color: hsl(53, 89%, 79%); /* #F9EE98 */
+.rorvswild-local-panel .token.property,
+.rorvswild-local-panel .token.selector,
+.rorvswild-local-panel .token.symbol,
+.rorvswild-local-panel .token.builtin,
+.rorvswild-local-panel .token.string {
+  color: #54ddb9 !important;
 }
 
-.token.attr-name,
-.token.attr-value,
-.token.string,
-.token.char,
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string,
-.token.variable,
-.token.inserted {
-  color: hsl(76, 21%, 52%); /* #8F9D6A */
+.rorvswild-local-panel .token.attr-name,
+.rorvswild-local-panel .token.char,
+.rorvswild-local-panel .token.operator,
+.rorvswild-local-panel .token.entity,
+.rorvswild-local-panel .token.url,
+.rorvswild-local-panel .token.variable,
+.rorvswild-local-panel .token.inserted,
+.rorvswild-local-panel .token.atrule,
+.rorvswild-local-panel .token.attr-value,
+.rorvswild-local-panel .token.keyword {
+  color: #c555df !important;
 }
 
-.token.atrule {
-  color: hsl(218, 22%, 55%); /* #7587A6 */
+.rorvswild-local-panel .token.constant,
+.rorvswild-local-panel .token.regex,
+.rorvswild-local-panel .token.important {
+  color: #fcd160 !important;
 }
 
-.token.regex,
-.token.important {
-  color: hsl(42, 75%, 65%); /* #E9C062 */
+.rorvswild-local-panel .token.function {
+  color: #549fdd !important;
 }
 
-.token.important,
-.token.bold {
-  font-weight: bold;
+.rorvswild-local-panel .token.important,
+.rorvswild-local-panel .token.bold {
+  font-weight: bold !important;
 }
-.token.italic {
-  font-style: italic;
-}
-
-.token.entity {
-  cursor: help;
+.rorvswild-local-panel .token.italic {
+  font-style: italic !important;
 }
 
-pre[data-line] {
-  padding: 1em 0 1em 3em;
-  position: relative;
+.rorvswild-local-panel .token.entity {
+  cursor: help !important;
+}
+
+.rorvswild-local-panel pre[data-line] {
+  padding: 0 !important;
+  position: relative !important;
 }
 
 /* Markup */
-.language-markup .token.tag,
-.language-markup .token.attr-name,
-.language-markup .token.punctuation {
-  color: hsl(33, 33%, 52%); /* #AC885B */
-}
-
-/* Make the tokens sit above the line highlight so the colours don't look faded. */
-.token {
-  position: relative;
-  z-index: 1;
-}
-
-.line-highlight {
-  background: hsla(0, 0%, 33%, 0.25); /* #545454 */
-  background: linear-gradient(to right, hsla(0, 0%, 33%, .1) 70%, hsla(0, 0%, 33%, 0)); /* #545454 */
-  border-bottom: 1px dashed hsl(0, 0%, 33%); /* #545454 */
-  border-top: 1px dashed hsl(0, 0%, 33%); /* #545454 */
-  left: 0;
-  line-height: inherit;
-  margin-top: 0.75em; /* Same as .prism’s padding-top */
-  padding: inherit 0;
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  white-space: pre;
-  z-index: 0;
-}
-
-.line-highlight:before,
-.line-highlight[data-end]:after {
-  background-color: hsl(215, 15%, 59%); /* #8794A6 */
-  border-radius: 999px;
-  box-shadow: 0 1px white;
-  color: hsl(24, 20%, 95%); /* #F5F2F0 */
-  content: attr(data-start);
-  font: bold 65%/1.5 sans-serif;
-  left: .6em;
-  min-width: 1em;
-  padding: 0 .5em;
-  position: absolute;
-  text-align: center;
-  text-shadow: none;
-  top: .4em;
-  vertical-align: .3em;
-}
-
-.line-highlight[data-end]:after {
-  bottom: .4em;
-  content: attr(data-end);
-  top: auto;
+.rorvswild-local-panel .language-markup .token.tag,
+.rorvswild-local-panel .language-markup .token.attr-name,
+.rorvswild-local-panel .language-markup .token.punctuation {
+  color: #9bacbd !important;
 }

@@ -32,7 +32,7 @@
   background: #202630 !important;
   box-shadow: 0 0 0 48px rgba(0,0,0,.9) !important;
   color: #ebf5ff !important;
-  font-family: monospace !important;
+  font-family: monospace; !important;
   font-size: 15px !important;
   line-height: 24px !important;
   position: fixed !important;
@@ -58,12 +58,12 @@
   color: inherit !important;
 }
 
-.rorvswild-local-panel::-moz-selection {
+.rorvswild-local-panel ::-moz-selection {
   background: #ebf5ff !important;
   color: #202630 !important;
 }
 
-.rorvswild-local-panel::selection {
+.rorvswild-local-panel ::selection {
   background: #ebf5ff !important;
   color: #202630 !important;
 }
@@ -213,7 +213,11 @@ h2.rorvswild-local-panel__request__name__title {
   border-bottom: 1px solid #2a2f3b !important;
   display: block !important;
 }
-.rorvswild-local-panel__request-details__section:hover { background: #2a2f3b !important; }
+.rorvswild-local-panel__request-details__section:hover {
+  background: #2a2f3b !important;
+  -webkit-transition: all .3s !important;
+  transition: all .3s !important;
+}
 
 .rorvswild-local-panel__request-details__section__main {
   display: -webkit-box !important;
@@ -263,6 +267,11 @@ h2.rorvswild-local-panel__request__name__title {
   -webkit-box-flex: 1 !important;
       -ms-flex: 1 !important;
           flex: 1 !important;
+  opacity: .6 !important;
+}
+
+.rorvswild-local-panel__request-details__section:hover .rorvswild-local-panel__request-details__section__command {
+  opacity: 1 !important;
 }
 
 /* Panel Footer */

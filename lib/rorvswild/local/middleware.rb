@@ -44,7 +44,7 @@ module RorVsWild
       JS_FOLDER = File.join(LOCAL_FOLDER, "javascript")
       CSS_FOLDER = File.join(LOCAL_FOLDER, "stylesheet")
       JS_FILES = ["mustache.js", "barber.js", "prism.js", "local.js"]
-      CSS_FILES = ["prism.css", "local.css", "coloration.css"]
+      CSS_FILES = ["prism.css", "local.css"]
 
       def html_markup(data)
         html = File.read(File.join(LOCAL_FOLDER, "local.html"))
