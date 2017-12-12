@@ -41,8 +41,8 @@ module RorVsWild
       end
 
       DIRECTORY = File.expand_path(File.dirname(__FILE__))
-      JS_FILES = ["mustache.js", "barber.js", "local.js"]
-      CSS_FILES = ["local.css"]
+      JS_FILES = ["mustache.js", "barber.js", "prism.js", "local.js"]
+      CSS_FILES = ["prism.css", "local.css", "coloration.css"]
 
       def html_markup(data)
         html = File.read(File.join(DIRECTORY, "local.html"))

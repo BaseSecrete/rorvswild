@@ -103,7 +103,9 @@
         {{file}}:{{line}}
         <div class="rorvswild-local-panel__request-details__section__code">
           <span class="rorvswild-local-panel__request-details__section__kind">{{kind}}</span>
-          <span class="rorvswild-local-panel__request-details__section__command">{{command}}</span>
+          <span class="rorvswild-local-panel__request-details__section__command">
+            <pre><code class="language-sql">{{command}}</code></pre>
+          </span>
         </div>
       </span>
       <span class="rorvswild-local-panel__request-details__section__average" title="average runtime">{{averageRuntime}}<small>ms</small></span>
