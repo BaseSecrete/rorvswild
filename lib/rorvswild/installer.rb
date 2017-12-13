@@ -17,10 +17,6 @@ module RorVsWild
 
     def self.template(api_key)
       <<YAML
-# Keep the development block for testing on your local machine only.
-development:
-  api_key: #{api_key}
-
 production:
   api_key: #{api_key}
   # ignored_exceptions:
