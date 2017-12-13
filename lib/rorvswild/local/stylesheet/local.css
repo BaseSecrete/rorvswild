@@ -262,12 +262,14 @@ h2.rorvswild-local-panel__request__name__title {
   display: inline-block !important;
 }
 .rorvswild-local-panel__request-details__section__command {
+  overflow: hidden !important;
   color: #afbecc !important;
   margin-left: 12px !important;
   -webkit-box-flex: 1 !important;
       -ms-flex: 1 !important;
           flex: 1 !important;
   opacity: .6 !important;
+  word-wrap: break-word !important;
 }
 
 .rorvswild-local-panel__request-details__section:hover .rorvswild-local-panel__request-details__section__command {

@@ -12,11 +12,9 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   font-family: monospace !important;
   text-align: left !important;
   text-shadow: 0 0 0 !important;
-  white-space: inherit !important;
   word-spacing: normal !important;
-
-  word-break: break-all !important;
-  overflow-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
 
   font-size: 15px !important;
   line-height: 24px !important;
@@ -26,7 +24,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   tab-size: 4 !important;
 
   -webkit-hyphens: none !important;
-  -moz-hyphens: none !important;
   -ms-hyphens: none !important;
   hyphens: none !important;
 
@@ -45,7 +42,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   border: 0 !important;
   box-shadow: 0 0 0 !important;
   margin: 0 !important;
-  overflow: hidden !important;
   padding: 0 !important;
 }
 
@@ -66,7 +62,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   border: 0 !important;
   box-shadow: 0 0 0 !important;
   padding: 0 !important;
-  white-space: normal !important;
 }
 
 .rorvswild-local-panel .token.comment,
