@@ -20,7 +20,7 @@ class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
     assert_equal("Mailer", section.command)
     assert_equal(line, section.line.to_i)
     assert_equal("mail", section.kind)
-    assert(section.self_runtime > 10)
+    assert(section.self_runtime >= 10)
     assert_equal(1, section.calls)
   end
 end

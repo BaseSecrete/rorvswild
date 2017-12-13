@@ -5,9 +5,9 @@ class RorVsWildTest < Minitest::Test
 
   def test_measure_code
     agent.expects(:post_job)
-    assert_equal(2, agent.measure_code("1 + 1"))
-    assert_equal("1 + 1", agent.send(:data)[:name])
-    assert(agent.send(:data)[:runtime] > 0)
+    assert_equal(2, agent.measure_code("sleep(0.001); 1 + 1"))
+    assert_equal("sleep(0.001); 1 + 1", agent.send(:data)[:name])
+    assert(agent.send(:data)[:runtime] >= 1)
   end
 
   def test_measure_code_when_raising

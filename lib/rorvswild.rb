@@ -46,6 +46,10 @@ module RorVsWild
       Logger.new(Rails.root + "log/rorvswild.log")
     end
   end
+
+  def self.clock_milliseconds
+    Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+  end
 end
 
 if defined?(Rails)

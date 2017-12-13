@@ -84,7 +84,7 @@ module RorVsWild
         push_exception(ex, parameters: parameters)
         raise
       ensure
-        data[:runtime] = (Time.now - data[:started_at]) * 1000
+        data[:runtime] = RorVsWild.clock_milliseconds - data[:started_at]
         post_job
       end
     end
@@ -97,7 +97,7 @@ module RorVsWild
 
     def stop_request
       return unless data[:name]
-      data[:runtime] = (Time.now.utc - data[:started_at]) * 1000
+      data[:runtime] = RorVsWild.clock_milliseconds - data[:started_at]
       post_request
     end
 
@@ -144,7 +144,7 @@ module RorVsWild
       data[:name] = name
       data[:sections] = []
       data[:section_stack] = []
-      data[:started_at] = Time.now.utc
+      data[:started_at] = RorVsWild.clock_milliseconds
     end
 
     def cleanup_data

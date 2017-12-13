@@ -15,7 +15,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     data = agent.send(:data)
     assert_equal(0, data[:sections].size)
     assert_equal("UsersController#show", data[:name])
-    assert(data[:runtime] > 10)
+    assert(data[:runtime] >= 10)
   end
 
   def test_callback_when_exception_is_raised

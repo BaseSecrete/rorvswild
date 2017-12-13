@@ -13,7 +13,7 @@ module RorVsWild
     def self.stop(&block)
       section = stack.pop
       block.call(section) if block_given?
-      section.total_runtime = (Time.now.utc - section.started_at) * 1000
+      section.total_runtime = RorVsWild.clock_milliseconds - section.started_at
       current.children_runtime += section.total_runtime if current
       RorVsWild.agent.add_section(section)
     end
@@ -30,7 +30,7 @@ module RorVsWild
       @calls = 1
       @total_runtime = 0
       @children_runtime = 0
-      @started_at = Time.now.utc
+      @started_at = RorVsWild.clock_milliseconds
       location = RorVsWild.agent.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.relative_path(location.path)
       @line = location.lineno

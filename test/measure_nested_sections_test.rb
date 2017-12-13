@@ -18,8 +18,8 @@ class RorVsWild::MeasureNestedSectionsTest < Minitest::Test
     parent, child = sections[1], sections[0]
     assert_equal("child", child.command)
     assert_equal("parent", parent.command)
-    assert(child.self_runtime > 20)
-    assert(parent.self_runtime > 10)
+    assert(child.self_runtime >= 20)
+    assert(parent.self_runtime >= 10)
     assert(child.self_runtime > parent.self_runtime)
     assert_equal(child.total_runtime + parent.self_runtime, parent.total_runtime)
   end
