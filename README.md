@@ -3,7 +3,7 @@
 
 <img align="right" src="/images/rorvswild_logo.jpg">
 
-*RoRvsWild* is a free ruby gem to monitor performances and quality in Ruby on Rails applications.
+*RoRvsWild* is a ruby gem to monitor performances and quality in Ruby on Rails applications.
 
 This gem has a double mode, development and production.
 It can be used without an account to monitor your requests performances in your development environment.
@@ -35,14 +35,15 @@ Signup on https://www.rorvswild.com and create an app to get one.
 
 The `rorvswild-setup` command creates a `config/rorvswild.yml` file.
 
-For those who prefer to manually use an initializer, they can do the following.
+If you prefer to use an initializer, you can do the following:
 
 ```ruby
 # config/initializers/rorvswild.rb
 RorVsWild.start(api_key: API_KEY)
 ```
 
-You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production. If you want to add a staging server you have to edit your Gemfile.
+You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production.
+If you want to add a staging server you have to edit your Gemfile.
 
 ## Development mode: *RoRvsWild Local*
 
