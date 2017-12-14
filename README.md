@@ -42,8 +42,7 @@ If you prefer to use an initializer, you can do the following:
 RorVsWild.start(api_key: API_KEY)
 ```
 
-You can create unlimited apps on *rorvswild.com* to monitor your different environments, or use the same key for both staging and production.
-If you want to add a staging server you have to edit your Gemfile.
+You can create unlimited apps on *rorvswild.com*. If you want to monitor your staging environment, create a new app and edit your rorvswild.yml to add the API key.
 
 ## Development mode: *RoRvsWild Local*
 
