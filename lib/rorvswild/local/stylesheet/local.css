@@ -231,6 +231,7 @@ h2.rorvswild-local-panel__request__name__title {
   width: 100% !important;
   word-break: break-all !important;
   overflow-wrap: break-word !important;
+  min-width: 0 !important;
 }
 .rorvswild-local-panel__request-details__section__average {
   color: #61b8ff !important;
@@ -269,7 +270,6 @@ h2.rorvswild-local-panel__request__name__title {
       -ms-flex: 1 !important;
           flex: 1 !important;
   opacity: .6 !important;
-  word-wrap: break-word !important;
 }
 
 .rorvswild-local-panel__request-details__section:hover .rorvswild-local-panel__request-details__section__command {
@@ -294,6 +294,11 @@ a.rorvswild-local-panel__footer__link {
 /* MEDIA QUERIES */
 
 @media screen and (min-width: 720px) {
+  .rorvswild-local-panel__request-details__section__main {
+    -ms-flex-wrap: nowrap !important;
+        flex-wrap: nowrap !important;
+  }
+
   .rorvswild-local-panel__request__name {
     -webkit-box-flex: 1 !important;
         -ms-flex: 1 !important;
@@ -306,6 +311,7 @@ a.rorvswild-local-panel__footer__link {
         -ms-flex: 1 !important;
             flex: 1 !important;
   }
+
   .rorvswild-local-panel__request-details__section__average {
     text-align: right !important;
     margin:0 0 0 12px !important;

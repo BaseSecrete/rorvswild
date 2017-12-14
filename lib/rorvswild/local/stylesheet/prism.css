@@ -1,9 +1,9 @@
 /* PrismJS 1.9.0
 http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clike+javascript+ruby+json+sql+yaml */
 /**
- * prism.js Twilight theme
+ * prism.js RoRvsWild theme
  * Based (more or less) on the Twilight theme originally of Textmate fame.
- * @author Remy Bach
+ * @author Antoine Marguerie
  */
 .rorvswild-local-panel code[class*="language-"],
 .rorvswild-local-panel pre[class*="language-"] {
@@ -13,15 +13,13 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   text-align: left !important;
   text-shadow: 0 0 0 !important;
   word-spacing: normal !important;
-  white-space: pre-wrap !important;
-  word-wrap: break-word !important;
 
   font-size: 15px !important;
   line-height: 24px !important;
 
-  -moz-tab-size: 4 !important;
-  -o-tab-size: 4 !important;
-  tab-size: 4 !important;
+  white-space: pre-line !important;
+  word-wrap: break-word !important;
+  word-break: keep-all !important;
 
   -webkit-hyphens: none !important;
   -ms-hyphens: none !important;
@@ -29,6 +27,12 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 
   -webkit-filter: saturate(75%) !important; /* Safari 6.0 - 9.0 */
   filter: saturate(75%) !important;
+
+  border-radius: 0 !important;
+  border: 0 !important;
+  box-shadow: 0 0 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .rorvswild-local-panel pre[class*="language-"],
@@ -36,14 +40,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   background: transparent !important;
 }
 
-/* Code blocks */
-.rorvswild-local-panel pre[class*="language-"] {
-  border-radius: 0 !important;
-  border: 0 !important;
-  box-shadow: 0 0 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
 
 /* Text Selection colour */
 .rorvswild-local-panel pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
