@@ -46,7 +46,10 @@ module RorVsWild
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
       if section
-        self.command << "\n".freeze + section.command if appendable_command
+        if appendable_command
+          self.command = self.command.dup if self.command.frozen?
+          self.command << "\n" + section.command
+        end
       else
         self.command = section.command
       end
