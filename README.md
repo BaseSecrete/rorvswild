@@ -1,6 +1,8 @@
 
 # RorVsWild
 
+[![Gem Version](https://badge.fury.io/rb/rorvswild.svg)](https://badge.fury.io/rb/rorvswild)
+
 <img align="right" src="/images/rorvswild_logo.jpg">
 
 *RoRvsWild* is a ruby gem to monitor performances and quality in Ruby on Rails applications.
