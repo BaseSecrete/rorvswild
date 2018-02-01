@@ -11,6 +11,7 @@ module RorVsWild
       @requests = []
       @client = client
       @mutex = Mutex.new
+      Kernel.at_exit { flush }
     end
 
     def push_job(data)
