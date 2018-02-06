@@ -15,7 +15,7 @@ module RorVsWild
       # Sometime Exception#backtrace_locations returns nil for an unknow reason. So we fallback to the old way.
       if exception.respond_to?(:backtrace_locations) && locations = exception.backtrace_locations
         extract_most_relevant_file_and_line(locations)
-      elsif backtrace = exception.backtrace
+      elsif (backtrace = exception.backtrace) && backtrace.size > 0
         extract_most_relevant_file_and_line_from_array_of_strings(backtrace)
       else
         ["No backtrace".freeze, 1]

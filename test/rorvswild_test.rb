@@ -138,6 +138,11 @@ class RorVsWildTest < Minitest::Test
     assert_equal(["No backtrace", 1], agent.extract_most_relevant_file_and_line_from_exception(StandardError.new))
   end
 
+  def test_extract_most_relevant_file_and_line_from_exception_when_backtrace_is_an_empty_array
+    (error = StandardError.new).set_backtrace([])
+    assert_equal(["No backtrace", 1], agent.extract_most_relevant_file_and_line_from_exception(error))
+  end
+
   private
 
   def agent
