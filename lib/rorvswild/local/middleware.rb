@@ -25,7 +25,7 @@ module RorVsWild
             log_incompatible_middleware_warning
           else
             body.each { |string| inject_into(string) }
-            headers["Content-Length"] = body.map(&:bytesize).reduce(0, :+) if headers["Content-Length"]
+            headers["Content-Length"] = body.map(&:bytesize).reduce(0, :+).to_s if headers["Content-Length"]
           end
         end
         [status, headers, body]
