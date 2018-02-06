@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "active_job"
 
 class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def test_callback
     line = nil

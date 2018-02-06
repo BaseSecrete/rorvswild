@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "action_controller"
 
 class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def test_callback
     agent.expects(:post_request)

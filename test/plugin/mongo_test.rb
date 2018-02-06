@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "mongo"
 
 class RorVsWild::Plugin::MongoTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   Mongo::Logger.logger.level = ::Logger::FATAL
 

@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "net/http"
 
 class RorVsWild::Plugin::NetHttpTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def test_callback
     agent.measure_block("test") { Net::HTTP.get("ruby-lang.org", "/index.html") }

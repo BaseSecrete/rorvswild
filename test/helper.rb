@@ -6,7 +6,7 @@ require "minitest/autorun"
 require "mocha/mini_test"
 require "top_tests"
 
-module RorVsWildAgentHelper
+module RorVsWild::AgentHelper
   def agent
     @agent ||= initialize_agent(app_root: File.dirname(__FILE__))
   end

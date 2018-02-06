@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "elasticsearch"
 
 class RorVsWild::Plugin::ElasticsearchTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def test_callback
     agent.measure_block("elastic") do

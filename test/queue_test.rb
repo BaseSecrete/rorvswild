@@ -1,7 +1,7 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
-class QueueTest < Minitest::Test
-  include RorVsWildAgentHelper
+class RorVsWild::QueueTest < Minitest::Test
+  include RorVsWild::AgentHelper
 
   def test_push_job
     queue.start_thread

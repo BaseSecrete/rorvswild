@@ -4,7 +4,7 @@ require "sidekiq"
 require "sidekiq/testing"
 
 class RorVsWild::Plugin::SidekiqTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   Sidekiq::Testing.server_middleware do |chain|
     chain.add(RorVsWild::Plugin::Sidekiq)

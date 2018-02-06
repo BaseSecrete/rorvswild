@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "redis"
 
 class RorVsWild::Plugin::RedisTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def test_callback
     url = "redis://localhost:6379/1"

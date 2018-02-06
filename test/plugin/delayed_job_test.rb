@@ -3,7 +3,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 require "delayed_job"
 
 class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   class SampleJob
     def initialize(arg)

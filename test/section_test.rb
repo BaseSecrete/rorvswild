@@ -1,7 +1,7 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::SectionTest < Minitest::Test
-  include RorVsWildAgentHelper
+  include RorVsWild::AgentHelper
 
   def setup
     agent
