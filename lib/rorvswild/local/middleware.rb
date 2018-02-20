@@ -32,13 +32,18 @@ module RorVsWild
       end
 
       def inject_into(html)
+        markup = html_markup(RorVsWild.agent.queue.requests).encode(html.encoding)
+        style = "<style type='text/css'> #{concatenate_stylesheet}</style>".encode(html.encoding)
+
         if index = html.index("</body>")
-          html.insert(index, html_markup(RorVsWild.agent.queue.requests))
+          html.insert(index, markup)
         end
         if index = html.index("</head>")
-          html.insert(index, "<style type='text/css'> #{concatenate_stylesheet}</style>")
+          html.insert(index, style)
         end
         html
+      rescue Encoding::UndefinedConversionError => ex
+        log_incompatible_encoding_warning(ex)
       end
 
       LOCAL_FOLDER = File.expand_path(File.dirname(__FILE__))
@@ -68,6 +73,11 @@ module RorVsWild
         RorVsWild.logger.warn("RorVsWild::Local cannot be embeded into your HTML page because of compression." +
           " Try to disable Rack::Deflater in development only." +
           " In the meantime just visit the /rorvswild page to see the profiler.")
+      end
+
+      def log_incompatible_encoding_warning(exception)
+        RorVsWild.logger.warn("RorVsWild::Local cannot be embeded into your HTML page because of incompatible #{exception.message}." +
+          " However you can just visit the /rorvswild page to see the profiler.")
       end
     end
   end
