@@ -14,8 +14,8 @@ module RorVsWild
       end
 
       def standalone_profiler(env)
-        html = "<!DOCTYPE html>\n<html><head></head><body></body></html>"
-        [200, {"Content-Type:" => "text/html; charset=utf-8"}, StringIO.new(inject_into(html))]
+        html = inject_into(empty_html_page)
+        [200, {"Content-Type:" => "text/html; charset=utf-8"}, StringIO.new(html || empty_html_page)]
       end
 
       def embed_profiler(env)
@@ -44,6 +44,7 @@ module RorVsWild
         html
       rescue Encoding::UndefinedConversionError => ex
         log_incompatible_encoding_warning(ex)
+        nil
       end
 
       LOCAL_FOLDER = File.expand_path(File.dirname(__FILE__))
@@ -67,6 +68,10 @@ module RorVsWild
 
       def concatenate_assets(directory, files)
         files.map { |file| File.read(File.join(directory, file)) }.join("\n")
+      end
+
+      def empty_html_page
+        "<!DOCTYPE html>\n<html><head></head><body></body></html>"
       end
 
       def log_incompatible_middleware_warning
