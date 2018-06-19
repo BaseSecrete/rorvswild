@@ -8,11 +8,11 @@ module RorVsWild
         ::Elasticsearch::Transport::Client.class_eval do
           alias_method :perform_request_without_rorvswild, :perform_request
 
-          def perform_request(method, path, params={}, body=nil)
+          def perform_request(*args)
             RorVsWild::Plugin::NetHttp.ignore do
-              command = {method: method, path: path, params: params, body: body}.to_json
+              command = {method: args[0], path: args[1], params: args[2], body: args[3]}.to_json
               RorVsWild.agent.measure_section(command, kind: "elasticsearch") do
-                perform_request_without_rorvswild(method, path, params, body)
+                perform_request_without_rorvswild(*args)
               end
             end
           end
