@@ -122,7 +122,7 @@ RorVsWild.catch_error(something: "important") { 1 / 0 }
 
 #### Ignore endpoints and exceptions
 
-By using `ignore_actions` you can prevent from tracking specific endpoints. In the same idea you can prevent from recording specific exceptions with the `ignored_exceptions` config.
+By using `ignore_actions` you can prevent from tracking specific endpoints. In the same idea you can prevent from recording specific exceptions with the `ignore_exceptions` config.
 
 ```yaml
 # config/rorvswild.yml
@@ -130,7 +130,7 @@ production:
   api_key: API_KEY
   ignore_actions:
     - SecretController#index
-  ignored_exceptions:
+  ignore_exceptions:
     - ActionController::RoutingError
     - ZeroDivisionError
 ```
@@ -140,7 +140,7 @@ production:
 RorVsWild.start(
   api_key: "API_KEY",
   ignore_actions: ["SecretController#index"],
-  ignored_exceptions: ["ActionController::RoutingError", "ZeroDivisionError"])
+  ignore_exceptions: ["ActionController::RoutingError", "ZeroDivisionError"])
 ```
 
 By default ActionController::RoutingError is ignored in order to not be flooded with 404.

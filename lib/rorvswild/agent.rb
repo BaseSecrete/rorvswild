@@ -7,7 +7,7 @@ module RorVsWild
     def self.default_config
       {
         api_url: "https://www.rorvswild.com/api/v1",
-        ignored_exceptions: default_ignored_exceptions,
+        ignore_exceptions: default_ignored_exceptions,
         ignore_actions: [],
       }
     end
@@ -183,7 +183,7 @@ module RorVsWild
     end
 
     def ignored_exception?(exception)
-      config[:ignored_exceptions].include?(exception.class.to_s)
+      (config[:ignored_exceptions] || config[:ignore_exceptions]).include?(exception.class.to_s)
     end
   end
 end

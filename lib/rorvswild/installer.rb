@@ -21,7 +21,7 @@ production:
   api_key: #{api_key}
   ignore_actions: # Do not track following endpoints
     # - SecretController#index
-  ignored_exceptions: # Do not track following exceptions
+  ignore_exceptions: # Do not track following exceptions
     # - ActionController::RoutingError
 YAML
     end
