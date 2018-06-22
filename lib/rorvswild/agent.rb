@@ -7,32 +7,33 @@ module RorVsWild
     def self.default_config
       {
         api_url: "https://www.rorvswild.com/api/v1",
-        ignored_exceptions: [],
+        ignored_exceptions: default_ignored_exceptions,
+        ignore_actions: [],
       }
     end
 
-    attr_reader :api_url, :api_key, :app_id, :app_root, :ignored_exceptions
+    def self.default_ignored_exceptions
+      if defined?(Rails)
+        %w[ActionController::RoutingError] + Rails.application.config.action_dispatch.rescue_responses.map { |(key,value)| key }
+      else
+        []
+      end
+    end
 
-    attr_reader :app_root_regex, :client, :queue
+    attr_reader :config, :app_root, :app_root_regex, :client, :queue
 
     def initialize(config)
-      config = self.class.default_config.merge(config)
-      @ignored_exceptions = config[:ignored_exceptions]
-      @app_root = config[:app_root]
-      @client = Client.new(config)
+      @config = self.class.default_config.merge(config)
+      @client = Client.new(@config)
       @queue = config[:queue] || Queue.new(client)
-      cleanup_data
 
-      if defined?(Rails)
-        @app_root ||= Rails.root.to_s
-        config = Rails.application.config
-        @ignored_exceptions ||= %w[ActionController::RoutingError] + config.action_dispatch.rescue_responses.map { |(key,value)| key }
-      end
-
+      @app_root = config[:app_root]
+      @app_root ||= Rails.root.to_s if defined?(Rails)
       @app_root_regex = app_root ? /\A#{app_root}/ : nil
 
       RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION} from #{app_root}")
       setup_plugins
+      cleanup_data
     end
 
     def setup_plugins
@@ -134,6 +135,10 @@ module RorVsWild
       end
     end
 
+    def ignored_action?(name)
+      config[:ignore_actions].include?(name)
+    end
+
     #######################
     ### Private methods ###
     #######################
@@ -178,7 +183,7 @@ module RorVsWild
     end
 
     def ignored_exception?(exception)
-      ignored_exceptions.include?(exception.class.to_s)
+      config[:ignored_exceptions].include?(exception.class.to_s)
     end
   end
 end

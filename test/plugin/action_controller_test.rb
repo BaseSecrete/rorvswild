@@ -41,6 +41,18 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal({"Content-Type" => "HTML"}, data[:error][:environment_variables])
   end
 
+  class SecretController
+    def index
+    end
+  end
+
+  def test_callback_when_action_is_ignored
+    agent.expects(:post_request).never
+    payload = {controller: "SecretController", action: "index"}
+    ActiveSupport::Notifications.instrument("process_action.action_controller", payload) { }
+    assert_equal({}, agent.send(:data))
+  end
+
   class SampleController
     def index
     end

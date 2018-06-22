@@ -8,7 +8,7 @@ require "top_tests"
 
 module RorVsWild::AgentHelper
   def agent
-    @agent ||= initialize_agent(app_root: File.dirname(__FILE__))
+    @agent ||= initialize_agent(app_root: File.dirname(__FILE__), ignore_actions: ["SecretController#index"])
   end
 
   def initialize_agent(options = {})

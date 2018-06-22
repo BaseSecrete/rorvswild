@@ -19,9 +19,10 @@ module RorVsWild
       <<YAML
 production:
   api_key: #{api_key}
-  # ignored_exceptions:
-  #   - ActionController::RoutingError
-  #   - UncommentToIgnoreAnyExceptionNameListedHere
+  ignore_actions: # Do not track following endpoints
+    # - SecretController#index
+  ignored_exceptions: # Do not track following exceptions
+    # - ActionController::RoutingError
 YAML
     end
   end
