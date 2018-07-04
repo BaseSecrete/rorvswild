@@ -23,7 +23,7 @@ module RorVsWild
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           if headers["Content-Encoding"]
             log_incompatible_middleware_warning
-          else
+          elsif body.respond_to?(:map)  # Rack::File::Iterator does not implement map
             body.each { |string| inject_into(string) }
             headers["Content-Length"] = body.map(&:bytesize).reduce(0, :+).to_s if headers["Content-Length"]
           end
