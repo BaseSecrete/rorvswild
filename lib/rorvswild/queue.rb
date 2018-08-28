@@ -29,23 +29,25 @@ module RorVsWild
     end
 
     def pull_jobs
+      result = nil
       mutex.synchronize do
         if jobs.size > 0
           result = jobs
           @jobs = []
-          return result
         end
       end
+      result
     end
 
     def pull_requests
+      result = nil
       mutex.synchronize do
         if requests.size > 0
           result = requests
           @requests = []
-          return result
         end
       end
+      result
     end
 
     def flush_indefinetely
