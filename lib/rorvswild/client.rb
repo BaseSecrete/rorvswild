@@ -20,6 +20,7 @@ module RorVsWild
       @connections = []
       @connection_count = 0
       @mutex = Mutex.new
+      @config = config
     end
 
     def post(path, data)
@@ -66,8 +67,10 @@ module RorVsWild
       http.open_timeout = timeout
 
       if uri.scheme == HTTPS
-        http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        http.ca_file = CERTIFICATE_AUTHORITIES_PATH
+        unless @config[:ssl_verify_none]
+          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+          http.ca_file = CERTIFICATE_AUTHORITIES_PATH
+        end
         http.use_ssl = true
       end
 
