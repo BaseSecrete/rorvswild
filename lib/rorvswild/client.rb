@@ -67,10 +67,9 @@ module RorVsWild
       http.open_timeout = timeout
 
       if uri.scheme == HTTPS
-        unless @config[:ssl_verify_none]
-          http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-          http.ca_file = CERTIFICATE_AUTHORITIES_PATH
-        end
+        # Disable peer verification while there is a memory leak with OpenSSL
+        # http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+        # http.ca_file = CERTIFICATE_AUTHORITIES_PATH
         http.use_ssl = true
       end
 
