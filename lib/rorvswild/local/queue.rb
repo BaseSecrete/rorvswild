@@ -11,6 +11,7 @@ module RorVsWild
 
       def push_request(data)
         requests.unshift(data)
+        data[:queued_at] = Time.now
         requests.pop if requests.size > 100
       end
     end
