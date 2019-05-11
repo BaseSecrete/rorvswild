@@ -1,4 +1,6 @@
-<div data-barber="RorVsWild.Local" data-json="%{data}">
+<div id="RorVsWild.Local">
+  <div data-barber="RorVsWild.Local" data-json="%{data}">
+  </div>
 </div>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local">
@@ -121,7 +123,7 @@
     var RorVsWild = {};
     var startRorVsWild = function() {
       %{javascript_source}
-      Barber.launch(document.rootElement, this)
+      Barber.launch(document.getElementById("RorVsWild.Local"), this)
     }.bind(RorVsWild)
 
     if (document.readyState != "loading")
