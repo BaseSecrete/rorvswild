@@ -44,8 +44,6 @@ module RorVsWild
 
         if index = html.index("</body>")
           html.insert(index, markup)
-        end
-        if index = html.index("</head>")
           html.insert(index, style)
         end
         html
