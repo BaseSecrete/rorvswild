@@ -39,6 +39,9 @@ module RorVsWild
         markup = html_markup(RorVsWild.agent.queue.requests).encode(html.encoding)
         style = "<style type='text/css'> #{concatenate_stylesheet}</style>".encode(html.encoding)
 
+        markup = markup.html_safe if markup.respond_to?(:html_safe)
+        style = style.html_safe if markup.respond_to?(:html_safe)
+
         if index = html.index("</body>")
           html.insert(index, markup)
         end
