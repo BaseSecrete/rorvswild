@@ -35,6 +35,12 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal(2, agent.data[:sections].size)
   end
 
+  def test_measure_job_when_ignored
+    result = agent.measure_job("SecretJob") { "result" }
+    assert_equal("result", result)
+    refute(agent.data[:name])
+  end
+
   def test_extract_most_relevant_file_and_line
     agent = initialize_agent(app_root: "/rails/root")
     callstack = [

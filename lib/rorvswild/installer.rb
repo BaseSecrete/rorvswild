@@ -21,6 +21,8 @@ production:
   api_key: #{api_key}
     # ignore_actions: # Do not track following endpoints
     #   - SecretController#index
+    # ignore_jobs: # Do not monitor the following jobs
+    #   - SecretJob
     # ignore_exceptions: # Do not track following exceptions
     #   - ActionController::RoutingError
     # ignore_plugins:

@@ -12,7 +12,7 @@ module RorVsWild::AgentHelper
   end
 
   def initialize_agent(options = {})
-    agent ||= RorVsWild.start({logger: "/dev/null"}.merge(options))
+    agent ||= RorVsWild.start({logger: "/dev/null", ignore_jobs: ["SecretJob"]}.merge(options))
     agent.stubs(:post_request)
     agent.stubs(:post_job)
     agent

@@ -120,9 +120,9 @@ RorVsWild.record_error(exception, {something: "important"})
 RorVsWild.catch_error(something: "important") { 1 / 0 }
 ```
 
-#### Ignore endpoints, exceptions and plugins
+#### Ignore requests, jobs, exceptions and plugins
 
-By using `ignore_actions` you can prevent from tracking specific endpoints. In the same idea you can prevent from recording specific exceptions with the `ignore_exceptions` config.
+From the configuration file, you can tell RorVsWild to skip monitoring some requests, jobs, exceptions and plugins.
 
 ```yaml
 # config/rorvswild.yml
@@ -130,23 +130,41 @@ production:
   api_key: API_KEY
   ignore_actions:
     - SecretController#index
+  ignore_jobs:
+    - SecretJob
   ignore_exceptions:
-    - ActionController::RoutingError
+    - ActionController::RoutingError  # Ignore by default any 404
     - ZeroDivisionError
   ignore_plugins:
     - Sidekiq # If you don't want to monitor your Sidekiq jobs
 ```
+
+Here is the equivalent if you prefer initializing RorVsWild manually.
 
 ```ruby
 # config/initializers/rorvswild.rb
 RorVsWild.start(
   api_key: "API_KEY",
   ignore_actions: ["SecretController#index"],
+  ignore_jobs: ["SecretJob"],
   ignore_exceptions: ["ActionController::RoutingError", "ZeroDivisionError"],
   ignore_plugins: ["Sidekiq"])
 ```
 
-By default ActionController::RoutingError is ignored in order to not be flooded with 404.
+Finnally here is the list of all plugins that you can ignore :
+
+  - ActionController
+  - ActionMailer
+  - ActionView
+  - ActiveJob
+  - ActiveRecord
+  - DelayedJob
+  - Elasticsearch
+  - Mongo
+  - NetHttp
+  - Redis
+  - Resque
+  - Sidekiq
 
 ## Contributing
 

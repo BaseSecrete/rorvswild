@@ -10,6 +10,7 @@ module RorVsWild
         ignore_exceptions: default_ignored_exceptions,
         ignore_actions: [],
         ignore_plugins: [],
+        ignore_jobs: [],
       }
     end
 
@@ -71,6 +72,7 @@ module RorVsWild
 
     def measure_job(name, parameters: nil, &block)
       return block.call if data[:name] # Prevent from recursive jobs
+      return block.call if ignored_job?(name)
       initialize_data(name)
       begin
         block.call
@@ -130,6 +132,10 @@ module RorVsWild
 
     def ignored_action?(name)
       config[:ignore_actions].include?(name)
+    end
+
+    def ignored_job?(name)
+      config[:ignore_jobs].include?(name)
     end
 
     #######################
