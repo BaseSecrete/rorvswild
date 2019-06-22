@@ -37,21 +37,10 @@ module RorVsWild
     end
 
     def setup_plugins
-      Plugin::NetHttp.setup
-
-      Plugin::Redis.setup
-      Plugin::Mongo.setup
-      Plugin::Elasticsearch.setup
-
-      Plugin::Resque.setup
-      Plugin::Sidekiq.setup
-      Plugin::ActiveJob.setup
-      Plugin::DelayedJob.setup
-
-      Plugin::ActionView.setup
-      Plugin::ActiveRecord.setup
-      Plugin::ActionMailer.setup
-      Plugin::ActionController.setup
+      for name in RorVsWild::Plugin.constants
+        plugin = RorVsWild::Plugin.const_get(name)
+        plugin.setup if plugin.respond_to?(:setup)
+      end
     end
 
     def measure_code(code)
