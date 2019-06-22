@@ -9,6 +9,7 @@ module RorVsWild
         api_url: "https://www.rorvswild.com/api/v1",
         ignore_exceptions: default_ignored_exceptions,
         ignore_actions: [],
+        ignore_plugins: [],
       }
     end
 
@@ -38,8 +39,11 @@ module RorVsWild
 
     def setup_plugins
       for name in RorVsWild::Plugin.constants
-        plugin = RorVsWild::Plugin.const_get(name)
-        plugin.setup if plugin.respond_to?(:setup)
+        next if config[:ignore_plugins] && config[:ignore_plugins].include?(name.to_s)
+        if (plugin = RorVsWild::Plugin.const_get(name)).respond_to?(:setup)
+          RorVsWild.logger.info("Load plugin #{name}")
+          plugin.setup
+        end
       end
     end
 

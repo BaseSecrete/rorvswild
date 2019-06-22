@@ -23,6 +23,19 @@ production:
     #   - SecretController#index
     # ignore_exceptions: # Do not track following exceptions
     #   - ActionController::RoutingError
+    # ignore_plugins:
+    #   - ActionController
+    #   - ActionMailer
+    #   - ActionView
+    #   - ActiveJob
+    #   - ActiveRecord
+    #   - DelayedJob
+    #   - Elasticsearch
+    #   - Mongo
+    #   - NetHttp
+    #   - Redis
+    #   - Resque
+    #   - Sidekiq
 YAML
     end
   end
