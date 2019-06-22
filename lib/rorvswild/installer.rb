@@ -19,12 +19,12 @@ module RorVsWild
       <<YAML
 production:
   api_key: #{api_key}
-    # ignore_actions: # Do not track following endpoints
+    # ignore_requests: # Do not monitor the following actions
     #   - SecretController#index
     # ignore_jobs: # Do not monitor the following jobs
     #   - SecretJob
-    # ignore_exceptions: # Do not track following exceptions
-    #   - ActionController::RoutingError
+    # ignore_exceptions: # Do not record the following exceptions
+    #   - ActionController::RoutingError  # By default to ignore 404
     # ignore_plugins:
     #   - ActionController
     #   - ActionMailer

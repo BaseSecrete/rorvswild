@@ -35,7 +35,7 @@ module RorVsWild
 
       # Payload: controller, action, params, format, method, path
       def start(name, id, payload)
-        if !RorVsWild.agent.ignored_action?(name = "#{payload[:controller]}##{payload[:action]}")
+        if !RorVsWild.agent.ignored_request?(name = "#{payload[:controller]}##{payload[:action]}")
           RorVsWild.agent.start_request(name: name, path: payload[:path])
         end
       end

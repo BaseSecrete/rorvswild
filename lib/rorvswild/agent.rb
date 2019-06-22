@@ -8,7 +8,7 @@ module RorVsWild
       {
         api_url: "https://www.rorvswild.com/api/v1",
         ignore_exceptions: default_ignored_exceptions,
-        ignore_actions: [],
+        ignore_requests: [],
         ignore_plugins: [],
         ignore_jobs: [],
       }
@@ -130,8 +130,8 @@ module RorVsWild
       end
     end
 
-    def ignored_action?(name)
-      config[:ignore_actions].include?(name)
+    def ignored_request?(name)
+      (config[:ignore_actions] || config[:ignore_requests]).include?(name)
     end
 
     def ignored_job?(name)
