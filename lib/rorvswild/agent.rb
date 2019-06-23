@@ -71,7 +71,7 @@ module RorVsWild
     end
 
     def measure_job(name, parameters: nil, &block)
-      return block.call if data[:name] # Prevent from recursive jobs
+      return measure_section(name, &block) if data[:name] # For recursive jobs
       return block.call if ignored_job?(name)
       initialize_data(name)
       begin

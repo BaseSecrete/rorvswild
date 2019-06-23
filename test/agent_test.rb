@@ -41,6 +41,14 @@ class RorVsWild::AgentTest < Minitest::Test
     refute(agent.data[:name])
   end
 
+  def test_measure_job_when_recursive
+    agent.measure_job("parent") do
+      agent.measure_job("child") { }
+    end
+    assert_equal(1, agent.data[:sections].size)
+    assert_equal("child", agent.data[:sections][0].command)
+  end
+
   def test_extract_most_relevant_file_and_line
     agent = initialize_agent(app_root: "/rails/root")
     callstack = [
