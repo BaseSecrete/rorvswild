@@ -6,8 +6,7 @@ module RorVsWild
     end
 
     def find_most_relevant_location(locations)
-      result = locations.find { |l| relevant_path?(l.path) && !irrelevant_path?(l.path) } if app_root
-      result || locations.find { |l| !irrelevant_path?(l.path) } || locations.first
+      locations.find { |l| relevant_path?(l.path) } || locations.find { |l| !irrelevant_path?(l.path) } || locations.first
     end
 
     def find_most_relevant_file_and_line_from_exception(exception)
@@ -24,20 +23,20 @@ module RorVsWild
 
     def find_most_relevant_file_and_line_from_array_of_strings(stack)
       location = stack.find { |str| relevant_path?(str) }
-      location ||= stack.find { |str| irrelevant_path?(str) }
+      location ||= stack.find { |str| !irrelevant_path?(str) }
       relative_path(location || stack.first).split(":".freeze)
     end
 
     def relative_path(path)
-      path.index(relevant_path) == 0 ? path.sub(relevant_path, "".freeze) : path
+      path.index(current_path) == 0 ? path.sub(current_path, "".freeze) : path
     end
 
     def relevant_path?(path)
-      path.index(relevant_path) == 0
+      path.index(current_path) == 0 && !irrelevant_path?(path)
     end
 
-    def relevant_path
-      @relevant_path ||= app_root || ENV["PWD"]
+    def current_path
+      @current_path ||= app_root || ENV["PWD"]
     end
 
     def irrelevant_path?(path)
