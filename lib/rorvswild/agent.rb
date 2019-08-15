@@ -2,8 +2,6 @@ require "logger"
 
 module RorVsWild
   class Agent
-    include RorVsWild::Location
-
     def self.default_config
       {
         api_url: "https://www.rorvswild.com/api/v1",
@@ -22,18 +20,15 @@ module RorVsWild
       end
     end
 
-    attr_reader :config, :app_root, :app_root_regex, :client, :queue
+    attr_reader :config, :locator, :client, :queue
 
     def initialize(config)
       @config = self.class.default_config.merge(config)
       @client = Client.new(@config)
+      @locator = RorVsWild::Locator.new
       @queue = config[:queue] || Queue.new(client)
 
-      @app_root = config[:app_root]
-      @app_root ||= Rails.root.to_s if defined?(Rails)
-      @app_root_regex = app_root ? /\A#{app_root}/ : nil
-
-      RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION} from #{app_root}")
+      RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
       cleanup_data
     end
@@ -170,10 +165,10 @@ module RorVsWild
     end
 
     def exception_to_hash(exception, extra_details = nil)
-      file, line = find_most_relevant_file_and_line_from_exception(exception)
+      file, line = locator.find_most_relevant_file_and_line_from_exception(exception)
       {
         line: line.to_i,
-        file: relative_path(file),
+        file: locator.relative_path(file),
         message: exception.message,
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,

@@ -1,5 +1,11 @@
 module RorVsWild
-  module Location
+  class Locator
+    attr_reader :current_path
+
+    def initialize(current_path = ENV["PWD"])
+      @current_path = current_path
+    end
+
     def find_most_relevant_file_and_line(locations)
       location = find_most_relevant_location(locations)
       [relative_path(location.path), location.lineno]
@@ -35,10 +41,6 @@ module RorVsWild
       path.index(current_path) == 0 && !irrelevant_path?(path)
     end
 
-    def current_path
-      @current_path ||= app_root || ENV["PWD"]
-    end
-
     def irrelevant_path?(path)
       irrelevant_paths.any? { |irrelevant_path| path.index(irrelevant_path) }
     end
@@ -46,6 +48,8 @@ module RorVsWild
     def irrelevant_paths
       @irrelevant_paths ||= initialize_irrelevant_paths
     end
+
+    private
 
     def initialize_irrelevant_paths
       array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|

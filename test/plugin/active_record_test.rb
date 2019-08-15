@@ -7,7 +7,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
 
   def test_render_template_callback
     line1, line2 = nil
-    agent = initialize_agent(app_root: File.dirname(__FILE__))
+    agent.locator.stubs(current_path: File.dirname(__FILE__))
     agent.measure_block("test") do
       ActiveSupport::Notifications.instrument("sql.active_record", {sql: "SELECT COUNT(*) FROM users"}) do line1 = __LINE__
         sleep 0.01

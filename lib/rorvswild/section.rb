@@ -31,8 +31,8 @@ module RorVsWild
       @total_runtime = 0
       @children_runtime = 0
       @started_at = RorVsWild.clock_milliseconds
-      location = RorVsWild.agent.find_most_relevant_location(caller_locations)
-      @file = RorVsWild.agent.relative_path(location.path)
+      location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
+      @file = RorVsWild.agent.locator.relative_path(location.path)
       @line = location.lineno
       @appendable_command = false
     end

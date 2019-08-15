@@ -7,7 +7,6 @@ class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
 
   def test_callback
     line = nil
-    agent = initialize_agent(app_root: File.dirname(__FILE__))
     agent.measure_block("test") do
       ActiveSupport::Notifications.instrument("deliver.action_mailer", {mailer: "Mailer"}) do line = __LINE__
         sleep 0.01
