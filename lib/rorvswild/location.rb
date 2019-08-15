@@ -6,8 +6,8 @@ module RorVsWild
     end
 
     def find_most_relevant_location(locations)
-      result = locations.find { |l| l.path.index(app_root) == 0 && !(l.path =~ gem_home_regex) } if app_root
-      result || locations.find { |l| !(l.path =~ gem_home_regex) } || locations.first
+      result = locations.find { |l| relevant_path?(l.path) && !irrelevant_path?(l.path) } if app_root
+      result || locations.find { |l| !irrelevant_path?(l.path) } || locations.first
     end
 
     def extract_most_relevant_file_and_line_from_exception(exception)
@@ -23,29 +23,42 @@ module RorVsWild
     end
 
     def extract_most_relevant_file_and_line_from_array_of_strings(stack)
-      location = stack.find { |str| str =~ app_root_regex && !(str =~ gem_home_regex) } if app_root_regex
-      location ||= stack.find { |str| !(str =~ gem_home_regex) } if gem_home_regex
+      location = stack.find { |str| relevant_path?(str) }
+      location ||= stack.find { |str| irrelevant_path?(str) }
       relative_path(location || stack.first).split(":".freeze)
     end
 
-    def gem_home_regex
-      @gem_home_regex ||= gem_home ? /\A#{gem_home}/.freeze : /\/gems\//.freeze
-    end
-
-    def gem_home
-      @gem_home ||= guess_gem_home
-    end
-
-    def guess_gem_home
-      if ENV["GEM_HOME"] && !ENV["GEM_HOME"].empty?
-        ENV["GEM_HOME"]
-      elsif ENV["GEM_PATH"] && !(first_gem_path = ENV["GEM_PATH"].split(":").first)
-        first_gem_path if first_gem_path && !first_gem_path.empty?
-      end
-    end
-
     def relative_path(path)
-      app_root_regex ? path.sub(app_root_regex, "".freeze) : path
+      path.index(relevant_path) == 0 ? path.sub(relevant_path, "".freeze) : path
+    end
+
+    def relevant_path?(path)
+      path.index(relevant_path) == 0
+    end
+
+    def relevant_path
+      @relevant_path ||= app_root || ENV["PWD"]
+    end
+
+    def irrelevant_path?(path)
+      irrelevant_paths.any? { |irrelevant_path| path.index(irrelevant_path) }
+    end
+
+    def irrelevant_paths
+      @irrelevant_paths ||= initialize_irrelevant_paths
+    end
+
+    def initialize_irrelevant_paths
+      array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
+        ENV[name].split(":".freeze) if ENV[name]
+      end
+      array += [heroku_ruby_lib_path] if File.exists?(heroku_ruby_lib_path)
+      array += Gem.path
+      array.compact.uniq
+    end
+
+    def heroku_ruby_lib_path
+      "/app/vendor/ruby-#{RUBY_VERSION}/lib"
     end
   end
 end
