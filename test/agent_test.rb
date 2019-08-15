@@ -49,44 +49,44 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("child", agent.data[:sections][0].command)
   end
 
-  def test_extract_most_relevant_file_and_line
+  def test_find_most_relevant_file_and_line
     agent = initialize_agent(app_root: "/rails/root")
     callstack = [
       stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.find_most_relevant_file_and_line(callstack))
 
     locations = [stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1)]
-    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", 1], agent.extract_most_relevant_file_and_line(locations))
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", 1], agent.find_most_relevant_file_and_line(locations))
   end
 
-  def test_extract_most_relevant_file_and_line_when_there_is_not_app_root
+  def test_find_most_relevant_file_and_line_when_there_is_not_app_root
     agent = initialize_agent
     callstack = [
       stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/usr/lib/ruby/net/http.rb", 2], agent.extract_most_relevant_file_and_line(callstack))
+    assert_equal(["/usr/lib/ruby/net/http.rb", 2], agent.find_most_relevant_file_and_line(callstack))
   end
 
-  def test_extract_most_relevant_file_and_line_when_there_is_no_method_name
-    assert_equal(["/foo/bar.rb", 123], agent.extract_most_relevant_file_and_line([stub(path: "/foo/bar.rb", lineno:123)]))
+  def test_find_most_relevant_file_and_line_when_there_is_no_method_name
+    assert_equal(["/foo/bar.rb", 123], agent.find_most_relevant_file_and_line([stub(path: "/foo/bar.rb", lineno:123)]))
   end
 
-  def test_extract_most_relevant_file_and_line_when_gem_home_is_in_heroku_app_root
+  def test_find_most_relevant_file_and_line_when_gem_home_is_in_heroku_app_root
     agent = initialize_agent(app_root: app_root = File.dirname(gem_home = ENV["GEM_HOME"]))
     callstack = [
       stub(path: "#{gem_home}/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "#{app_root}/app/models/user.rb", lineno: 3)
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.find_most_relevant_file_and_line(callstack))
   end
 
-  def test_extract_most_relevant_file_and_line_when_gem_path_is_set_instead_of_gem_home
+  def test_find_most_relevant_file_and_line_when_gem_path_is_set_instead_of_gem_home
     original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", "/gem/path"
     agent = initialize_agent(app_root: "/rails/root")
@@ -96,12 +96,12 @@ class RorVsWild::AgentTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb",lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.find_most_relevant_file_and_line(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
 
-  def test_extract_most_relevant_file_and_line_when_gem_path_and_gem_home_are_undefined
+  def test_find_most_relevant_file_and_line_when_gem_path_and_gem_home_are_undefined
     original_gem_home, original_gem_path = ENV["GEM_HOME"], ENV["GEM_PATH"]
     ENV["GEM_HOME"], ENV["GEM_PATH"] = "", ""
     agent = initialize_agent(app_root: "/rails/root")
@@ -111,27 +111,27 @@ class RorVsWild::AgentTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["/app/models/user.rb", 3], agent.extract_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], agent.find_most_relevant_file_and_line(callstack))
   ensure
     ENV["GEM_HOME"], ENV["GEM_PATH"] = original_gem_home,  original_gem_path
   end
 
-  def test_extract_most_relevant_file_and_line_from_array_of_strings
+  def test_find_most_relevant_file_and_line_from_array_of_strings
     agent = initialize_agent(app_root: "/rails/root")
 
     callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1", "/usr/lib/ruby/net/http.rb:2", "/rails/root/app/models/user.rb:3"]
-    assert_equal(["/app/models/user.rb", "3"], agent.extract_most_relevant_file_and_line_from_array_of_strings(callstack))
+    assert_equal(["/app/models/user.rb", "3"], agent.find_most_relevant_file_and_line_from_array_of_strings(callstack))
 
     locations = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1"]
-    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1"], agent.extract_most_relevant_file_and_line_from_array_of_strings(locations))
+    assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1"], agent.find_most_relevant_file_and_line_from_array_of_strings(locations))
   end
 
-  def test_extract_most_relevant_file_and_line_from_exception_when_exception_has_no_backtrace
-    assert_equal(["No backtrace", 1], agent.extract_most_relevant_file_and_line_from_exception(StandardError.new))
+  def test_find_most_relevant_file_and_line_from_exception_when_exception_has_no_backtrace
+    assert_equal(["No backtrace", 1], agent.find_most_relevant_file_and_line_from_exception(StandardError.new))
   end
 
-  def test_extract_most_relevant_file_and_line_from_exception_when_backtrace_is_an_empty_array
+  def test_find_most_relevant_file_and_line_from_exception_when_backtrace_is_an_empty_array
     (error = StandardError.new).set_backtrace([])
-    assert_equal(["No backtrace", 1], agent.extract_most_relevant_file_and_line_from_exception(error))
+    assert_equal(["No backtrace", 1], agent.find_most_relevant_file_and_line_from_exception(error))
   end
 end

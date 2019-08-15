@@ -170,7 +170,7 @@ module RorVsWild
     end
 
     def exception_to_hash(exception, extra_details = nil)
-      file, line = extract_most_relevant_file_and_line_from_exception(exception)
+      file, line = find_most_relevant_file_and_line_from_exception(exception)
       {
         line: line.to_i,
         file: relative_path(file),
