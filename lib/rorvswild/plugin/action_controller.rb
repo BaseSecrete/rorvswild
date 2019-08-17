@@ -24,6 +24,7 @@ module RorVsWild
           RorVsWild::Section.start do |section|
             method_name = controller.method_for_action(controller.action_name)
             section.file, section.line = controller.method(method_name).source_location
+            section.file = RorVsWild.agent.locator.relative_path(section.file)
             section.command = "#{controller.class}##{method_name}"
             section.kind = "code".freeze
           end

@@ -65,7 +65,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
       RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
     end
     assert_equal(1, agent.data[:sections].size)
-    assert_equal(__FILE__, agent.data[:sections][0].file)
+    assert_equal("/plugin/action_controller_test.rb", agent.data[:sections][0].file)
     assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.data[:sections][0].command)
   end
 
