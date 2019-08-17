@@ -25,8 +25,8 @@ module RorVsWild
     def initialize(config)
       @config = self.class.default_config.merge(config)
       @client = Client.new(@config)
-      @locator = RorVsWild::Locator.new
       @queue = config[:queue] || Queue.new(client)
+      @locator = RorVsWild::Locator.new(defined?(Rails) ? Rails.root.to_s : ENV["PWD"])
 
       RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
