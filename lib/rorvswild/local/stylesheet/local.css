@@ -3,11 +3,11 @@
 /********************************************/
 
 .rorvswild-local-toggler {
-  background: #202630 !important;
-  color: #61b8ff !important;
-  box-shadow: 0 1px 4px 0px #2a2f3b !important;
+  background: #1d242f !important;
+  color: #7babe8 !important;
+  box-shadow: 0 0 0 1px rgba(159, 169, 187, 0.3), 0 1px 4px 0px rgba(25, 32, 42, .9) !important;
   border-radius: 4px !important;
-  font-family: monospace !important;
+  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
   line-height: 24px !important;
   position: fixed !important;
@@ -15,10 +15,10 @@
   left: 12px !important;
   padding:0 12px !important;
   cursor: pointer !important;
-  z-index: 100001 !important;
+  z-index: 100000000000000003 !important;
 }
 .rorvswild-local-toggler small {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   font-size: 12px !important;
   margin-left: 4px !important;
   display: inline-block !important;
@@ -29,10 +29,10 @@
 /********************************************/
 
 .rorvswild-local-panel {
-  background: #202630 !important;
-  box-shadow: 0 0 0 48px rgba(0,0,0,.9) !important;
-  color: #ebf5ff !important;
-  font-family: monospace; !important;
+  background: #1d242f !important;
+  box-shadow: 0 0 0 48px rgba(25, 32, 42, .9) !important;
+  color: #eceef1 !important;
+  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace; !important;
   font-size: 15px !important;
   line-height: 24px !important;
   position: fixed !important;
@@ -40,7 +40,7 @@
   left: 12px !important;
   right: 12px !important;
   bottom: 48px !important;
-  z-index: 100000 !important;
+  z-index: 100000000000000000 !important;
   overflow: hidden !important;
   display: -webkit-box !important;
   display: -ms-flexbox !important;
@@ -59,33 +59,33 @@
 }
 
 .rorvswild-local-panel ::-moz-selection {
-  background: #ebf5ff !important;
-  color: #202630 !important;
+  background: #eceef1 !important;
+  color: #222835 !important;
 }
 
 .rorvswild-local-panel ::selection {
-  background: #ebf5ff !important;
-  color: #202630 !important;
+  background: #eceef1 !important;
+  color: #222835 !important;
 }
 
 .rorvswild-local-panel small {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   font-size: 12px !important;
   margin-left: 4px !important;
 }
 
 /* Panel Header */
 .rorvswild-local-panel__header {
-  background: #2a2f3b !important;
+  background: #212834 !important;
+  z-index: 100000000000000005 !important;
   padding: 12px !important;
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.2) !important;
-  z-index: 100002 !important;
+  box-shadow: 0 1px 2px 0 rgba(25, 32, 42, .8) !important;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 .rorvswild-local-panel__header__title {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   text-transform: uppercase !important;
   font-size: 12px !important;
   letter-spacing: 2px !important;
@@ -100,12 +100,12 @@
   stroke-width: 2 !important;
   fill: none !important;
   stroke-linecap: square !important;
-  stroke: #afbecc !important;
+  stroke: #9fa9bb !important;
   stroke-miterlimit: 10 !important;
   vertical-align: middle !important;
 }
 .rorvswild-local-panel svg:hover {
-  stroke: #ebf5ff !important;
+  stroke: #eceef1 !important;
 }
 .rorvswild-local-panel__logo {
   width: 60px !important;
@@ -125,11 +125,11 @@
 }
 .rorvswild-local-panel__github svg {
   stroke: none !important;
-  fill: #afbecc !important;
+  fill: #9fa9bb !important;
 }
 .rorvswild-local-panel__github svg:hover {
   stroke: none !important;
-  fill: #ebf5ff !important;
+  fill: #eceef1 !important;
 }
 
 /* Panel Content */
@@ -148,8 +148,8 @@
   background: transparent !important;
 }
 .rorvswild-local-panel__content::-webkit-scrollbar-thumb {
-  background-color: #afbecc !important;
-  outline: 1px solid #afbecc !important;
+  background-color: #9fa9bb !important;
+  outline: 1px solid #9fa9bb !important;
 }
 
 /* Panel request summary */
@@ -159,26 +159,26 @@
   display: -ms-flexbox !important;
   display: flex !important;
   padding: 12px 12px 11px !important;
-  border-bottom: 1px solid #2a2f3b !important;
+  border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
   cursor: pointer !important;
   -ms-flex-wrap: wrap !important;
       flex-wrap: wrap !important;
 }
-.rorvswild-local-panel__request:hover { background: #2a2f3b !important; }
+.rorvswild-local-panel__request:hover { background: #222835 !important; }
 .rorvswild-local-panel__request__name {
   word-break: break-all !important;
   overflow-wrap: break-word !important;
   width: 100% !important;
 }
 .rorvswild-local-panel__request__path {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   display: block !important;
 }
 .rorvswild-local-panel__request__started-at {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   margin-left: 12px !important;
 }
-.rorvswild-local-panel__request__runtime { color: #61b8ff !important; }
+.rorvswild-local-panel__request__runtime { color: #7babe8 !important; }
 
 /* Panel request details */
 
@@ -202,7 +202,7 @@ h2.rorvswild-local-panel__request__name__title {
   font-size: 31px !important;
   line-height: 48px !important;
   font-weight: 700 !important;
-  font-family: monospace !important;
+  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   text-align: left !important;
 }
 
@@ -210,11 +210,11 @@ h2.rorvswild-local-panel__request__name__title {
 
 .rorvswild-local-panel__request-details__section {
   padding: 12px 12px 11px !important;
-  border-bottom: 1px solid #2a2f3b !important;
+  border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
   display: block !important;
 }
 .rorvswild-local-panel__request-details__section:hover {
-  background: #2a2f3b !important;
+  background: #212834 !important;
   -webkit-transition: all .3s !important;
   transition: all .3s !important;
 }
@@ -234,12 +234,12 @@ h2.rorvswild-local-panel__request__name__title {
   min-width: 0 !important;
 }
 .rorvswild-local-panel__request-details__section__average {
-  color: #61b8ff !important;
+  color: #7babe8 !important;
   width: 48px !important;
   margin:0 12px 0 0 !important;
 }
 .rorvswild-local-panel__request-details__section__calls {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   width: 48px !important;
   margin:0 12px 0 0 !important;
 }
@@ -253,7 +253,7 @@ h2.rorvswild-local-panel__request__name__title {
   display: flex !important;
 }
 .rorvswild-local-panel__request-details__section__kind {
-  background: #181c26 !important;
+  background: rgba(25, 32, 42, 1) !important;
   font-size: 10px !important;
   text-transform: uppercase !important;
   text-align: center !important;
@@ -264,7 +264,7 @@ h2.rorvswild-local-panel__request__name__title {
 }
 .rorvswild-local-panel__request-details__section__command {
   overflow: hidden !important;
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   margin-left: 12px !important;
   -webkit-box-flex: 1 !important;
       -ms-flex: 1 !important;
@@ -280,13 +280,13 @@ h2.rorvswild-local-panel__request__name__title {
 
 .rorvswild-local-panel__footer {
   width: 100% !important;
-  background: #2a2f3b !important;
-  color: #afbecc !important;
+  background: #212834 !important;
+  color: #9fa9bb !important;
   padding: 12px !important;
   text-align: center !important;
 }
 a.rorvswild-local-panel__footer__link {
-  color: #ebf5ff !important;
+  color: #eceef1 !important;
   text-decoration: underline !important;
   line-height: inherit !important;
 }

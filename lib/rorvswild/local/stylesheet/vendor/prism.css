@@ -7,9 +7,9 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
  */
 .rorvswild-local-panel code[class*="language-"],
 .rorvswild-local-panel pre[class*="language-"] {
-  color: #afbecc !important;
+  color: #9fa9bb !important;
   background: none !important;
-  font-family: monospace !important;
+  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   text-align: left !important;
   text-shadow: 0 0 0 !important;
   word-spacing: normal !important;
@@ -64,7 +64,9 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.prolog,
 .rorvswild-local-panel .token.doctype,
 .rorvswild-local-panel .token.cdata {
-  color: #465b70 !important;
+  color: #9fa9bb !important;
+  font-style: italic !important;
+  opacity: 0.5 !important;
 }
 
 .rorvswild-local-panel .token.punctuation {
@@ -79,7 +81,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.boolean,
 .rorvswild-local-panel .token.number,
 .rorvswild-local-panel .token.deleted {
-  color: #fc8660 !important;
+  color: #e79659 !important;
 }
 
 .rorvswild-local-panel .token.property,
@@ -87,7 +89,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.symbol,
 .rorvswild-local-panel .token.builtin,
 .rorvswild-local-panel .token.string {
-  color: #54ddb9 !important;
+  color: #60b4cb !important;
 }
 
 .rorvswild-local-panel .token.attr-name,
@@ -100,17 +102,17 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.atrule,
 .rorvswild-local-panel .token.attr-value,
 .rorvswild-local-panel .token.keyword {
-  color: #c555df !important;
+  color: #e685e7 !important;
 }
 
 .rorvswild-local-panel .token.constant,
 .rorvswild-local-panel .token.regex,
 .rorvswild-local-panel .token.important {
-  color: #fcd160 !important;
+  color: #c1a658 !important;
 }
 
 .rorvswild-local-panel .token.function {
-  color: #549fdd !important;
+  color: #7babe8 !important;
 }
 
 .rorvswild-local-panel .token.important,
@@ -134,5 +136,5 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .language-markup .token.tag,
 .rorvswild-local-panel .language-markup .token.attr-name,
 .rorvswild-local-panel .language-markup .token.punctuation {
-  color: #9bacbd !important;
+  color: #9fa9bb !important;
 }

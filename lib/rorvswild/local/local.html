@@ -4,9 +4,6 @@
 </div>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local">
-  {{#embedded}}
-    <div class="rorvswild-local-toggler" data-events="click->toggle">{{lastRuntime}}<small>ms</small></div>
-  {{/embedded}}
   <div id="rorvswild-local-requests" class="rorvswild-local-panel" style="{{containerStyle}}">
 
     <div class="rorvswild-local-panel__header">
@@ -63,6 +60,10 @@
       <a href="https://www.rorvswild.com" class="rorvswild-local-panel__footer__link">create an account</a>.
     </div>
   </div>
+
+  {{#embedded}}
+    <div class="rorvswild-local-toggler" data-events="click->toggle">{{lastRuntime}}<small>ms</small></div>
+  {{/embedded}}
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestSummary">
@@ -114,7 +115,6 @@
       <span class="rorvswild-local-panel__request-details__section__calls" title="calls">x{{calls}}</span>
       <span class="rorvswild-local-panel__request-details__section__impact" title="impact">{{impact}}<small>&#37;</small></span>
     </div>
-
   </div>
 </script>
 
