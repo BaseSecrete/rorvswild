@@ -7,7 +7,6 @@
   <div id="rorvswild-local-requests" class="rorvswild-local-panel" style="{{containerStyle}}">
 
     <div class="rorvswild-local-panel__header">
-
       <a href="https://www.rorvswild.com" class="rorvswild-local-panel__logo">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34.83 30.83">
           <polygon points="17.41 9.41 13.41 9.41 9.41 13.41 17.41 21.41 25.41 13.41 21.41 9.41 17.41 9.41"/>
@@ -116,19 +115,4 @@
       <span class="rorvswild-local-panel__request-details__section__impact" title="impact">{{impact}}<small>&#37;</small></span>
     </div>
   </div>
-</script>
-
-<script>
-  (function() {
-    var RorVsWild = {};
-    var startRorVsWild = function() {
-      %{javascript_source}
-      Barber.launch(document.getElementById("RorVsWild.Local"), this)
-    }.bind(RorVsWild)
-
-    if (document.readyState != "loading")
-      startRorVsWild()
-    else
-      document.addEventListener("DOMContentLoaded", startRorVsWild)
-  })()
 </script>

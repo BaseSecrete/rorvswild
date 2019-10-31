@@ -10,12 +10,17 @@ module RorVsWild
       end
 
       def call(env)
-        env["REQUEST_URI"] == "/rorvswild" ? standalone_profiler(env) : embed_profiler(env)
+        case env["REQUEST_URI"]
+        when "/rorvswild" then standalone_profiler(env)
+        when "/rorvswild.css" then serve_stylesheet
+        when "/rorvswild.js" then serve_javascript
+        else embed_profiler(env)
+        end
       end
 
       def standalone_profiler(env)
         html = inject_into(empty_html_page)
-        [200, {"Content-Type:" => "text/html; charset=utf-8"}, StringIO.new(html || empty_html_page)]
+        [200, {"Content-Type" => "text/html; charset=utf-8"}, StringIO.new(html || empty_html_page)]
       end
 
       def embed_profiler(env)
@@ -36,15 +41,12 @@ module RorVsWild
       end
 
       def inject_into(html)
-        markup = html_markup(RorVsWild.agent.queue.requests).encode(html.encoding)
-        style = "<style type='text/css'> #{concatenate_stylesheet}</style>".encode(html.encoding)
-
-        markup = markup.html_safe if markup.respond_to?(:html_safe)
-        style = style.html_safe if markup.respond_to?(:html_safe)
-
         if index = html.index("</body>")
+          markup = html_markup(RorVsWild.agent.queue.requests).encode(html.encoding)
+          markup = markup.html_safe if markup.respond_to?(:html_safe)
+          html.insert(index, %{<link rel="stylesheet" media="all" href="/rorvswild.css"/>})
+          html.insert(index, %{<script src="/rorvswild.js"></script>})
           html.insert(index, markup)
-          html.insert(index, style)
         end
         html
       rescue Encoding::UndefinedConversionError => ex
@@ -63,8 +65,18 @@ module RorVsWild
         html % {data: html_escape(data.to_json), javascript_source: concatenate_javascript}
       end
 
+      def serve_stylesheet
+        [200, {"Content-Type" => "text/css"}, StringIO.new(concatenate_stylesheet)]
+      end
+
+      def serve_javascript
+        [200, {"Content-Type" => "application/javascript"}, StringIO.new(concatenate_javascript)]
+      end
+
       def concatenate_javascript
-        concatenate_assets(JS_FOLDER, JS_FILES)
+        js = File.read(File.join(JS_FOLDER, "application.js"))
+        js = js.split("// include javascript here")
+        js[0] + concatenate_assets(JS_FOLDER, JS_FILES) + js[1]
       end
 
       def concatenate_stylesheet
