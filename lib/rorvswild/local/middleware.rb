@@ -11,19 +11,20 @@ module RorVsWild
 
       def call(env)
         case env["REQUEST_URI"]
-        when "/rorvswild" then standalone_profiler(env)
+        when "/rorvswild" then serve_standalone_profiler(env)
         when "/rorvswild.css" then serve_stylesheet
         when "/rorvswild.js" then serve_javascript
-        else embed_profiler(env)
+        when "/rorvswild.json" then serve_json
+        else serve_embed_profiler(env)
         end
       end
 
-      def standalone_profiler(env)
+      def serve_standalone_profiler(env)
         html = inject_into(empty_html_page)
         [200, {"Content-Type" => "text/html; charset=utf-8"}, StringIO.new(html || empty_html_page)]
       end
 
-      def embed_profiler(env)
+      def serve_embed_profiler(env)
         status, headers, body = app.call(env)
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           if headers["Content-Encoding"]
@@ -40,9 +41,23 @@ module RorVsWild
         [status, headers, body]
       end
 
+      def serve_stylesheet
+        [200, {"Content-Type" => "text/css"}, StringIO.new(concatenate_stylesheet)]
+      end
+
+      def serve_javascript
+        [200, {"Content-Type" => "application/javascript"}, StringIO.new(concatenate_javascript)]
+      end
+
+      def serve_json
+        [200, {"Content-Type" => "application/json"}, StringIO.new(RorVsWild.agent.queue.requests.to_json)]
+      end
+
+      private
+
       def inject_into(html)
         if index = html.index("</body>")
-          markup = html_markup(RorVsWild.agent.queue.requests).encode(html.encoding)
+          markup = File.read(File.join(LOCAL_FOLDER, "local.html"))
           markup = markup.html_safe if markup.respond_to?(:html_safe)
           html.insert(index, %{<link rel="stylesheet" media="all" href="/rorvswild.css"/>})
           html.insert(index, %{<script src="/rorvswild.js"></script>})
@@ -59,19 +74,6 @@ module RorVsWild
       CSS_FOLDER = File.join(LOCAL_FOLDER, "stylesheet")
       JS_FILES = ["vendor/mustache.js", "vendor/barber.js", "vendor/prism.js", "local.js"]
       CSS_FILES = ["vendor/prism.css", "local.css"]
-
-      def html_markup(data)
-        html = File.read(File.join(LOCAL_FOLDER, "local.html"))
-        html % {data: html_escape(data.to_json), javascript_source: concatenate_javascript}
-      end
-
-      def serve_stylesheet
-        [200, {"Content-Type" => "text/css"}, StringIO.new(concatenate_stylesheet)]
-      end
-
-      def serve_javascript
-        [200, {"Content-Type" => "application/javascript"}, StringIO.new(concatenate_javascript)]
-      end
 
       def concatenate_javascript
         js = File.read(File.join(JS_FOLDER, "application.js"))
