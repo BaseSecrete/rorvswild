@@ -5,7 +5,7 @@
 
 <img align="right" src="/images/rorvswild_logo.jpg">
 
-*RoRvsWild* is a ruby gem to monitor performances and quality in Ruby on Rails applications.
+*RoRvsWild* is a ruby gem to monitor performances and exceptions in Ruby on Rails applications.
 
 This gem has a double mode, development and production.
 It can be used without an account to monitor your requests performances in your development environment.
