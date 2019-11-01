@@ -9,7 +9,7 @@
 
 This gem has a double mode, development and production.
 It can be used without an account to monitor your requests performances in your development environment.
-It can also be used in your production and staging environments with an account on https://rorvswild.com. With such an account you also get extra benefits such as 30 day trace, background jobs monitoring, errors monitoring and notifications.
+It can also be used in your production and staging environments with an account on https://rorvswild.com. With such an account you also get extra benefits such as 30 day trace, background jobs monitoring, exceptions monitoring and notifications.
 
 
 ## Installation
@@ -139,7 +139,7 @@ production:
     - Sidekiq # If you don't want to monitor your Sidekiq jobs
 ```
 
-Here is the equivalent if you prefer initializing RorVsWild manually.
+Here is the equivalent if you prefer initialising RorVsWild manually.
 
 ```ruby
 # config/initializers/rorvswild.rb
@@ -151,7 +151,7 @@ RorVsWild.start(
   ignore_plugins: ["Sidekiq"])
 ```
 
-Finnally here is the list of all plugins that you can ignore :
+Finally here is the list of all plugins you can ignore :
 
   - ActionController
   - ActionMailer
