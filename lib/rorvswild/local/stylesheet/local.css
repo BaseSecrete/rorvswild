@@ -4,7 +4,7 @@
 
 .rorvswild-local-toggler {
   background: #1d242f !important;
-  color: #7babe8 !important;
+  color: #80abe3 !important;
   box-shadow: 0 0 0 1px rgba(159, 169, 187, 0.3), 0 1px 4px 0px rgba(25, 32, 42, .9) !important;
   border-radius: 4px !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
@@ -178,7 +178,7 @@
   color: #9fa9bb !important;
   margin-left: 12px !important;
 }
-.rorvswild-local-panel__request__runtime { color: #7babe8 !important; }
+.rorvswild-local-panel__request__runtime { color: #80abe3 !important; }
 
 /* Panel request details */
 
@@ -234,7 +234,7 @@ h2.rorvswild-local-panel__request__name__title {
   min-width: 0 !important;
 }
 .rorvswild-local-panel__request-details__section__average {
-  color: #7babe8 !important;
+  color: #80abe3 !important;
   width: 48px !important;
   margin:0 12px 0 0 !important;
 }

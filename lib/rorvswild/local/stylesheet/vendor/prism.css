@@ -81,7 +81,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.boolean,
 .rorvswild-local-panel .token.number,
 .rorvswild-local-panel .token.deleted {
-  color: #e79659 !important;
+  color: #e79199 !important;
 }
 
 .rorvswild-local-panel .token.property,
@@ -89,7 +89,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.symbol,
 .rorvswild-local-panel .token.builtin,
 .rorvswild-local-panel .token.string {
-  color: #60b4cb !important;
+  color: #67b6b2 !important;
 }
 
 .rorvswild-local-panel .token.attr-name,
@@ -102,17 +102,17 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.atrule,
 .rorvswild-local-panel .token.attr-value,
 .rorvswild-local-panel .token.keyword {
-  color: #e685e7 !important;
+  color: #e189e2 !important;
 }
 
 .rorvswild-local-panel .token.constant,
 .rorvswild-local-panel .token.regex,
 .rorvswild-local-panel .token.important {
-  color: #c1a658 !important;
+  color: #bfa661 !important;
 }
 
 .rorvswild-local-panel .token.function {
-  color: #7babe8 !important;
+  color: #80abe3 !important;
 }
 
 .rorvswild-local-panel .token.important,
