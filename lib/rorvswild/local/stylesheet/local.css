@@ -32,7 +32,7 @@
   background: #1d242f !important;
   box-shadow: 0 0 0 48px rgba(25, 32, 42, .9) !important;
   color: #eceef1 !important;
-  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace; !important;
+  font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
   line-height: 24px !important;
   position: fixed !important;
@@ -144,7 +144,7 @@
 .rorvswild-local-panel__content::-webkit-scrollbar { width: 3px !important; }
 .rorvswild-local-panel__content::-webkit-scrollbar-corner { background: transparent !important; }
 .rorvswild-local-panel__content::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 0 rgba(0,0,0,0.3) !important;
+  box-shadow: inset 0 0 0 rgba(0,0,0,0.3) !important;
   background: transparent !important;
 }
 .rorvswild-local-panel__content::-webkit-scrollbar-thumb {
@@ -304,6 +304,7 @@ a.rorvswild-local-panel__footer__link {
         -ms-flex: 1 !important;
             flex: 1 !important;
   }
+
   .rorvswild-local-panel__request__runtime { margin-left: 12px !important; }
 
   .rorvswild-local-panel__request-details__section__file {

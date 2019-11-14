@@ -2,6 +2,7 @@
 # RorVsWild
 
 [![Gem Version](https://badge.fury.io/rb/rorvswild.svg)](https://badge.fury.io/rb/rorvswild)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2c4805cf658d7af794fe/maintainability)](https://codeclimate.com/github/BaseSecrete/rorvswild/maintainability)
 
 <img align="right" src="/images/rorvswild_logo.jpg">
 
