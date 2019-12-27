@@ -3,7 +3,7 @@ $LOAD_PATH.unshift(path)
 
 require "rorvswild"
 require "minitest/autorun"
-require "mocha/mini_test"
+require "mocha/minitest"
 require "top_tests"
 
 module RorVsWild::AgentHelper
