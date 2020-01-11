@@ -10,7 +10,7 @@ module RorVsWild
       end
 
       def call(env)
-        case env["REQUEST_URI"]
+        case env["PATH_INFO"]
         when "/rorvswild" then serve_standalone_profiler(env)
         when "/rorvswild.css" then serve_stylesheet
         when "/rorvswild.js" then serve_javascript
@@ -59,8 +59,6 @@ module RorVsWild
         if index = html.index("</body>")
           markup = File.read(File.join(LOCAL_FOLDER, "local.html"))
           markup = markup.html_safe if markup.respond_to?(:html_safe)
-          html.insert(index, %{<link rel="stylesheet" media="all" href="/rorvswild.css"/>})
-          html.insert(index, %{<script src="/rorvswild.js"></script>})
           html.insert(index, markup)
         end
         html
