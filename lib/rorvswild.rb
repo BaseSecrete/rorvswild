@@ -20,7 +20,7 @@ module RorVsWild
   end
 
   def self.logger
-    @logger ||= Logger.new(STDOUT)
+    @logger ||= initialize_logger
   end
 
   def self.measure_code(code)
@@ -39,11 +39,15 @@ module RorVsWild
     agent.record_error(exception, extra_details) if agent
   end
 
-  def self.initialize_logger(destination)
-    if destination
+  def self.initialize_logger(destination = nil)
+    if destination.is_a?(Logger)
+      destination
+    elsif destination
       Logger.new(destination)
     elsif defined?(Rails)
-      Logger.new(Rails.root + "log/rorvswild.log")
+      Rails.logger
+    else
+      Logger.new(STDOUT)
     end
   end
 

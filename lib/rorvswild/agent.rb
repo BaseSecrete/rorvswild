@@ -37,7 +37,7 @@ module RorVsWild
       for name in RorVsWild::Plugin.constants
         next if config[:ignore_plugins] && config[:ignore_plugins].include?(name.to_s)
         if (plugin = RorVsWild::Plugin.const_get(name)).respond_to?(:setup)
-          RorVsWild.logger.info("Load plugin #{name}")
+          RorVsWild.logger.info("Setup RorVsWild::Plugin::#{name}")
           plugin.setup
         end
       end
