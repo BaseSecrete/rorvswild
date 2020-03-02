@@ -19,6 +19,6 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
     assert_equal(1, agent.data[:sections].size)
     assert_equal(2, agent.data[:sections][0].calls)
     assert_equal("mongo", agent.data[:sections][0].kind)
-    assert_match('{"insert"=>"mountains", "documents"=>', agent.data[:sections][0].command)
+    assert_match('{"insert"=>"mountains", "ordered"=>true, "documents"=>', agent.data[:sections][0].command)
   end
 end
