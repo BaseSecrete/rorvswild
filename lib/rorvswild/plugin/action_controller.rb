@@ -5,9 +5,26 @@ module RorVsWild
         return if @installed
         return unless defined?(::ActionController::Base)
         ActiveSupport::Notifications.subscribe("process_action.action_controller", new)
-        ::ActionController::Base.around_action(&method(:around_action))
         ::ActionController::Base.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         @installed = true
+      end
+
+      def start(name, id, payload)
+        controller_action = "#{payload[:controller]}##{payload[:action]}"
+        if !RorVsWild.agent.ignored_request?(controller_action)
+          section = RorVsWild::Section.start
+          RorVsWild.agent.data[:name] = controller_action
+          controller = payload[:headers]["action_controller.instance".freeze]
+          method_name = controller.method_for_action(payload[:action])
+          section.file, section.line = controller.method(method_name).source_location
+          section.file = RorVsWild.agent.locator.relative_path(section.file)
+          section.command = "#{controller.class}##{method_name}"
+          section.kind = "code".freeze
+        end
+      end
+
+      def finish(name, id, payload)
+        RorVsWild::Section.stop
       end
 
       def self.after_exception(exception, controller)
@@ -17,32 +34,6 @@ module RorVsWild
           hash[:environment_variables] = extract_http_headers(controller.request.filtered_env)
         end
         raise exception
-      end
-
-      def self.around_action(controller, block)
-        begin
-          RorVsWild::Section.start do |section|
-            method_name = controller.method_for_action(controller.action_name)
-            section.file, section.line = controller.method(method_name).source_location
-            section.file = RorVsWild.agent.locator.relative_path(section.file)
-            section.command = "#{controller.class}##{method_name}"
-            section.kind = "code".freeze
-          end
-          block.call
-        ensure
-          RorVsWild::Section.stop
-        end
-      end
-
-      # Payload: controller, action, params, format, method, path
-      def start(name, id, payload)
-        if !RorVsWild.agent.ignored_request?(name = "#{payload[:controller]}##{payload[:action]}")
-          RorVsWild.agent.start_request(name: name, path: payload[:path])
-        end
-      end
-
-      def finish(name, id, payload)
-        RorVsWild.agent.stop_request
       end
 
       def self.extract_http_headers(headers)

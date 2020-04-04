@@ -2,7 +2,6 @@ require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWildTest < Minitest::Test
   include RorVsWild::AgentHelper
-  include TopTests
 
   def test_measure_code
     agent.expects(:post_job)

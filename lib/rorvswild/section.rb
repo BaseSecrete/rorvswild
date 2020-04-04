@@ -11,7 +11,7 @@ module RorVsWild
     end
 
     def self.stop(&block)
-      section = stack.pop
+      return unless section = stack.pop
       block.call(section) if block_given?
       section.total_runtime = RorVsWild.clock_milliseconds - section.started_at
       current.children_runtime += section.total_runtime if current
@@ -19,11 +19,11 @@ module RorVsWild
     end
 
     def self.stack
-      RorVsWild.agent.data[:section_stack] ||= []
+      (data = RorVsWild.agent.data) && data[:section_stack]
     end
 
     def self.current
-      stack.last
+      (sections = stack) && sections.last
     end
 
     def initialize

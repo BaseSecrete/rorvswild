@@ -9,7 +9,6 @@ require "top_tests"
 module RorVsWild::AgentHelper
   def agent
     @agent ||= initialize_agent(ignore_requests: ["SecretController#index"])
-
   end
 
   def initialize_agent(options = {})

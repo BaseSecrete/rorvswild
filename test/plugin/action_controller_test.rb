@@ -6,23 +6,22 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_callback
-    agent.expects(:post_request)
-    payload = {controller: "UsersController", action: "show"}
-    ActiveSupport::Notifications.instrument("process_action.action_controller", payload) do
-      sleep 0.01
-    end
+    agent.start_request
+    controller = SampleController.new
+    payload = {controller: "SampleController", action: "index", headers: {"action_controller.instance" => controller}}
+    ActiveSupport::Notifications.instrument("process_action.action_controller", payload) { sleep(0.01) }
 
-    data = agent.send(:data)
-    assert_equal(0, data[:sections].size)
-    assert_equal("UsersController#show", data[:name])
-    assert(data[:runtime] >= 10)
+    assert_equal(1, agent.data[:sections].size)
+    assert(agent.data[:sections][0].total_runtime >= 10)
+    assert_equal("SampleController#index", agent.data[:name])
   end
 
   def test_callback_when_exception_is_raised
-    agent.expects(:post_request)
+    agent.start_request
+    controller = SampleController.new
     request = stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"})
-    controller = stub(session: {id: "session"}, request: request)
-    payload = {controller: "UsersController", action: "show"}
+    controller.stubs(session: {id: "session"}, request: request)
+    payload = {controller: "SampleController", action: "index", headers: {"action_controller.instance" => controller}}
     assert_raises(ZeroDivisionError) do
       ActiveSupport::Notifications.instrument("process_action.action_controller", payload) do
         begin
@@ -34,7 +33,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     end
 
     data = agent.send(:data)
-    assert_equal("UsersController#show", data[:name])
+    assert_equal("SampleController#index", data[:name])
     assert_equal("ZeroDivisionError", data[:error][:exception])
     assert_equal({id: "session"}, data[:error][:session])
     assert_equal({foo: "bar"}, data[:error][:parameters])
@@ -47,26 +46,20 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
   end
 
   def test_callback_when_action_is_ignored
-    agent.expects(:post_request).never
-    payload = {controller: "SecretController", action: "index"}
+    agent.start_request
+    controller = SampleController.new
+    payload = {controller: "SecretController", action: "index", headers: {"action_controller.instance" => controller}}
     ActiveSupport::Notifications.instrument("process_action.action_controller", payload) { }
-    assert_equal({}, agent.send(:data))
+    refute(agent.data[:name])
   end
 
   class SampleController
     def index
     end
-  end
 
-  def test_around_action
-    controller = SampleController.new
-    controller.stubs(action_name: "index", controller_name: "SampleController", method_for_action: "index")
-    agent.measure_block("test") do
-      RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
+    def method_for_action(name)
+      name
     end
-    assert_equal(1, agent.data[:sections].size)
-    assert_equal("/plugin/action_controller_test.rb", agent.data[:sections][0].file)
-    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.data[:sections][0].command)
   end
 
   def test_format_header_name

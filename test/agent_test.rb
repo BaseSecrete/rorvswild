@@ -38,7 +38,7 @@ class RorVsWild::AgentTest < Minitest::Test
   def test_measure_job_when_ignored
     result = agent.measure_job("SecretJob") { "result" }
     assert_equal("result", result)
-    refute(agent.data[:name])
+    refute(agent.data)
   end
 
   def test_measure_job_when_recursive

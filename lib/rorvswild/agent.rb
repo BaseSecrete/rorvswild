@@ -48,11 +48,11 @@ module RorVsWild
     end
 
     def measure_block(name, kind = "code".freeze, &block)
-      data[:name] ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
+      data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
     def measure_section(name, kind: "code", appendable_command: false, &block)
-      return block.call unless data[:name]
+      return block.call unless data
       begin
         RorVsWild::Section.start do |section|
           section.appendable_command = appendable_command
@@ -66,9 +66,9 @@ module RorVsWild
     end
 
     def measure_job(name, parameters: nil, &block)
-      return measure_section(name, &block) if data[:name] # For recursive jobs
+      return measure_section(name, &block) if data # For recursive jobs
       return block.call if ignored_job?(name)
-      initialize_data(name)
+      initialize_data[:name] = name
       begin
         block.call
       rescue Exception => ex
@@ -80,14 +80,12 @@ module RorVsWild
       end
     end
 
-    def start_request(payload)
-      return if data[:name]
-      initialize_data(payload[:name])
-      data[:path] = payload[:path]
+    def start_request
+      data || initialize_data
     end
 
     def stop_request
-      return unless data[:name]
+      return unless data
       data[:runtime] = RorVsWild.clock_milliseconds - data[:started_at]
       post_request
     end
@@ -113,7 +111,7 @@ module RorVsWild
     end
 
     def data
-      Thread.current[:rorvswild_data] ||= {}
+      Thread.current[:rorvswild_data]
     end
 
     def add_section(section)
@@ -139,11 +137,8 @@ module RorVsWild
 
     private
 
-    def initialize_data(name)
-      data[:name] = name
-      data[:sections] = []
-      data[:section_stack] = []
-      data[:started_at] = RorVsWild.clock_milliseconds
+    def initialize_data
+      Thread.current[:rorvswild_data] = {sections: [], section_stack: [], started_at: RorVsWild.clock_milliseconds}
     end
 
     def cleanup_data
@@ -153,7 +148,7 @@ module RorVsWild
     end
 
     def post_request
-      queue.push_request(cleanup_data)
+      (data = cleanup_data) && data[:name] && queue.push_request(data)
     end
 
     def post_job
