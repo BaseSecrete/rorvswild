@@ -52,7 +52,7 @@ module RorVsWild
     private
 
     def initialize_irrelevant_paths
-      array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
+      array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
         ENV[name].split(":".freeze) if ENV[name]
       end
       array += [heroku_ruby_lib_path] if File.exists?(heroku_ruby_lib_path)
