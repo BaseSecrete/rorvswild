@@ -17,7 +17,7 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
     ActiveJob::Base.logger = Logger.new("/dev/null")
     agent.expects(:post_job)
     SampleJob.perform_now(1)
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.data[:name])
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
   end
 
   def test_callback_on_exception
@@ -26,7 +26,7 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
     SampleJob.perform_now(false)
   rescue
   ensure
-    assert_equal([false], agent.data[:error][:parameters])
+    assert_equal([false], agent.current_data[:error][:parameters])
   end
 end
 

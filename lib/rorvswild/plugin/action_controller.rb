@@ -13,7 +13,7 @@ module RorVsWild
         controller_action = "#{payload[:controller]}##{payload[:action]}"
         if !RorVsWild.agent.ignored_request?(controller_action)
           section = RorVsWild::Section.start
-          RorVsWild.agent.data[:name] = controller_action
+          RorVsWild.agent.current_data[:name] = controller_action
           controller = payload[:headers]["action_controller.instance".freeze]
           method_name = controller.method_for_action(payload[:action])
           section.file, section.line = controller.method(method_name).source_location

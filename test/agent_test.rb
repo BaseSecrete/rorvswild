@@ -14,7 +14,7 @@ class RorVsWild::AgentTest < Minitest::Test
       end
     end
     assert_equal(42, result)
-    sections = agent.data[:sections]
+    sections = agent.current_data[:sections]
     parent, child = sections[1], sections[0]
     assert_equal("child", child.command)
     assert_equal("parent", parent.command)
@@ -32,20 +32,20 @@ class RorVsWild::AgentTest < Minitest::Test
         end
       end
     end
-    assert_equal(2, agent.data[:sections].size)
+    assert_equal(2, agent.current_data[:sections].size)
   end
 
   def test_measure_job_when_ignored
     result = agent.measure_job("SecretJob") { "result" }
     assert_equal("result", result)
-    refute(agent.data)
+    refute(agent.current_data)
   end
 
   def test_measure_job_when_recursive
     agent.measure_job("parent") do
       agent.measure_job("child") { }
     end
-    assert_equal(1, agent.data[:sections].size)
-    assert_equal("child", agent.data[:sections][0].command)
+    assert_equal(1, agent.current_data[:sections].size)
+    assert_equal("child", agent.current_data[:sections][0].command)
   end
 end

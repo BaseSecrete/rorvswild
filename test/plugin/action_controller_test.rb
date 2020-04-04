@@ -11,9 +11,9 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     payload = {controller: "SampleController", action: "index", headers: {"action_controller.instance" => controller}}
     ActiveSupport::Notifications.instrument("process_action.action_controller", payload) { sleep(0.01) }
 
-    assert_equal(1, agent.data[:sections].size)
-    assert(agent.data[:sections][0].total_runtime >= 10)
-    assert_equal("SampleController#index", agent.data[:name])
+    assert_equal(1, agent.current_data[:sections].size)
+    assert(agent.current_data[:sections][0].total_runtime >= 10)
+    assert_equal("SampleController#index", agent.current_data[:name])
   end
 
   def test_callback_when_exception_is_raised
@@ -32,7 +32,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
       end
     end
 
-    data = agent.send(:data)
+    data = agent.current_data
     assert_equal("SampleController#index", data[:name])
     assert_equal("ZeroDivisionError", data[:error][:exception])
     assert_equal({id: "session"}, data[:error][:session])
@@ -50,7 +50,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     controller = SampleController.new
     payload = {controller: "SecretController", action: "index", headers: {"action_controller.instance" => controller}}
     ActiveSupport::Notifications.instrument("process_action.action_controller", payload) { }
-    refute(agent.data[:name])
+    refute(agent.current_data[:name])
   end
 
   class SampleController

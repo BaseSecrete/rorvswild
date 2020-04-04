@@ -13,9 +13,9 @@ class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
       end
     end
 
-    section = agent.data[:sections][0]
+    section = agent.current_data[:sections][0]
 
-    assert_equal(1, agent.data[:sections].size)
+    assert_equal(1, agent.current_data[:sections].size)
     assert_equal("Mailer", section.command)
     assert_equal(line, section.line.to_i)
     assert_equal("mail", section.kind)

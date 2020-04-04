@@ -22,7 +22,7 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
   def test_callback
     agent.expects(:post_job)
     Sidekiq::Testing.inline! { SampleJob.perform_async(1) }
-    assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob", agent.data[:name])
+    assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob", agent.current_data[:name])
   end
 
   def test_callback_on_exception
@@ -30,7 +30,7 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
     Sidekiq::Testing.inline! { SampleJob.perform_async(false) }
   rescue
   ensure
-    assert_equal([false], agent.data[:error][:parameters])
+    assert_equal([false], agent.current_data[:error][:parameters])
   end
 end
 

@@ -48,11 +48,11 @@ module RorVsWild
     end
 
     def measure_block(name, kind = "code".freeze, &block)
-      data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
+      current_data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
     def measure_section(name, kind: "code", appendable_command: false, &block)
-      return block.call unless data
+      return block.call unless current_data
       begin
         RorVsWild::Section.start do |section|
           section.appendable_command = appendable_command
@@ -66,7 +66,7 @@ module RorVsWild
     end
 
     def measure_job(name, parameters: nil, &block)
-      return measure_section(name, &block) if data # For recursive jobs
+      return measure_section(name, &block) if current_data # For recursive jobs
       return block.call if ignored_job?(name)
       initialize_data[:name] = name
       begin
@@ -75,18 +75,18 @@ module RorVsWild
         push_exception(ex, parameters: parameters)
         raise
       ensure
-        data[:runtime] = RorVsWild.clock_milliseconds - data[:started_at]
+        current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
         post_job
       end
     end
 
     def start_request
-      data || initialize_data
+      current_data || initialize_data
     end
 
     def stop_request
-      return unless data
-      data[:runtime] = RorVsWild.clock_milliseconds - data[:started_at]
+      return unless current_data
+      current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
       post_request
     end
 
@@ -105,21 +105,21 @@ module RorVsWild
 
     def push_exception(exception, options = nil)
       return if ignored_exception?(exception)
-      data[:error] = exception_to_hash(exception)
-      data[:error].merge!(options) if options
-      data[:error]
+      current_data[:error] = exception_to_hash(exception)
+      current_data[:error].merge!(options) if options
+      current_data[:error]
     end
 
-    def data
+    def current_data
       Thread.current[:rorvswild_data]
     end
 
     def add_section(section)
-      return unless data[:sections]
-      if sibling = data[:sections].find { |s| s.sibling?(section) }
+      return unless current_data[:sections]
+      if sibling = current_data[:sections].find { |s| s.sibling?(section) }
         sibling.merge(section)
       else
-        data[:sections] << section
+        current_data[:sections] << section
       end
     end
 

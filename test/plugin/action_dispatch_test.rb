@@ -9,9 +9,9 @@ class RorVsWild::Plugin::ActionDispatchTest < Minitest::Test
     agent # Load agent
     payload = {request: stub(original_fullpath: "/foo/bar")}
     ActiveSupport::Notifications.instrument("request.action_dispatch", payload) { sleep(0.01) }
-    assert_equal("/foo/bar", agent.data[:path])
-    assert_equal(1, agent.data[:sections].size)
-    assert(agent.data[:sections][0].total_runtime >= 10)
+    assert_equal("/foo/bar", agent.current_data[:path])
+    assert_equal(1, agent.current_data[:sections].size)
+    assert(agent.current_data[:sections][0].total_runtime >= 10)
   end
 end
 

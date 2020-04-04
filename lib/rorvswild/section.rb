@@ -19,7 +19,7 @@ module RorVsWild
     end
 
     def self.stack
-      (data = RorVsWild.agent.data) && data[:section_stack]
+      (data = RorVsWild.agent.current_data) && data[:section_stack]
     end
 
     def self.current
