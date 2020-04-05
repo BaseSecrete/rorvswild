@@ -6,12 +6,12 @@ module RorVsWild
     def self.start(&block)
       section = Section.new
       block.call(section) if block_given?
-      stack.push(section)
+      stack && stack.push(section)
       section
     end
 
     def self.stop(&block)
-      return unless section = stack.pop
+      return unless stack && section = stack.pop
       block.call(section) if block_given?
       section.total_runtime = RorVsWild.clock_milliseconds - section.started_at
       current.children_runtime += section.total_runtime if current
