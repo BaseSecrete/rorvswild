@@ -34,15 +34,15 @@ module RorVsWild
     end
 
     def relative_path(path)
-      path.index(current_path) == 0 ? path.sub(current_path, "".freeze) : path
+      path.start_with?(current_path) ? path.sub(current_path, "".freeze) : path
     end
 
     def relevant_path?(path)
-      path.index(current_path) == 0 && !irrelevant_path?(path)
+      path.start_with?(current_path) && !irrelevant_path?(path)
     end
 
     def irrelevant_path?(path)
-      irrelevant_paths.any? { |irrelevant_path| path.index(irrelevant_path) }
+      path.start_with?(*irrelevant_paths)
     end
 
     def irrelevant_paths
