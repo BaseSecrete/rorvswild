@@ -54,6 +54,16 @@ module RorVsWild
   def self.clock_milliseconds
     Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
   end
+
+  def self.check
+    api_key = RorVsWild.agent.config[:api_key]
+    return puts "You API key is missing and has to be defined in config/rorvswild.yml." if !api_key || api_key.empty?
+    puts case response = agent.client.post("/jobs", jobs: [{sections: [], name: "RorVsWild.check", runtime: 0}])
+    when Net::HTTPOK then "Connection to RorVsWild works fine !"
+    when Net::HTTPUnauthorized then "Wrong API key"
+    else puts "Something went wrong: #{response.inspect}"
+    end
+  end
 end
 
 if defined?(Rails)
