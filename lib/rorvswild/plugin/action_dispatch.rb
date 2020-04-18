@@ -14,6 +14,7 @@ module RorVsWild
         @action_dispath_location ||= ::ActionDispatch::Executor.instance_method(:call).source_location
         section = RorVsWild::Section.start
         section.file, section.line = @action_dispath_location
+        section.command = "ActionDispatch::Executor.#call".freeze
         section.kind = "code".freeze
       end
 
