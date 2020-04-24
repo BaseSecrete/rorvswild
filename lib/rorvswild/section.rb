@@ -30,6 +30,7 @@ module RorVsWild
       @calls = 1
       @total_runtime = 0
       @children_runtime = 0
+      @kind = "code".freeze
       @started_at = RorVsWild.clock_milliseconds
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
