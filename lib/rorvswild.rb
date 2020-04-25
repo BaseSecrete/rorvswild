@@ -40,7 +40,7 @@ module RorVsWild
   end
 
   def self.initialize_logger(destination = nil)
-    if destination.is_a?(Logger)
+    if destination.respond_to?(:info) && destination.respond_to?(:warn) && destination.respond_to?(:error)
       destination
     elsif destination
       Logger.new(destination)
