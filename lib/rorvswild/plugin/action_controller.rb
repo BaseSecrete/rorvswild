@@ -4,27 +4,26 @@ module RorVsWild
       def self.setup
         return if @installed
         return unless defined?(::ActionController::Base)
-        ActiveSupport::Notifications.subscribe("process_action.action_controller", new)
+        ::ActionController::Base.around_action(&method(:around_action))
         ::ActionController::Base.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         @installed = true
       end
 
-      def start(name, id, payload)
-        controller_action = "#{payload[:controller]}##{payload[:action]}"
-        if !RorVsWild.agent.ignored_request?(controller_action)
-          section = RorVsWild::Section.start
-          RorVsWild.agent.current_data[:name] = controller_action
-          controller = payload[:headers]["action_controller.instance".freeze]
-          method_name = controller.method_for_action(payload[:action])
-          section.file, section.line = controller.method(method_name).source_location
-          section.file = RorVsWild.agent.locator.relative_path(section.file)
-          section.command = "#{controller.class}##{method_name}"
-          section.kind = "code".freeze
+      def self.around_action(controller, block)
+        controller_action = "#{controller.class}##{controller.action_name}"
+        return block.call if RorVsWild.agent.ignored_request?(controller_action)
+        begin
+          RorVsWild::Section.start do |section|
+            method_name = controller.method_for_action(controller.action_name)
+            section.file, section.line = controller.method(method_name).source_location
+            section.file = RorVsWild.agent.locator.relative_path(section.file)
+            section.command = "#{controller.class}##{method_name}"
+            RorVsWild.agent.current_data[:name] = controller_action
+          end
+          block.call
+        ensure
+          RorVsWild::Section.stop
         end
-      end
-
-      def finish(name, id, payload)
-        RorVsWild::Section.stop
       end
 
       def self.after_exception(exception, controller)
