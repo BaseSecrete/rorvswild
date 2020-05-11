@@ -38,6 +38,7 @@ production:
     #   - Redis
     #   - Resque
     #   - Sidekiq
+    # logger: log/rorvswild.log # By default it uses Rails.logger or Logger.new(STDOUT)
 YAML
     end
   end

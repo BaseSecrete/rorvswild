@@ -167,6 +167,32 @@ Finally here is the list of all plugins you can ignore :
   - Resque
   - Sidekiq
 
+#### Change logger
+
+By default RorVsWild uses `Rails.logger` or standard output. However in some cases you want to isolate RorVsWild's logs.
+To do that, you have to specifiy the log destination via the `logger` option :
+
+```yaml
+# config/rorvswild.yml
+production:
+  api_key: API_KEY
+  logger: log/rorvswild.yml
+```
+
+Here is the equivalent if you prefer initialising RorVsWild manually :
+
+```ruby
+# config/initializers/rorvswild.rb
+RorVsWild.start(api_key: "API_KEY", logger: "log/rorvswild.log")
+```
+
+In the case you want a custom logger such as Syslog, you can only do it by initialising it manually :
+
+```ruby
+# config/initializers/rorvswild.rb
+RorVsWild.start(api_key: "API_KEY", logger: Logger::Syslog.new)
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/rorvswild/fork )
