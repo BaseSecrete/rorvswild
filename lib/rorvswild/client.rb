@@ -46,6 +46,7 @@ module RorVsWild
 
     def take_or_create_connection
       if http = take_connection
+        http.start unless http.active?
         http
       elsif @connection_count < max_connections
         @connection_count += 1
@@ -65,6 +66,7 @@ module RorVsWild
       uri = URI(api_url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.open_timeout = timeout
+      http.keep_alive_timeout = 5
 
       if uri.scheme == HTTPS
         # Disable peer verification while there is a memory leak with OpenSSL
