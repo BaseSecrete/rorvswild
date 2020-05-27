@@ -59,6 +59,8 @@ module RorVsWild
       if http = take_or_create_connection
         http.request(request)
       end
+    rescue Exception => ex
+      RorVsWild.logger.error(ex.full_message)
     ensure
       release_connection(http)
     end
