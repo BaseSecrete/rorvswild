@@ -32,11 +32,11 @@ Signup on https://www.rorvswild.com and create an app to get one.
 
 * Add in your Gemfile `gem "rorvswild"`
 * Run `bundle install` in you terminal
-* Run `rorvswild-setup API_KEY` in you terminal
+* Run `rorvswild-install API_KEY` in you terminal
 * Deploy/Restart your app
 * Make a few requests and refresh your app page on rorvswild.com to view the dashboard.
 
-The `rorvswild-setup` command creates a `config/rorvswild.yml` file.
+The `rorvswild-install` command creates a `config/rorvswild.yml` file.
 
 If you prefer to use an initializer, you can do the following:
 
