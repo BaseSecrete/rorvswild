@@ -21,12 +21,13 @@ module RorVsWild
       @connection_count = 0
       @mutex = Mutex.new
       @config = config
+      @headers = {"Content-Type" => "application/json", "X-Gem-Version" => RorVsWild::VERSION}
+      @headers["X-Rails-Version"] = Rails.version if defined?(Rails)
     end
 
     def post(path, data)
       uri = URI(api_url + path)
-      post = Net::HTTP::Post.new(uri.path, "X-Gem-Version".freeze => RorVsWild::VERSION)
-      post.content_type = "application/json".freeze
+      post = Net::HTTP::Post.new(uri.path, @headers)
       post.basic_auth(nil, api_key)
       post.body = data.to_json
       transmit(post)
