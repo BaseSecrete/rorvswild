@@ -4,7 +4,9 @@ module RorVsWild
       def self.setup
         return if @installed
         return unless defined?(::ActionController::Base)
+        ::ActionController::API.around_action(&method(:around_action))
         ::ActionController::Base.around_action(&method(:around_action))
+        ::ActionController::API.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         ::ActionController::Base.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         @installed = true
       end
@@ -14,7 +16,7 @@ module RorVsWild
         return block.call if RorVsWild.agent.ignored_request?(controller_action)
         begin
           RorVsWild::Section.start do |section|
-            method_name = controller.method_for_action(controller.action_name)
+            method_name = controller.send(:method_for_action, controller.action_name)
             section.file, section.line = controller.method(method_name).source_location
             section.file = RorVsWild.agent.locator.relative_path(section.file)
             section.command = "#{controller.class}##{method_name}"
