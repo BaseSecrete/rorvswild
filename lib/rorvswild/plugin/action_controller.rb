@@ -4,10 +4,13 @@ module RorVsWild
       def self.setup
         return if @installed
         return unless defined?(::ActionController::Base)
-        ::ActionController::API.around_action(&method(:around_action))
         ::ActionController::Base.around_action(&method(:around_action))
-        ::ActionController::API.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         ::ActionController::Base.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
+
+        if defined?(::ActionController::API) && ::ActionController::API.respond_to?(:around_action)
+          ::ActionController::API.around_action(&method(:around_action))
+          ::ActionController::API.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
+        end
         @installed = true
       end
 
