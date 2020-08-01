@@ -5,7 +5,7 @@
 .rorvswild-local-toggler {
   background: #1d242f !important;
   color: #80abe3 !important;
-  box-shadow: 0 0 0 1px rgba(159, 169, 187, 0.3), 0 1px 4px 0px rgba(25, 32, 42, .9) !important;
+  box-shadow: 0 0 0 1px rgba(159, 169, 187, 0.3), 0 1px 4px 0px rgba(25, 32, 42, 0.9) !important;
   border-radius: 4px !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
@@ -13,10 +13,11 @@
   position: fixed !important;
   bottom: 12px !important;
   left: 12px !important;
-  padding:0 12px !important;
+  padding: 0 12px !important;
   cursor: pointer !important;
   z-index: 100000000000000003 !important;
 }
+
 .rorvswild-local-toggler small {
   color: #9fa9bb !important;
   font-size: 12px !important;
@@ -30,7 +31,7 @@
 
 .rorvswild-local-panel {
   background: #1d242f !important;
-  box-shadow: 0 0 0 48px rgba(25, 32, 42, .9) !important;
+  box-shadow: 0 0 0 48px rgba(25, 32, 42, 0.9) !important;
   color: #eceef1 !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
@@ -84,6 +85,7 @@
   display: -ms-flexbox;
   display: flex;
 }
+
 .rorvswild-local-panel__header__title {
   color: #9fa9bb !important;
   text-transform: uppercase !important;
@@ -94,6 +96,7 @@
       -ms-flex: 1;
           flex: 1;
 }
+
 .rorvswild-local-panel svg {
   height: 24px !important;
   width: 24px !important;
@@ -104,12 +107,15 @@
   stroke-miterlimit: 10 !important;
   vertical-align: middle !important;
 }
+
 .rorvswild-local-panel svg:hover {
   stroke: #eceef1 !important;
 }
+
 .rorvswild-local-panel__logo {
   width: 60px !important;
 }
+
 .rorvswild-local-panel__header__icons {
   width: 60px !important;
   display: -webkit-box !important;
@@ -119,14 +125,17 @@
   -ms-flex-pack: end !important;
   justify-content: flex-end !important;
 }
+
 .rorvswild-local-panel__close {
   cursor: pointer !important;
   margin-left: 12px !important;
 }
+
 .rorvswild-local-panel__github svg {
   stroke: none !important;
   fill: #9fa9bb !important;
 }
+
 .rorvswild-local-panel__github svg:hover {
   stroke: none !important;
   fill: #eceef1 !important;
@@ -136,17 +145,21 @@
 
 .rorvswild-local-panel__content {
   -webkit-box-flex: 1 !important;
-      -ms-flex: 1 !important;
-          flex: 1 !important;
+  -ms-flex: 1 !important;
+  flex: 1 !important;
   height: calc(100% - 48px) !important;
   overflow-x: auto !important;
 }
+
 .rorvswild-local-panel__content::-webkit-scrollbar { width: 3px !important; }
+
 .rorvswild-local-panel__content::-webkit-scrollbar-corner { background: transparent !important; }
+
 .rorvswild-local-panel__content::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 0 rgba(0,0,0,0.3) !important;
+  box-shadow: inset 0 0 0 rgba(0, 0, 0, 0.3) !important;
   background: transparent !important;
 }
+
 .rorvswild-local-panel__content::-webkit-scrollbar-thumb {
   background-color: #9fa9bb !important;
   outline: 1px solid #9fa9bb !important;
@@ -162,18 +175,22 @@
   border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
   cursor: pointer !important;
   -ms-flex-wrap: wrap !important;
-      flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
 }
+
 .rorvswild-local-panel__request:hover { background: #222835 !important; }
+
 .rorvswild-local-panel__request__name {
   word-break: break-all !important;
   overflow-wrap: break-word !important;
   width: 100% !important;
 }
+
 .rorvswild-local-panel__request__path {
   color: #9fa9bb !important;
   display: block !important;
 }
+
 .rorvswild-local-panel__request__started-at {
   color: #9fa9bb !important;
   margin-left: 12px !important;
@@ -187,6 +204,7 @@
   cursor: pointer !important;
   display: block !important;
 }
+
 .rorvswild-local-panel__request-details__request {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
@@ -194,8 +212,9 @@
   margin-bottom: 48px !important;
   padding: 12px 12px 0 !important;
   -ms-flex-wrap: wrap !important;
-      flex-wrap: wrap !important;
+  flex-wrap: wrap !important;
 }
+
 h2.rorvswild-local-panel__request__name__title {
   margin:-18px 0 0 !important;
   padding:0 !important;
@@ -213,6 +232,7 @@ h2.rorvswild-local-panel__request__name__title {
   border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
   display: block !important;
 }
+
 .rorvswild-local-panel__request-details__section:hover {
   background: #212834 !important;
   -webkit-transition: all .3s !important;
@@ -227,31 +247,37 @@ h2.rorvswild-local-panel__request__name__title {
   -ms-flex-wrap: wrap !important;
       flex-wrap: wrap !important;
 }
+
 .rorvswild-local-panel__request-details__section__file {
   width: 100% !important;
   word-break: break-all !important;
   overflow-wrap: break-word !important;
   min-width: 0 !important;
 }
+
 .rorvswild-local-panel__request-details__section__average {
   color: #80abe3 !important;
   width: 48px !important;
   margin:0 12px 0 0 !important;
 }
+
 .rorvswild-local-panel__request-details__section__calls {
   color: #9fa9bb !important;
   width: 48px !important;
-  margin:0 12px 0 0 !important;
+  margin: 0 12px 0 0 !important;
 }
+
 .rorvswild-local-panel__request-details__section__impact {
   width: 48px !important;
-  margin:0 12px 0 0 !important;
+  margin: 0 12px 0 0 !important;
 }
+
 .rorvswild-local-panel__request-details__section__code {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important;
 }
+
 .rorvswild-local-panel__request-details__section__kind {
   background: rgba(25, 32, 42, 1) !important;
   font-size: 10px !important;
@@ -262,18 +288,15 @@ h2.rorvswild-local-panel__request__name__title {
   height: 24px !important;
   display: inline-block !important;
 }
-.rorvswild-local-panel__request-details__section__command {
-  overflow: hidden !important;
-  color: #9fa9bb !important;
-  margin-left: 12px !important;
-  -webkit-box-flex: 1 !important;
-      -ms-flex: 1 !important;
-          flex: 1 !important;
-  opacity: .6 !important;
-}
 
-.rorvswild-local-panel__request-details__section:hover .rorvswild-local-panel__request-details__section__command {
-  opacity: 1 !important;
+.rorvswild-local-panel__request-details__section__command {
+  color: #9fa9bb !important;
+  -webkit-box-flex: 1 !important;
+  -ms-flex: 1 !important;
+  flex: 1 !important;
+  margin-left: 12px !important;
+  opacity: 1;
+  overflow: hidden !important;
 }
 
 /* Panel Footer */
@@ -285,6 +308,7 @@ h2.rorvswild-local-panel__request__name__title {
   padding: 12px !important;
   text-align: center !important;
 }
+
 a.rorvswild-local-panel__footer__link {
   color: #eceef1 !important;
   text-decoration: underline !important;
@@ -296,33 +320,35 @@ a.rorvswild-local-panel__footer__link {
 @media screen and (min-width: 720px) {
   .rorvswild-local-panel__request-details__section__main {
     -ms-flex-wrap: nowrap !important;
-        flex-wrap: nowrap !important;
+    flex-wrap: nowrap !important;
   }
 
   .rorvswild-local-panel__request__name {
     -webkit-box-flex: 1 !important;
-        -ms-flex: 1 !important;
-            flex: 1 !important;
+    -ms-flex: 1 !important;
+    flex: 1 !important;
   }
 
   .rorvswild-local-panel__request__runtime { margin-left: 12px !important; }
 
   .rorvswild-local-panel__request-details__section__file {
     -webkit-box-flex: 1 !important;
-        -ms-flex: 1 !important;
-            flex: 1 !important;
+    -ms-flex: 1 !important;
+    flex: 1 !important;
   }
 
   .rorvswild-local-panel__request-details__section__average {
     text-align: right !important;
-    margin:0 0 0 12px !important;
+    margin: 0 0 0 12px !important;
   }
+
   .rorvswild-local-panel__request-details__section__calls {
     text-align: right !important;
-    margin:0 0 0 12px !important;
+    margin: 0 0 0 12px !important;
   }
+
   .rorvswild-local-panel__request-details__section__impact {
     text-align: right !important;
-    margin:0 0 0 12px !important;
+    margin: 0 0 0 12px !important;
   }
 }

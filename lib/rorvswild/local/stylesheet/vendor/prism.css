@@ -25,9 +25,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   -ms-hyphens: none !important;
   hyphens: none !important;
 
-  -webkit-filter: saturate(75%) !important; /* Safari 6.0 - 9.0 */
-  filter: saturate(75%) !important;
-
   border-radius: 0 !important;
   border: 0 !important;
   box-shadow: 0 0 0 !important;
@@ -39,7 +36,6 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel :not(pre) > code[class*="language-"] {
   background: transparent !important;
 }
-
 
 /* Text Selection colour */
 .rorvswild-local-panel pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
@@ -66,7 +62,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.cdata {
   color: #9fa9bb !important;
   font-style: italic !important;
-  opacity: 0.5 !important;
+  opacity: 0.7 !important;
 }
 
 .rorvswild-local-panel .token.punctuation {
@@ -89,7 +85,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.symbol,
 .rorvswild-local-panel .token.builtin,
 .rorvswild-local-panel .token.string {
-  color: #67b6b2 !important;
+  color: #69b3c8 !important;
 }
 
 .rorvswild-local-panel .token.attr-name,
