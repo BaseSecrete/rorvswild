@@ -4,7 +4,7 @@
 [![Gem Version](https://badge.fury.io/rb/rorvswild.svg)](https://badge.fury.io/rb/rorvswild)
 [![Maintainability](https://api.codeclimate.com/v1/badges/2c4805cf658d7af794fe/maintainability)](https://codeclimate.com/github/BaseSecrete/rorvswild/maintainability)
 
-<img align="right" src="/images/rorvswild_logo.jpg">
+<img align="right" src="./images/rorvswild_logo.jpg">
 
 *RoRvsWild* is a ruby gem to monitor performances and exceptions in Ruby on Rails applications.
 
@@ -21,7 +21,7 @@ It can also be used in your production and staging environments with an account 
 * Run `bundle install` in you terminal
 * Restart your local server and you’ll see a small button in the bottom left corner of your page.
 
-![RoRvsWild Local Button](/images/rorvswild_local_button.jpg)
+![RoRvsWild Local Button](./images/rorvswild_local_button.jpg)
 
 This is all what you need to do to monitor your local environment requests.
 
@@ -49,7 +49,7 @@ You can create unlimited apps on *rorvswild.com*. If you want to monitor your st
 
 ## Development mode: *RoRvsWild Local*
 
-![RoRvsWild Local](/images/rorvswild_local.jpg)
+![RoRvsWild Local](./images/rorvswild_local.jpg)
 
 *RorVsWild Local* monitors the performances of requests in development environment.
 It shows most of the requests performances insights *RoRvsWild.com* displays. **A big difference is everything works locally and no data is sent and recorded on our servers**. You don’t even need an account to use it.
@@ -69,7 +69,7 @@ If you are using `Rack::Deflater` middleware you won't see the small button in t
 
 ## Production mode: *RoRvsWild.com*
 
-![RoRvsWild.com](/images/rorvswild_prod.jpg)
+![RoRvsWild.com](./images/rorvswild_prod.jpg)
 
 *RoRvsWild.com* makes it easy to monitor requests, background jobs and errors in your production and staging environment.
 It also comes with some extra options listed below.
