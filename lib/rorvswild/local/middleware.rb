@@ -26,6 +26,7 @@ module RorVsWild
 
       def serve_embed_profiler(env)
         status, headers, body = app.call(env)
+        status = status.to_i
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           if headers["Content-Encoding"]
             log_incompatible_middleware_warning
