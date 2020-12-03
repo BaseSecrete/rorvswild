@@ -35,7 +35,12 @@ module RorVsWild
         if hash = RorVsWild.agent.push_exception(exception)
           hash[:session] = controller.session.to_hash
           hash[:parameters] = controller.request.filtered_parameters
-          hash[:environment_variables] = extract_http_headers(controller.request.filtered_env)
+          hash[:request] = {
+            headers: extract_http_headers(controller.request.filtered_env),
+            name: "#{controller.class}##{controller.action_name}",
+            method: controller.request.method,
+            url: controller.request.url,
+          }
         end
         raise exception
       end

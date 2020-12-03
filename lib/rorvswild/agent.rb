@@ -1,4 +1,6 @@
 require "logger"
+require "socket"
+require "etc"
 
 module RorVsWild
   class Agent
@@ -168,11 +170,25 @@ module RorVsWild
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
         extra_details: extra_details,
+        environment: {
+          os: os_description,
+          user: Etc.getlogin,
+          host: Socket.gethostname,
+          ruby: RUBY_DESCRIPTION,
+          pid: Process.pid,
+          pwd: Dir.pwd,
+        },
       }
     end
 
     def ignored_exception?(exception)
       (config[:ignored_exceptions] || config[:ignore_exceptions]).include?(exception.class.to_s)
+    end
+
+    def os_description
+      @os_description ||= `uname -a`
+    rescue Exception => ex
+      @os_description = "Unknow"
     end
   end
 end

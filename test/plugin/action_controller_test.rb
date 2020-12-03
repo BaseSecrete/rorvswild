@@ -20,14 +20,18 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     agent.start_request
     controller = SampleController.new
     controller.action_name = "index"
-    controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}))
+    controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
     assert_raises(ZeroDivisionError) { RorVsWild::Plugin::ActionController.after_exception(ZeroDivisionError.new, controller) }
 
     data = agent.current_data
     assert_equal("ZeroDivisionError", data[:error][:exception])
     assert_equal({id: "session"}, data[:error][:session])
     assert_equal({foo: "bar"}, data[:error][:parameters])
-    assert_equal({"Content-Type" => "HTML"}, data[:error][:environment_variables])
+    assert_equal({"Content-Type" => "HTML"}, data[:error][:request][:headers])
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", data[:error][:request][:name])
+    assert_equal("http://localhost:3000/test", data[:error][:request][:url])
+    assert_equal("GET", data[:error][:request][:method])
+    assert(data[:error][:environment][:os])
   end
 
   def test_around_action_for_api_controller
