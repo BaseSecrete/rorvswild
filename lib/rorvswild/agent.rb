@@ -74,7 +74,7 @@ module RorVsWild
       begin
         block.call
       rescue Exception => ex
-        push_exception(ex, parameters: parameters)
+        push_exception(ex, parameters: parameters, job: {name: name})
         raise
       ensure
         current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
