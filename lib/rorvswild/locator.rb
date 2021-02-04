@@ -55,13 +55,9 @@ module RorVsWild
       array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
         ENV[name].split(":".freeze) if ENV[name]
       end
-      array += [heroku_ruby_lib_path] if File.exists?(heroku_ruby_lib_path)
+      array += Gem.default_path
       array += Gem.path
       array.compact.uniq
-    end
-
-    def heroku_ruby_lib_path
-      "/app/vendor/ruby-#{RUBY_VERSION}/lib"
     end
   end
 end
