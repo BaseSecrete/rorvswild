@@ -5,6 +5,7 @@ require "rorvswild/client"
 require "rorvswild/plugins"
 require "rorvswild/queue"
 require "rorvswild/agent"
+require "rorvswild/stat"
 
 module RorVsWild
   def self.start(config)
