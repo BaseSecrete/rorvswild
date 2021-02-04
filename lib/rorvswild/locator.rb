@@ -2,7 +2,7 @@ module RorVsWild
   class Locator
     attr_reader :current_path
 
-    def initialize(current_path = ENV["PWD"])
+    def initialize(current_path = Dir.pwd)
       @current_path = current_path
     end
 
