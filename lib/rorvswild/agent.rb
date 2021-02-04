@@ -176,7 +176,7 @@ module RorVsWild
           host: Socket.gethostname,
           ruby: RUBY_DESCRIPTION,
           pid: Process.pid,
-          pwd: Dir.pwd,
+          cwd: Dir.pwd,
         },
       }
     end
