@@ -21,7 +21,11 @@ module RorVsWild
       @connection_count = 0
       @mutex = Mutex.new
       @config = config
-      @headers = {"Content-Type" => "application/json", "X-Gem-Version" => RorVsWild::VERSION}
+      @headers = {
+        "Content-Type" => "application/json",
+        "X-RorVsWild-Version" => RorVsWild::VERSION,
+        "X-Ruby-Version" => RUBY_VERSION,
+      }
       @headers["X-Rails-Version"] = Rails.version if defined?(Rails)
     end
 
