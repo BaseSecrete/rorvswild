@@ -177,6 +177,7 @@ module RorVsWild
           ruby: RUBY_DESCRIPTION,
           pid: Process.pid,
           cwd: Dir.pwd,
+          gem_paths: Gem.default_path + Gem.path,
         },
       }
     end
