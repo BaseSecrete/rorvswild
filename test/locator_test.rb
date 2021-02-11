@@ -30,11 +30,12 @@ class RorVsWild::LocatorTest < Minitest::Test
   end
 
   def test_find_most_relevant_file_and_line_when_gem_home_is_in_heroku_app_root
-    locator = RorVsWild::Locator.new(app_root = File.dirname(gem_home = ENV["GEM_HOME"]))
+    locator = RorVsWild::Locator.new("/app")
+    locator.stubs(initialize_lib_paths: ["/app/vendor/bundle"])
     callstack = [
-      stub(path: "#{gem_home}/lib/sql.rb", lineno: 1),
+      stub(path: "/app/vendor/bundle/lib/sql.rb", lineno: 1),
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
-      stub(path: "#{app_root}/app/models/user.rb", lineno: 3)
+      stub(path: "/app/app/models/user.rb", lineno: 3)
     ]
     assert_equal(["/app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
   end

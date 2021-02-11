@@ -42,21 +42,20 @@ module RorVsWild
     end
 
     def irrelevant_path?(path)
-      path.start_with?(*irrelevant_paths)
+      path.start_with?(*lib_paths)
     end
 
-    def irrelevant_paths
-      @irrelevant_paths ||= initialize_irrelevant_paths
+    def lib_paths
+      @lib_paths ||= initialize_lib_paths
     end
 
     private
 
-    def initialize_irrelevant_paths
-      array = ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
+    def initialize_lib_paths
+      array = [RbConfig::CONFIG["rubylibprefix"]] + Gem.default_path + Gem.path
+      array += ["RUBYLIB", "GEM_HOME", "GEM_PATH", "BUNDLER_ORIG_GEM_PATH"].flat_map do |name|
         ENV[name].split(":".freeze) if ENV[name]
       end
-      array += Gem.default_path
-      array += Gem.path
       array.compact.uniq
     end
   end
