@@ -10,7 +10,7 @@ class RorVsWild::LocatorTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/rails/root/app/models/user.rb", lineno: 3),
     ]
-    assert_equal(["./app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
 
     locations = [stub(path: "#{ENV["GEM_HOME"]}/lib/sql.rb", lineno: 1)]
     assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", 1], locator.find_most_relevant_file_and_line(locations))
@@ -37,14 +37,14 @@ class RorVsWild::LocatorTest < Minitest::Test
       stub(path: "/usr/lib/ruby/net/http.rb", lineno: 2),
       stub(path: "/app/app/models/user.rb", lineno: 3)
     ]
-    assert_equal(["./app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
+    assert_equal(["/app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
   end
 
   def test_find_most_relevant_file_and_line_from_array_of_strings
     locator = RorVsWild::Locator.new("/rails/root")
 
     callstack = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1", "/usr/lib/ruby/net/http.rb:2", "/rails/root/app/models/user.rb:3"]
-    assert_equal(["./app/models/user.rb", "3"], locator.find_most_relevant_file_and_line_from_array_of_strings(callstack))
+    assert_equal(["/app/models/user.rb", "3"], locator.find_most_relevant_file_and_line_from_array_of_strings(callstack))
 
     locations = ["#{ENV["GEM_HOME"]}/lib/sql.rb:1"]
     assert_equal(["#{ENV["GEM_HOME"]}/lib/sql.rb", "1"], locator.find_most_relevant_file_and_line_from_array_of_strings(locations))
