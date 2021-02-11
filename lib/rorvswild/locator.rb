@@ -34,7 +34,7 @@ module RorVsWild
     end
 
     def relative_path(path)
-      path.start_with?(current_path) ? path.sub(current_path, "".freeze) : path
+      path.start_with?(current_path) ? path.sub(current_path, ".".freeze) : path
     end
 
     def relevant_path?(path)
