@@ -66,5 +66,13 @@ module RorVsWild
     def command=(value)
       @command = value && value.size > COMMAND_MAX_SIZE ? value[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : value
     end
+
+    def to_h
+      {calls: calls, total_runtime: total_runtime, children_runtime: children_runtime, kind: kind, started_at: started_at, file: file, line: line}
+    end
+
+    def to_json(options = {})
+      to_h.to_json(options)
+    end
   end
 end
