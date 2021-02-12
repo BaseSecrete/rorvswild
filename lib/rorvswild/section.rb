@@ -68,7 +68,7 @@ module RorVsWild
     end
 
     def to_h
-      {calls: calls, total_runtime: total_runtime, children_runtime: children_runtime, kind: kind, started_at: started_at, file: file, line: line}
+      {calls: calls, total_runtime: total_runtime, children_runtime: children_runtime, kind: kind, started_at: started_at, file: file, line: line, command: command}
     end
 
     def to_json(options = {})
