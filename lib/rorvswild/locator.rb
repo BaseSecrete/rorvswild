@@ -3,7 +3,7 @@ module RorVsWild
     attr_reader :current_path
 
     def initialize(current_path = Dir.pwd)
-      @current_path = current_path
+      @current_path = File.join(current_path, "")
     end
 
     def find_most_relevant_file_and_line(locations)
