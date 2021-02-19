@@ -189,7 +189,7 @@ module RorVsWild
     def os_description
       @os_description ||= `uname -a`
     rescue Exception => ex
-      @os_description = "Unknow"
+      @os_description = RUBY_PLATFORM
     end
   end
 end
