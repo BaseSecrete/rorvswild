@@ -12,7 +12,7 @@ module RorVsWild
     end
 
     def find_most_relevant_location(locations)
-      locations.find { |l| relevant_path?(l.path) } || locations.find { |l| !irrelevant_path?(l.path) } || locations.first
+      locations.find { |l| relevant_path?(l.path) } || locations.find { |l| !l.path.start_with?(rorvswild_lib_path) } || locations.first
     end
 
     def find_most_relevant_file_and_line_from_exception(exception)
@@ -29,7 +29,7 @@ module RorVsWild
 
     def find_most_relevant_file_and_line_from_array_of_strings(stack)
       location = stack.find { |str| relevant_path?(str) }
-      location ||= stack.find { |str| !irrelevant_path?(str) }
+      location ||= stack.find { |str| !str.start_with?(rorvswild_lib_path) }
       relative_path(location || stack.first).split(":".freeze)
     end
 
@@ -47,6 +47,10 @@ module RorVsWild
 
     def lib_paths
       @lib_paths ||= initialize_lib_paths
+    end
+
+    def rorvswild_lib_path
+      @rorvswild_lib_path ||= File.dirname(File.expand_path(__FILE__))
     end
 
     private
