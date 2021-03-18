@@ -23,7 +23,7 @@ module RorVsWild
             section.file, section.line = controller.method(method_name).source_location
             section.file = RorVsWild.agent.locator.relative_path(section.file)
             section.command = "#{controller.class}##{method_name}"
-            RorVsWild.agent.current_data[:name] = controller_action
+            RorVsWild.agent.current_data[:name] = controller_action if RorVsWild.agent.current_data
           end
           block.call
         ensure

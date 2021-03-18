@@ -107,6 +107,7 @@ module RorVsWild
 
     def push_exception(exception, options = nil)
       return if ignored_exception?(exception)
+      return unless current_data
       current_data[:error] = exception_to_hash(exception)
       current_data[:error].merge!(options) if options
       current_data[:error]
