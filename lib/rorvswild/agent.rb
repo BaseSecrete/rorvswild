@@ -30,7 +30,7 @@ module RorVsWild
       @queue = config[:queue] || Queue.new(client)
       @locator = RorVsWild::Locator.new
 
-      RorVsWild.logger.info("Start RorVsWild #{RorVsWild::VERSION}")
+      RorVsWild.logger.debug("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
       cleanup_data
     end
@@ -39,7 +39,7 @@ module RorVsWild
       for name in RorVsWild::Plugin.constants
         next if config[:ignore_plugins] && config[:ignore_plugins].include?(name.to_s)
         if (plugin = RorVsWild::Plugin.const_get(name)).respond_to?(:setup)
-          RorVsWild.logger.info("Setup RorVsWild::Plugin::#{name}")
+          RorVsWild.logger.debug("Setup RorVsWild::Plugin::#{name}")
           plugin.setup
         end
       end

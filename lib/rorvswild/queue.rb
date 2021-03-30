@@ -63,7 +63,7 @@ module RorVsWild
     end
 
     def start_thread
-      RorVsWild.logger.info("RorVsWild::Queue#start_thread".freeze)
+      RorVsWild.logger.debug("RorVsWild::Queue#start_thread".freeze)
       @thread = Thread.new { flush_indefinetely }
     end
 
