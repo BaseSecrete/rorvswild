@@ -47,6 +47,8 @@ RorVsWild.start(api_key: API_KEY)
 
 You can create unlimited apps on *rorvswild.com*. If you want to monitor your staging environment, create a new app and edit your rorvswild.yml to add the API key.
 
+In case there is no data in the dashboard, you can run in a rails console : `RorVsWild.check`.
+
 ## Development mode: *RoRvsWild Local*
 
 ![RoRvsWild Local](./images/rorvswild_local.jpg)
