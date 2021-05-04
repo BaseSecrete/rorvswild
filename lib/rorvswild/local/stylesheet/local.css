@@ -25,6 +25,30 @@
   display: inline-block !important;
 }
 
+/************* TOGGLER POSITION OPTION(default bottom-left)**********************/
+
+.is-top-right .rorvswild-local-toggler {
+  bottom: auto !important;
+  left: auto !important;
+  right: 12px !important;
+  top: 12px !important;
+}
+
+.is-top-left .rorvswild-local-toggler {
+  bottom: auto !important;
+  top: 12px !important;
+}
+
+.is-bottom-right .rorvswild-local-toggler {
+  bottom: 12px !important;
+  left: auto !important;
+  right: 12px !important;
+}
+
+.is-hidden .rorvswild-local-toggler {
+  display: none;
+}
+
 /********************************************/
 /*************** PANEL **********************/
 /********************************************/
