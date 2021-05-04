@@ -56,9 +56,15 @@ module RorVsWild
 
       private
 
+      def widget_css
+        config = RorVsWild.agent.config
+        config && config[:widget] && "is-#{config[:widget][:position]}"
+      end
+
       def inject_into(html)
         if index = html.index("</body>")
           markup = File.read(File.join(LOCAL_FOLDER, "local.html"))
+          markup = ERB.new(markup).result(binding)
           markup = markup.html_safe if markup.respond_to?(:html_safe)
           html.insert(index, markup)
         end

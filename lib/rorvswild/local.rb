@@ -3,9 +3,9 @@ require "rorvswild/local/queue"
 
 module RorVsWild
   module Local
-    def self.start
+    def self.start(config)
       Rails.application.config.middleware.unshift(RorVsWild::Local::Middleware, nil)
-      RorVsWild.start(queue: RorVsWild::Local::Queue.new)
+      RorVsWild.start(config.merge(queue: RorVsWild::Local::Queue.new))
     end
   end
 end

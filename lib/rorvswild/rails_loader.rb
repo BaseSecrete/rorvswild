@@ -10,20 +10,18 @@ module RorVsWild
     def self.start
       return if RorVsWild.agent
 
-      if (path = Rails.root.join("config/rorvswild.yml")).exist?
-        if config = RorVsWild::RailsLoader.load_config_file(path)[Rails.env]
-          RorVsWild.start(config.symbolize_keys)
-        end
-      end
-
-      if !RorVsWild.agent && Rails.env.development?
+      if (config = load_config) && config["api_key"]
+        RorVsWild.start(config)
+      elsif Rails.env.development?
         require "rorvswild/local"
-        RorVsWild::Local.start
+        RorVsWild::Local.start(config)
       end
     end
 
-    def self.load_config_file(path)
-      YAML.load(ERB.new(path.read).result)
+    def self.load_config
+      if (path = Rails.root.join("config/rorvswild.yml")).exist?
+        YAML.load(ERB.new(path.read).result)[Rails.env].deep_symbolize_keys
+      end
     end
   end
 end
