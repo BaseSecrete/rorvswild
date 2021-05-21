@@ -65,12 +65,11 @@ Sometimes the widget displayed in the bottom left corner can be annoying dependi
 # config/rorvswild.yml
 
 development:
-  widget: top-right # Default is bottom-left
-  # All possition values :
-  #   top-left, top-right, bottom-right, bottom-left, hidden
+  widget: top-right 
+  #accepted values : top-left, top-right, bottom-right, bottom-left (default), hidden
 ```
 
-If you choose to hide the widget, you can still see request profilings via the following URL http://localhost:3000/rorvswild.
+You can still access the profiler at http://localhost:3000/rorvswild if you choose to hide the widget.
 
 Be aware that the performances on your development machine may vary from the production server. Obviously because of the different hardware and database size. Also, Rails is reloading all the code in development environment and this takes quite a lot of time.
 To prevent this behaviour and better match the production, turn on cache_classes in your config/environments/development.rb:
