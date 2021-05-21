@@ -58,15 +58,15 @@ It shows most of the requests performances insights *RoRvsWild.com* displays. **
 
 *RoRvsWild Local* renders a small button in the bottom left corner of your page showing the runtime of the current request. If you click on it, you get all the profiled sections ordered by impact, which is depending on the sections average runtime and the calls count. As on RoRvsWild.com, the bottleneck is always on the top of the list.
 
-Sometimes the widget displayed in the bottom left corner can be annoying depending on your site layout. You can change its position like in the example below with the `widget` option :
-
+You may want to hide or change the widget position like in the example below with the `widget` option :
 
 ```yaml
 # config/rorvswild.yml
 
 development:
   widget: top-right 
-  #accepted values : top-left, top-right, bottom-right, bottom-left (default), hidden
+  
+#accepted values : top-left, top-right, bottom-right, bottom-left (default), hidden
 ```
 
 You can still access the profiler at http://localhost:3000/rorvswild if you choose to hide the widget.
