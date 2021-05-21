@@ -14,13 +14,14 @@ module RorVsWild
         RorVsWild.start(config)
       elsif Rails.env.development?
         require "rorvswild/local"
-        RorVsWild::Local.start(config)
+        RorVsWild::Local.start(config || {})
       end
     end
 
     def self.load_config
       if (path = Rails.root.join("config/rorvswild.yml")).exist?
-        YAML.load(ERB.new(path.read).result)[Rails.env].deep_symbolize_keys
+        hash = YAML.load(ERB.new(path.read).result)[Rails.env]
+        hash && hash.deep_symbolize_keys
       end
     end
   end

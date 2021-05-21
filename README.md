@@ -58,6 +58,20 @@ It shows most of the requests performances insights *RoRvsWild.com* displays. **
 
 *RoRvsWild Local* renders a small button in the bottom left corner of your page showing the runtime of the current request. If you click on it, you get all the profiled sections ordered by impact, which is depending on the sections average runtime and the calls count. As on RoRvsWild.com, the bottleneck is always on the top of the list.
 
+Sometimes the widget displayed in the bottom left corner can be annoying depending on your site layout. You can change its position like in the example below with the `widget` option :
+
+
+```yaml
+# config/rorvswild.yml
+
+development:
+  widget: top-right # Default is bottom-left
+  # All possition values :
+  #   top-left, top-right, bottom-right, bottom-left, hidden
+```
+
+If you choose to hide the widget, you can still see request profilings via the following URL http://localhost:3000/rorvswild.
+
 Be aware that the performances on your development machine may vary from the production server. Obviously because of the different hardware and database size. Also, Rails is reloading all the code in development environment and this takes quite a lot of time.
 To prevent this behaviour and better match the production, turn on cache_classes in your config/environments/development.rb:
 
