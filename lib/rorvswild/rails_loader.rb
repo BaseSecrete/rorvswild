@@ -10,7 +10,7 @@ module RorVsWild
     def self.start
       return if RorVsWild.agent
 
-      if (config = load_config) && config["api_key"]
+      if (config = load_config) && config[:api_key]
         RorVsWild.start(config)
       elsif Rails.env.development?
         require "rorvswild/local"
