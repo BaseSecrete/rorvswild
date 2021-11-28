@@ -39,6 +39,10 @@ module RorVsWild
     agent.record_error(exception, extra_details) if agent
   end
 
+  def self.merge_error_context(hash)
+    agent.merge_error_context(hash) if agent
+  end
+
   def self.initialize_logger(destination = nil)
     if destination.respond_to?(:info) && destination.respond_to?(:warn) && destination.respond_to?(:error)
       destination

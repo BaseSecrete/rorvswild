@@ -136,6 +136,18 @@ RorVsWild.record_error(exception, {something: "important"})
 RorVsWild.catch_error(something: "important") { 1 / 0 }
 ```
 
+It is also possible to pre-fill this context data at the begining of each request or job :
+
+```ruby
+class ApplicationController < ActionController::Base
+  before_action :prefill_error_context
+
+  def prefill_error_context
+    RorVsWild.merge_error_context(something: "important")
+  end
+end
+```
+
 #### Ignore requests, jobs, exceptions and plugins
 
 From the configuration file, you can tell RorVsWild to skip monitoring some requests, jobs, exceptions and plugins.
