@@ -1,3 +1,5 @@
+## 1.5.13
+
 * Pre-fill error context at the begining of a request or job with RorVsWild.merge_error_context(hash)
 
 ## 1.5.12
