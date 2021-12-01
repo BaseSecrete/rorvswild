@@ -113,6 +113,18 @@ module RorVsWild
       current_data[:error]
     end
 
+    def merge_error_context(hash)
+      self.error_context = error_context ? error_context.merge(hash) : hash
+    end
+
+    def error_context
+      current_data[:error_context] if current_data
+    end
+
+    def error_context=(hash)
+      current_data[:error_context] = hash if current_data
+    end
+
     def current_data
       Thread.current[:rorvswild_data]
     end
@@ -162,15 +174,16 @@ module RorVsWild
       client.post_async("/errors".freeze, error: hash)
     end
 
-    def exception_to_hash(exception, extra_details = nil)
+    def exception_to_hash(exception, context = nil)
       file, line = locator.find_most_relevant_file_and_line_from_exception(exception)
+      context = context ? error_context.merge(context) : error_context if error_context
       {
         line: line.to_i,
         file: locator.relative_path(file),
         message: exception.message,
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
-        extra_details: extra_details,
+        extra_details: context,
         environment: {
           os: os_description,
           user: Etc.getlogin,

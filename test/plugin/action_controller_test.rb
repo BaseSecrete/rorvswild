@@ -18,6 +18,8 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
 
   def test_after_exception
     agent.start_request
+    RorVsWild.merge_error_context(user_id: 123)
+    RorVsWild.merge_error_context(other_id: 456)
     controller = SampleController.new
     controller.action_name = "index"
     controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
@@ -32,6 +34,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal("http://localhost:3000/test", data[:error][:request][:url])
     assert_equal("GET", data[:error][:request][:method])
     assert(data[:error][:environment][:os])
+    assert_equal({user_id: 123, other_id: 456}, data[:error][:extra_details])
   end
 
   def test_around_action_for_api_controller
