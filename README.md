@@ -89,24 +89,22 @@ If you are using `Rack::Deflater` middleware you won't see the small button in t
 *RoRvsWild.com* makes it easy to monitor requests, background jobs and errors in your production and staging environment.
 It also comes with some extra options listed below.
 
-#### Measure any code
+#### Measure any section of code
 
-You can measure any code like this (useful to monitor cronjobs):
-
-```ruby
-RorVsWild.measure_code("User.all.do_something_great")
-```
-
-Or like that:
+RorVsWild measures a lot of events such as SQL queries. But it might not be enough for you. There is a solution to measure any section of code to help you find the most hidden bottlenecks.
 
 ```ruby
-RorVsWild.measure_block("A great job name") { User.all.do_something_great }
+# Measure a code given as a string
+RorVsWild.measure("bubble_sort(array)")
+
+# Measure a code given as a block
+RorVsWild.measure { bubble_sort(array) }
+
+# Measure a code given as a block with an optional description
+RorVsWild.measure("Optional description") { bubble_sort(array) }
 ```
 
-Then it will appear in the jobs page.
-
-Note that Calling `measure_code` or `measure_block` inside or a request or a job will add a section.
-That is convenient to profile finely parts of your code.
+For each custom measure, a section is added with the file name and line number where it has been called.
 
 #### Send errors manually
 

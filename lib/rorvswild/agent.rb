@@ -49,7 +49,7 @@ module RorVsWild
       measure_block(code) { eval(code) }
     end
 
-    def measure_block(name, kind = "code".freeze, &block)
+    def measure_block(name = nil, kind = "code".freeze, &block)
       current_data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 

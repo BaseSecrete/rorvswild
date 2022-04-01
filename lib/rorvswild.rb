@@ -23,6 +23,10 @@ module RorVsWild
     @logger ||= initialize_logger
   end
 
+  def self.measure(code_or_name = nil, &block)
+    block ? measure_block(code_or_name, &block) : measure_code(code_or_name)
+  end
+
   def self.measure_code(code)
     agent ? agent.measure_code(code) : eval(code)
   end

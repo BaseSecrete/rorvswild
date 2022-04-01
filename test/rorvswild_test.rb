@@ -5,14 +5,14 @@ class RorVsWildTest < Minitest::Test
 
   def test_measure_code
     agent.expects(:post_job)
-    assert_equal(2, agent.measure_code("sleep(0.001); 1 + 1"))
+    assert_equal(2, RorVsWild.measure("sleep(0.001); 1 + 1"))
     assert_equal("sleep(0.001); 1 + 1", agent.current_data[:name])
     assert(agent.current_data[:runtime] >= 1)
   end
 
   def test_measure_code_when_raising
     agent.expects(:post_job)
-    assert_raises(RuntimeError) { agent.measure_code("raise 'error'") }
+    assert_raises(RuntimeError) { RorVsWild.measure("raise 'error'") }
     assert_equal(("raise 'error'"), agent.current_data[:name])
     assert(agent.current_data[:runtime])
     assert(agent.current_data[:error])
@@ -21,26 +21,26 @@ class RorVsWildTest < Minitest::Test
   def test_mesure_block_when_exception_is_ignored
     agent = initialize_agent(ignored_exceptions: %w[ZeroDivisionError])
     agent.expects(:post_job)
-    assert_raises(ZeroDivisionError) { RorVsWild.measure_code("1/0") }
+    assert_raises(ZeroDivisionError) { RorVsWild.measure("1/0") }
     refute(agent.current_data[:error])
   end
 
   def test_measure_code_when_no_agent
     RorVsWild.instance_variable_set(:@agent, nil)
     RorVsWild::Agent.any_instance.expects(:post_job).never
-    assert_equal(2, RorVsWild.measure_code("1+1"))
+    assert_equal(2, RorVsWild.measure("1+1"))
   end
 
   def test_measure_block_when_no_agent
     RorVsWild.instance_variable_set(:@agent, nil)
     RorVsWild::Agent.any_instance.expects(:post_job).never
-    assert_equal(2, RorVsWild.measure_block("1+1") { 1+1 })
+    assert_equal(2, RorVsWild.measure("1+1") { 1+1 })
   end
 
   def test_measure_block_recursive
     agent.expects(:post_job)
-    result = RorVsWild.measure_block("1") do
-      RorVsWild.measure_block("2") { 1 } + 1
+    result = RorVsWild.measure do
+      RorVsWild.measure { 1 } + 1
     end
     assert_equal(2, result)
   end
