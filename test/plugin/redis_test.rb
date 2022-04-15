@@ -10,7 +10,7 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     agent.measure_code("::Redis.new(url: '#{url}').get('foo')")
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("select 1\nget foo", agent.current_data[:sections][0].command)
+    assert_equal("select\nget", agent.current_data[:sections][0].command)
   end
 
   def test_callback_when_pipelined
@@ -22,11 +22,11 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     end
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("get foo\nset foo bar", agent.current_data[:sections][0].command)
+    assert_equal("get\nset", agent.current_data[:sections][0].command)
   end
 
   def test_commands_to_string_hide_auth_password
-    assert_equal("auth *****", RorVsWild::Plugin::Redis.commands_to_string([[:auth, "SECRET"]]))
+    assert_equal("auth", RorVsWild::Plugin::Redis.commands_to_string([[:auth, "SECRET"]]))
   end
 
   def test_appendable_commands?

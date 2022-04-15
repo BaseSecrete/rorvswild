@@ -18,7 +18,7 @@ module RorVsWild
       end
 
       def self.commands_to_string(commands)
-        commands.map { |c| c[0] == :auth ? "auth *****".freeze : c.join(" ".freeze) }.join("\n".freeze)
+        commands.map { |c| c[0]  }.join("\n".freeze)
       end
 
       APPENDABLE_COMMANDS = [:auth, :select]
