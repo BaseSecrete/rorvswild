@@ -10,12 +10,12 @@ class RorVsWild::Plugin::NetHttpTest < Minitest::Test
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal(1, agent.current_data[:sections][0].calls)
     assert_equal("http", agent.current_data[:sections][0].kind)
-    assert_match("GET http://www.ruby-lang.org/index.html", agent.current_data[:sections][0].command)
+    assert_match("GET www.ruby-lang.org", agent.current_data[:sections][0].command)
   end
 
   def test_callback_with_https
     agent.measure_block("test") { Net::HTTP.get(URI("https://www.ruby-lang.org/index.html")) }
-    assert_match("GET https://www.ruby-lang.org/index.html", agent.current_data[:sections][0].command)
+    assert_match("GET www.ruby-lang.org", agent.current_data[:sections][0].command)
     assert_equal("http", agent.current_data[:sections][0].kind)
   end
 

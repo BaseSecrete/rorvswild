@@ -2,7 +2,6 @@ module RorVsWild
   module Plugin
     class NetHttp
       HTTP = "http".freeze
-      HTTPS = "https".freeze
 
       def self.setup
         return if !defined?(Net::HTTP)
@@ -21,9 +20,7 @@ module RorVsWild
 
           def request_with_rorvswild(req, body = nil, &block)
             return request_without_rorvswild(req, body, &block) if request_called_twice?
-            scheme = use_ssl? ? HTTPS : HTTP
-            url = "#{req.method} #{scheme}://#{address}#{req.path}"
-            RorVsWild.agent.measure_section(url, kind: HTTP) do
+            RorVsWild.agent.measure_section("#{req.method} #{address}", kind: HTTP) do
               request_without_rorvswild(req, body, &block)
             end
           end
