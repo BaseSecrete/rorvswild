@@ -1,8 +1,9 @@
 module RorVsWild
-  module Stat
+  module Metrics
     class Memory
       attr_reader :ram_total, :ram_cached, :ram_free
       attr_reader :swap_total, :swap_free
+      attr_reader :updated_at
 
       def ram_used
         ram_total - ram_free
@@ -12,10 +13,10 @@ module RorVsWild
         swap_total - swap_free
       end
 
-      def refresh_info
-        if !@info_cached_at || RorVsWild.clock_milliseconds - @info_cached_at > 60_000
+      def update
+        if !updated_at || RorVsWild.clock_milliseconds - updated_at > UPDATE_INTERVAL_MS
           info = read_meminfo
-          @info_cached_at = RorVsWild.clock_milliseconds
+          @updated_at = RorVsWild.clock_milliseconds
           @ram_total = convert_to_bytes(info["MemTotal"])
           @ram_free = convert_to_bytes(info["MemFree"])
           @ram_cached = convert_to_bytes(info["Cached"])
