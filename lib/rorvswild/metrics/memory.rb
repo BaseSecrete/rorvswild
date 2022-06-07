@@ -1,9 +1,8 @@
 module RorVsWild
-  module Metrics
+  class Metrics
     class Memory
       attr_reader :ram_total, :ram_cached, :ram_free
       attr_reader :swap_total, :swap_free
-      attr_reader :updated_at
 
       def ram_used
         ram_total - ram_free
@@ -14,15 +13,12 @@ module RorVsWild
       end
 
       def update
-        if !updated_at || RorVsWild.clock_milliseconds - updated_at > UPDATE_INTERVAL_MS
-          info = read_meminfo
-          @updated_at = RorVsWild.clock_milliseconds
-          @ram_total = convert_to_bytes(info["MemTotal"])
-          @ram_free = convert_to_bytes(info["MemFree"])
-          @ram_cached = convert_to_bytes(info["Cached"])
-          @swap_total = convert_to_bytes(info["SwapTotal"])
-          @swap_free = convert_to_bytes(info["SwapFree"])
-        end
+        info = read_meminfo
+        @ram_total = convert_to_bytes(info["MemTotal"])
+        @ram_free = convert_to_bytes(info["MemFree"])
+        @ram_cached = convert_to_bytes(info["Cached"])
+        @swap_total = convert_to_bytes(info["SwapTotal"])
+        @swap_free = convert_to_bytes(info["SwapFree"])
       end
 
       private

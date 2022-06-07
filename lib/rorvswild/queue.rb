@@ -1,6 +1,6 @@
 module RorVsWild
   class Queue
-    SLEEP_TIME = 10
+    SLEEP_TIME = 30
     FLUSH_TRESHOLD = 10
 
     attr_reader :mutex, :thread, :client
@@ -11,6 +11,7 @@ module RorVsWild
       @requests = []
       @client = client
       @mutex = Mutex.new
+      @metrics = RorVsWild::Metrics.new
       Kernel.at_exit { flush }
     end
 
@@ -50,6 +51,10 @@ module RorVsWild
       result
     end
 
+    def pull_server_metrics
+      @metrics.update && @metrics.to_h
+    end
+
     def flush_indefinetely
       sleep(SLEEP_TIME) and flush while true
     rescue Exception => ex
@@ -60,6 +65,7 @@ module RorVsWild
     def flush
       data = pull_jobs and client.post("/jobs", jobs: data)
       data = pull_requests and client.post("/requests", requests: data)
+      data = pull_server_metrics and client.post("/metrics", metrics: data)
     end
 
     def start_thread

@@ -29,19 +29,32 @@ class RorVsWild::QueueTest < Minitest::Test
     refute(queue.pull_requests)
   end
 
+  def test_pull_server_metrics
+    assert_kind_of(Hash, queue.pull_server_metrics)
+    refute(queue.pull_server_metrics)
+  end
+
   def test_flush_when_jobs_are_present
+    queue.stubs(:pull_server_metrics)
     queue.client.expects(:post)
     queue.push_job(1)
     queue.flush
   end
 
   def test_flush_when_requests_are_present
+    queue.stubs(:pull_server_metrics)
     queue.client.expects(:post)
     queue.push_request(1)
     queue.flush
   end
 
+  def test_flush_when_there_are_metrics
+    queue.client.expects(:post)
+    queue.flush
+  end
+
   def test_flush_when_empty
+    queue.stubs(:pull_server_metrics)
     queue.client.expects(:post).never
     queue.flush
   end
