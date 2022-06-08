@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
-class RorVsWild::Plugin::MemoryTest < Minitest::Test
+class RorVsWild::Metrics::MemoryTest < Minitest::Test
   def test_total
     memory = RorVsWild::Metrics::Memory.new
     memory.update

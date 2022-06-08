@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
-class RorVsWild::Plugin::CpuTest < Minitest::Test
+class RorVsWild::Metrics::CpuTest < Minitest::Test
   def test_total
     cpu = RorVsWild::Metrics::Cpu.new
     cpu.update

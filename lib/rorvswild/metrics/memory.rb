@@ -3,6 +3,7 @@ module RorVsWild
     class Memory
       attr_reader :ram_total, :ram_cached, :ram_free
       attr_reader :swap_total, :swap_free
+      attr_reader :storage_total, :storage_used
 
       def ram_used
         ram_total - ram_free
