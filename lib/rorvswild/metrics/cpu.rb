@@ -14,9 +14,11 @@ module RorVsWild
         @load_average = read_loadavg[0].to_f
       end
 
+      PROC_LOADAVG = "/proc/loadavg".freeze
+
       def read_loadavg
-        return unless File.readable?("/proc/loadavg")
-        File.read("/proc/loadavg").split
+        return unless File.readable?(PROC_LOADAVG)
+        File.read(PROC_LOADAVG).split
       end
 
       def execute_vmstat

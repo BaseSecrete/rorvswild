@@ -15,22 +15,24 @@ module RorVsWild
 
       def update
         info = read_meminfo
-        @ram_total = convert_to_bytes(info["MemTotal"])
-        @ram_free = convert_to_bytes(info["MemFree"])
-        @ram_cached = convert_to_bytes(info["Cached"])
-        @swap_total = convert_to_bytes(info["SwapTotal"])
-        @swap_free = convert_to_bytes(info["SwapFree"])
+        @ram_total = convert_to_bytes(info["MemTotal".freeze])
+        @ram_free = convert_to_bytes(info["MemFree".freeze])
+        @ram_cached = convert_to_bytes(info["Cached".freeze])
+        @swap_total = convert_to_bytes(info["SwapTotal".freeze])
+        @swap_free = convert_to_bytes(info["SwapFree".freeze])
       end
 
       private
 
       def units
-        {"kb" => 1000, "mb" => 1000 * 1000, "gb" => 1000 * 1000 * 1000}
+        @unites ||= {"kb" => 1000, "mb" => 1000 * 1000, "gb" => 1000 * 1000 * 1000}.freeze
       end
 
+      PROC_MEMINFO = "/proc/meminfo".freeze
+
       def read_meminfo
-        return unless File.readable?("/proc/meminfo")
-        File.read("/proc/meminfo").split("\n").reduce({}) do |hash, line|
+        return unless File.readable?(PROC_MEMINFO)
+        File.read(PROC_MEMINFO).split("\n").reduce({}) do |hash, line|
           name, value = line.split(":")
           hash[name] = value.strip
           hash
