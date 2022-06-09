@@ -12,10 +12,15 @@ module RorVsWild::AgentHelper
   end
 
   def initialize_agent(options = {})
-    agent ||= RorVsWild.start({logger: "/dev/null", ignore_jobs: ["SecretJob"]}.merge(options))
+    agent = RorVsWild.start({logger: "/dev/null", ignore_jobs: ["SecretJob"]}.merge(options))
     agent.locator.stubs(current_path: File.dirname(__FILE__))
     agent.stubs(:post_request)
     agent.stubs(:post_job)
+    client = agent.client
+    def client.transmit(request)
+      # Prevent from any HTTP connections.
+      # A stub has no effect, since everythings are unstub before at_exit.
+    end
     agent
   end
 end
