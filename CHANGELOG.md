@@ -1,5 +1,6 @@
 ## [Unreleased]
 
+* Improve list of default ignored exceptions
 * Log HTTP requests host and verb only
 * Log Redis commands without arguments
 * Add simpler method RorVsWild.measure

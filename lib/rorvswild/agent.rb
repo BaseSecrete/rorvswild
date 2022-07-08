@@ -16,7 +16,7 @@ module RorVsWild
 
     def self.default_ignored_exceptions
       if defined?(Rails)
-        %w[ActionController::RoutingError] + Rails.application.config.action_dispatch.rescue_responses.map { |(key,value)| key }
+        ActionDispatch::ExceptionWrapper.rescue_responses.keys
       else
         []
       end
