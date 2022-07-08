@@ -1,3 +1,9 @@
+## [Unreleased]
+
+* Log HTTP requests host and verb only
+* Log Redis commands without arguments
+* Add simpler method RorVsWild.measure
+
 ## 1.5.13
 
 * Pre-fill error context at the begining of a request or job with RorVsWild.merge_error_context(hash)
