@@ -146,6 +146,12 @@ module RorVsWild
       config[:ignore_jobs].include?(name)
     end
 
+    def os_description
+      @os_description ||= `uname -a`
+    rescue Exception => ex
+      @os_description = RUBY_PLATFORM
+    end
+
     #######################
     ### Private methods ###
     #######################
@@ -198,12 +204,6 @@ module RorVsWild
 
     def ignored_exception?(exception)
       (config[:ignored_exceptions] || config[:ignore_exceptions]).include?(exception.class.to_s)
-    end
-
-    def os_description
-      @os_description ||= `uname -a`
-    rescue Exception => ex
-      @os_description = RUBY_PLATFORM
     end
   end
 end
