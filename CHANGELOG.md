@@ -1,4 +1,4 @@
-## [Unreleased]
+## 1.5.14
 
 * Improve list of default ignored exceptions
 * Log HTTP requests host and verb only
