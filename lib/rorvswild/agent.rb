@@ -147,9 +147,9 @@ module RorVsWild
     end
 
     def os_description
-      @os_description ||= `uname -a`
+      @os_description ||= `uname -sr`
     rescue Exception => ex
-      @os_description = RUBY_PLATFORM
+      @os_description = RbConfig::CONFIG["host_os"]
     end
 
     #######################
