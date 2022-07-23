@@ -4,8 +4,9 @@ module RorVsWild
       attr_reader :used, :free
 
       def update
-        array = `df | grep " /$"`.split
-        @used, @free = array[2..3].map(&:to_i)
+        array = `df -k | grep " /$"`.split
+        @used = array[2].to_i * 1000
+        @free = array[3].to_i * 1000
       end
 
       def total
