@@ -32,6 +32,7 @@ module RorVsWild
         cpu_idle: cpu.idle,
         cpu_waiting: cpu.waiting,
         cpu_stolen: cpu.stolen,
+        cpu_count: cpu.count,
         load_average: cpu.load_average,
         ram_total: memory.ram_total,
         ram_free: memory.ram_free,

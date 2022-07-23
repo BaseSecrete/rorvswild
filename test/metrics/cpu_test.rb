@@ -10,5 +10,6 @@ class RorVsWild::Metrics::CpuTest < Minitest::Test
     assert(cpu.waiting >= 0)
     assert(cpu.stolen >= 0)
     assert(cpu.load_average > 0)
+    assert(cpu.count >= 1)
   end
 end
