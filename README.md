@@ -218,6 +218,30 @@ In the case you want a custom logger such as Syslog, you can only do it by initi
 RorVsWild.start(api_key: "API_KEY", logger: Logger::Syslog.new)
 ```
 
+#### Server metrics monitoring
+
+We are adding server metrics as a beta feature.
+It monitors load average, CPU, memory, swap and disk space.
+For now, only Linux is supported.
+It has to be explicitly enabled with a feature flag :
+
+```yaml
+# config/rorvswild.yml
+production:
+  api_key: API_KEY
+  features:
+    - server_metrics
+```
+
+Here is the equivalent if you prefer initialising RorVsWild manually :
+
+```ruby
+# config/initializers/rorvswild.rb
+RorVsWild.start(api_key: "API_KEY", features: ["server_metrics"])
+```
+
+The data are available in a server tab beside requests and jobs.
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/rorvswild/fork )

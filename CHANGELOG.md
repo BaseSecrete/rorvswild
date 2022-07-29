@@ -1,3 +1,7 @@
+## Upcoming
+
+* Monitor server metrics (must be enabled explicitly, beta feature)
+
 ## 1.5.14
 
 * Improve list of default ignored exceptions

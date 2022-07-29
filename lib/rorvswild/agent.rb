@@ -26,6 +26,7 @@ module RorVsWild
 
     def initialize(config)
       @config = self.class.default_config.merge(config)
+      load_features
       @client = Client.new(@config)
       @queue = config[:queue] || Queue.new(client)
       @locator = RorVsWild::Locator.new
@@ -33,6 +34,12 @@ module RorVsWild
       RorVsWild.logger.debug("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
       cleanup_data
+    end
+
+    def load_features
+      features = config[:features] || []
+      features.include?("server_metrics")
+      require "rorvswild/metrics" if features.include?("server_metrics")
     end
 
     def setup_plugins

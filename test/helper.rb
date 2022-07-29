@@ -2,6 +2,7 @@ path = File.expand_path("#{File.dirname(__FILE__)}/../lib")
 $LOAD_PATH.unshift(path)
 
 require "rorvswild"
+qrequire "rorvswild/metrics"
 require "minitest/autorun"
 require "mocha/minitest"
 require "top_tests"

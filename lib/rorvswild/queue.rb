@@ -11,7 +11,7 @@ module RorVsWild
       @requests = []
       @client = client
       @mutex = Mutex.new
-      @metrics = RorVsWild::Metrics.new
+      @metrics = RorVsWild::Metrics.new if defined?(Metrics)
       Kernel.at_exit { flush }
     end
 
@@ -52,7 +52,7 @@ module RorVsWild
     end
 
     def pull_server_metrics
-      @metrics.update && @metrics.to_h
+      @metrics && @metrics.update && @metrics.to_h
     end
 
     def flush_indefinetely
