@@ -1,4 +1,4 @@
-## Upcoming
+## 1.5.15
 
 * Monitor server metrics (must be enabled explicitly, beta feature)
 
