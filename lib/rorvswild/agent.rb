@@ -159,6 +159,14 @@ module RorVsWild
       @os_description = RbConfig::CONFIG["host_os"]
     end
 
+    def hostname
+      if Dir.pwd == "/app"
+        ENV["DYNO"] || Socket.gethostname
+      else
+        Socket.gethostname
+      end
+    end
+
     #######################
     ### Private methods ###
     #######################

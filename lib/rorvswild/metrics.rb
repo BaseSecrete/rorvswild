@@ -25,7 +25,7 @@ module RorVsWild
 
     def to_h
       {
-        hostname: Socket.gethostname,
+        hostname: RorVsWild.agent.hostname,
         os: RorVsWild.agent.os_description,
         cpu_user: cpu.user,
         cpu_system: cpu.system,
