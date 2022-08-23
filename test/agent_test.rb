@@ -48,4 +48,17 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("child", agent.current_data[:sections][0].command)
   end
+
+  def test_hostname
+    old_dyno = ENV["DYNO"]
+    assert_equal(Socket.gethostname, agent.hostname)
+    ENV["DYNO"] = "web.1"
+    assert_equal("web.1", agent.hostname, "Heroku dyno")
+    ENV["DYNO"] = "release.123"
+    assert_equal("release.*", agent.hostname, "Group all release dynos")
+    ENV["DYNO"] = "run.123"
+    assert_equal("run.*", agent.hostname, "Group all run dynos")
+  ensure
+    ENV["DYNO"] = old_dyno
+  end
 end

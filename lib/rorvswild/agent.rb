@@ -160,8 +160,9 @@ module RorVsWild
     end
 
     def hostname
-      if Dir.pwd == "/app"
-        ENV["DYNO"] || Socket.gethostname
+      if dyno = ENV["DYNO"] # Heroku
+        dyno.start_with?("run.") ? "run.*" :
+          dyno.start_with?("release.") ? "release.*" : dyno
       else
         Socket.gethostname
       end

@@ -1,3 +1,7 @@
+## Unreleased
+
+* Retrieve pretty dyno's hostnames for Heroku
+
 ## 1.5.15
 
 * Monitor server metrics (must be enabled explicitly, beta feature)
