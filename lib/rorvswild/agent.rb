@@ -160,7 +160,9 @@ module RorVsWild
     end
 
     def hostname
-      if dyno = ENV["DYNO"] # Heroku
+      if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
+        gae_instance
+      elsif dyno = ENV["DYNO"] # Heroku
         dyno.start_with?("run.") ? "run.*" :
           dyno.start_with?("release.") ? "release.*" : dyno
       else

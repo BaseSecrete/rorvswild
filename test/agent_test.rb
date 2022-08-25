@@ -51,6 +51,7 @@ class RorVsWild::AgentTest < Minitest::Test
 
   def test_hostname
     old_dyno = ENV["DYNO"]
+    old_gae = ENV["GAE_INSTANCE"]
     assert_equal(Socket.gethostname, agent.hostname)
     ENV["DYNO"] = "web.1"
     assert_equal("web.1", agent.hostname, "Heroku dyno")
@@ -58,7 +59,11 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("release.*", agent.hostname, "Group all release dynos")
     ENV["DYNO"] = "run.123"
     assert_equal("run.*", agent.hostname, "Group all run dynos")
+
+    ENV["GAE_INSTANCE"] = "gae"
+    assert_equal("gae", agent.hostname)
   ensure
     ENV["DYNO"] = old_dyno
+    ENV["GAE_INSTANCE"] = old_gae
   end
 end
