@@ -1,3 +1,3 @@
 module RorVsWild
-  VERSION = "1.5.15".freeze
+  VERSION = "1.5.16".freeze
 end
