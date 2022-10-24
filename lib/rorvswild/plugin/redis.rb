@@ -29,15 +29,11 @@ module RorVsWild
         end
 
         def pipelined
-          RorVsWild.agent.measure_section("pipeline", kind: "redis".freeze) do
-            super
-          end
+          RorVsWild.agent.measure_section("pipeline", kind: "redis".freeze) { super }
         end
 
         def multi
-          RorVsWild.agent.measure_section("multi", kind: "redis".freeze) do
-            super
-          end
+          RorVsWild.agent.measure_section("multi", kind: "redis".freeze) { super }
         end
       end
 
