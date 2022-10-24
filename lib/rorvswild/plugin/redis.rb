@@ -28,7 +28,17 @@ module RorVsWild
           end
         end
 
-        # TODO: Monitor pipelined
+        def pipelined
+          RorVsWild.agent.measure_section("pipeline", kind: "redis".freeze) do
+            super
+          end
+        end
+
+        def multi
+          RorVsWild.agent.measure_section("multi", kind: "redis".freeze) do
+            super
+          end
+        end
       end
 
       def self.commands_to_string(commands)

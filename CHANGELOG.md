@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+* Fix monitoring for Redis 5
+
 ## [1.5.16] - 2022-10-03
 
 * Retrieve pretty dyno's hostnames for Heroku

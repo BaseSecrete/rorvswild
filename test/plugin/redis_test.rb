@@ -21,7 +21,19 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     end
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("get\nset", agent.current_data[:sections][0].command)
+    assert_equal("pipeline", agent.current_data[:sections][0].command)
+  end
+
+  def test_callback_when_multi
+    agent.measure_block("multi") do
+      (redis = ::Redis.new).multi do |transaction|
+        transaction.get("foo")
+        transaction.set("foo", "bar")
+      end
+    end
+    assert_equal(1, agent.current_data[:sections].size)
+    assert_equal("redis", agent.current_data[:sections][0].kind)
+    assert_equal("multi", agent.current_data[:sections][0].command)
   end
 
   def test_commands_to_string_hide_auth_password
