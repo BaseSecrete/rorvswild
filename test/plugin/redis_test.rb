@@ -21,7 +21,11 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     end
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("pipeline", agent.current_data[:sections][0].command)
+    if Redis::VERSION >= "5"
+      assert_equal("pipeline", agent.current_data[:sections][0].command)
+    else
+      assert_equal("get\nset", agent.current_data[:sections][0].command)
+    end
   end
 
   def test_callback_when_multi
@@ -33,16 +37,10 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
     end
     assert_equal(1, agent.current_data[:sections].size)
     assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("multi", agent.current_data[:sections][0].command)
-  end
-
-  def test_commands_to_string_hide_auth_password
-    assert_equal("auth", RorVsWild::Plugin::Redis.commands_to_string([[:auth, "SECRET"]]))
-  end
-
-  def test_appendable_commands?
-    assert(RorVsWild::Plugin::Redis.appendable_commands?([[:select, 1]]))
-    assert(RorVsWild::Plugin::Redis.appendable_commands?([[:auth, "SECRET"]]))
-    refute(RorVsWild::Plugin::Redis.appendable_commands?([[:get, "KEY"]]))
+    if Redis::VERSION >= "5"
+      assert_equal("multi", agent.current_data[:sections][0].command)
+    else
+      assert_equal("multi\nget\nset\nexec", agent.current_data[:sections][0].command)
+    end
   end
 end

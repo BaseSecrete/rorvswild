@@ -12,8 +12,8 @@ module RorVsWild
 
       module V4
         def process(commands, &block)
-          string = RorVsWild::Plugin::Redis.commands_to_string(commands)
-          appendable = RorVsWild::Plugin::Redis.appendable_commands?(commands)
+          string = commands.map(&:first).join("\n")
+          appendable = APPENDABLE_COMMANDS.include?(commands[0][0])
           RorVsWild.agent.measure_section(string, appendable_command: appendable, kind: "redis".freeze) do
             super(commands, &block)
           end
@@ -22,7 +22,7 @@ module RorVsWild
 
       module V5
         def send_command(command, &block)
-          appendable = RorVsWild::Plugin::Redis.appendable_commands?(command)
+          appendable = APPENDABLE_COMMANDS.include?(command)
           RorVsWild.agent.measure_section(command[0], appendable_command: appendable, kind: "redis".freeze) do
             super(command, &block)
           end
@@ -41,15 +41,7 @@ module RorVsWild
         end
       end
 
-      def self.commands_to_string(commands)
-        commands.map { |c| c[0]  }.join("\n".freeze)
-      end
-
       APPENDABLE_COMMANDS = [:auth, :select]
-
-      def self.appendable_commands?(commands)
-        commands.size == 1 && APPENDABLE_COMMANDS.include?(commands.first.first)
-      end
     end
   end
 end
