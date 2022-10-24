@@ -6,7 +6,7 @@ module RorVsWild
         if ::Redis::Client.method_defined?(:process)
           ::Redis::Client.prepend(V4)
         else
-          ::Redis::Client.prepend(V5)
+          ::Redis.prepend(V5)
         end
       end
 
@@ -21,10 +21,10 @@ module RorVsWild
       end
 
       module V5
-        def call_v(commands, &block)
-          appendable = RorVsWild::Plugin::Redis.appendable_commands?(commands)
-          RorVsWild.agent.measure_section(commands[0], appendable_command: appendable, kind: "redis".freeze) do
-            super(commands, &block)
+        def send_command(command, &block)
+          appendable = RorVsWild::Plugin::Redis.appendable_commands?(command)
+          RorVsWild.agent.measure_section(command[0], appendable_command: appendable, kind: "redis".freeze) do
+            super(command, &block)
           end
         end
 
