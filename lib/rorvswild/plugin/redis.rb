@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RorVsWild
   module Plugin
     class Redis
@@ -14,7 +16,7 @@ module RorVsWild
         def process(commands, &block)
           string = commands.map(&:first).join("\n")
           appendable = APPENDABLE_COMMANDS.include?(commands[0][0])
-          RorVsWild.agent.measure_section(string, appendable_command: appendable, kind: "redis".freeze) do
+          RorVsWild.agent.measure_section(string, appendable_command: appendable, kind: "redis") do
             super(commands, &block)
           end
         end
@@ -23,17 +25,17 @@ module RorVsWild
       module V5
         def send_command(command, &block)
           appendable = APPENDABLE_COMMANDS.include?(command)
-          RorVsWild.agent.measure_section(command[0], appendable_command: appendable, kind: "redis".freeze) do
+          RorVsWild.agent.measure_section(command[0], appendable_command: appendable, kind: "redis") do
             super(command, &block)
           end
         end
 
         def pipelined
-          RorVsWild.agent.measure_section("pipeline", kind: "redis".freeze) { super }
+          RorVsWild.agent.measure_section("pipeline", kind: "redis") { super }
         end
 
         def multi
-          RorVsWild.agent.measure_section("multi", kind: "redis".freeze) { super }
+          RorVsWild.agent.measure_section("multi", kind: "redis") { super }
         end
       end
 
