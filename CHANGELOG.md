@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.5.17] - 2022-10-25
+
 * Fix monitoring for Redis 5
 
 ## [1.5.16] - 2022-10-03
