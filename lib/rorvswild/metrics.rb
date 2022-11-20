@@ -1,6 +1,6 @@
 module RorVsWild
   class Metrics
-    UPDATE_INTERVAL_MS = 60_000 # One metric every minute
+    UPDATE_INTERVAL_MS = 30_000 # two metrics every minute
 
     attr_reader :cpu, :memory, :storage, :updated_at
 
