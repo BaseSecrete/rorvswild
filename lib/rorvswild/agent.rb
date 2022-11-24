@@ -177,7 +177,12 @@ module RorVsWild
     private
 
     def initialize_data
-      Thread.current[:rorvswild_data] = {sections: [], section_stack: [], started_at: RorVsWild.clock_milliseconds}
+      Thread.current[:rorvswild_data] = {
+        sections: [],
+        section_stack: [],
+        server_name: hostname,
+        started_at: RorVsWild.clock_milliseconds,
+      }
     end
 
     def cleanup_data
