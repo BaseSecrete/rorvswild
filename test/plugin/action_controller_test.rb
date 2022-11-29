@@ -34,6 +34,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal("http://localhost:3000/test", data[:error][:request][:url])
     assert_equal("GET", data[:error][:request][:method])
     assert(data[:error][:environment][:os])
+    assert(data[:error][:environment][:revision])
     assert_equal({user_id: 123, other_id: 456}, data[:error][:extra_details])
   end
 

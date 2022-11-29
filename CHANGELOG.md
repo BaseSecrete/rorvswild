@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+* Track deployment revisions
+
 ## [1.5.17] - 2022-10-25
 
 * Fix monitoring for Redis 5

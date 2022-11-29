@@ -153,23 +153,6 @@ module RorVsWild
       config[:ignore_jobs].include?(name)
     end
 
-    def os_description
-      @os_description ||= `uname -sr`
-    rescue Exception => ex
-      @os_description = RbConfig::CONFIG["host_os"]
-    end
-
-    def hostname
-      if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
-        gae_instance
-      elsif dyno = ENV["DYNO"] # Heroku
-        dyno.start_with?("run.") ? "run.*" :
-          dyno.start_with?("release.") ? "release.*" : dyno
-      else
-        Socket.gethostname
-      end
-    end
-
     #######################
     ### Private methods ###
     #######################
@@ -180,7 +163,7 @@ module RorVsWild
       Thread.current[:rorvswild_data] = {
         sections: [],
         section_stack: [],
-        server_name: hostname,
+        server_name: Host.name,
         started_at: RorVsWild.clock_milliseconds,
       }
     end
@@ -214,13 +197,14 @@ module RorVsWild
         exception: exception.class.to_s,
         extra_details: context,
         environment: {
-          os: os_description,
-          user: Etc.getlogin,
-          host: Socket.gethostname,
-          ruby: RUBY_DESCRIPTION,
-          pid: Process.pid,
-          cwd: Dir.pwd,
+          os: Host.os,
+          user: Host.user,
+          host: Host.name,
+          ruby: Host.ruby,
+          pid: Host.pid,
+          cwd: Host.cwd,
           lib_paths: locator.lib_paths,
+          revision: Host.revision,
         },
       }
     end
