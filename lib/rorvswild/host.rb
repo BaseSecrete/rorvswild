@@ -48,7 +48,8 @@ module RorVsWild
     end
 
     def self.revision_from_git
-      `git rev-parse HEAD`.strip rescue nil
+      sha1 = `git rev-parse HEAD`.strip rescue nil
+      sha1 if sha1.present?
     end
 
     def self.revision_from_capistrano
