@@ -163,7 +163,7 @@ module RorVsWild
       Thread.current[:rorvswild_data] = {
         sections: [],
         section_stack: [],
-        server_name: Host.name,
+        environment: Host.to_h,
         started_at: RorVsWild.clock_milliseconds,
       }
     end
@@ -196,16 +196,7 @@ module RorVsWild
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
         extra_details: context,
-        environment: {
-          os: Host.os,
-          user: Host.user,
-          host: Host.name,
-          ruby: Host.ruby,
-          pid: Host.pid,
-          cwd: Host.cwd,
-          lib_paths: locator.lib_paths,
-          revision: Host.revision,
-        },
+        environment: Host.to_h,
       }
     end
 

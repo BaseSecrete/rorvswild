@@ -55,5 +55,9 @@ module RorVsWild
     def self.revision_from_capistrano
       File.read("REVISION") if File.readable?("REVISION")
     end
+
+    def self.to_h
+      @to_h ||= {os: os, user: user, host: name, ruby: ruby, pid: pid, cwd: cwd, revision: revision}
+    end
   end
 end
