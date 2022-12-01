@@ -36,7 +36,9 @@ module RorVsWild
     end
 
     def self.revision
-      revision_from_scalingo || revision_from_heroku || revision_from_git || revision_from_capistrano
+      return @revision if defined?(@revision)
+      revision = revision_from_scalingo || revision_from_heroku || revision_from_git || revision_from_capistrano
+      @revision = revision && revision.strip!
     end
 
     def self.revision_from_scalingo
@@ -48,7 +50,7 @@ module RorVsWild
     end
 
     def self.revision_from_git
-      sha1 = `git rev-parse HEAD`.strip rescue nil
+      sha1 = `git rev-parse HEAD` rescue nil
       sha1 if sha1.present?
     end
 
