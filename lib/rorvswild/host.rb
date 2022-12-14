@@ -37,14 +37,17 @@ module RorVsWild
 
     def self.revision
       return @revision if defined?(@revision)
-      revision = revision_from_scalingo || revision_from_heroku || revision_from_git || revision_from_capistrano
-      @revision = revision && revision.strip
+      @revision = normalize_string(revision_from_scalingo) ||
+        normalize_string(revision_from_heroku) ||
+        normalize_string(revision_from_git) ||
+        normalize_string(revision_from_capistrano)
     end
 
     def self.revision_description
       return @revision_description if defined?(@revision_description)
-      revision_description = revision_description_from_heroku || revision_description_from_git || revision_description_from_capistrano
-      @revision_description = revision_description && revision_description.strip
+      @revision_description = normalize_string(revision_description_from_heroku) ||
+        normalize_string(revision_description_from_git) ||
+        normalize_string(revision_description_from_capistrano)
     end
 
     def self.to_h
@@ -66,8 +69,7 @@ module RorVsWild
     end
 
     def self.revision_from_git
-      sha1 = `git rev-parse HEAD`.strip rescue nil
-      sha1 if !sha1.empty?
+      `git rev-parse HEAD` rescue nil
     end
 
     def self.revision_description_from_heroku
@@ -75,14 +77,19 @@ module RorVsWild
     end
 
     def self.revision_description_from_git
-      msg = `git log -1 --pretty=%B`.strip rescue nil
-      msg if !msg.empty?
+      msg = `git log -1 --pretty=%B` rescue nil
     end
 
     def self.revision_description_from_capistrano
       if sha1 = revision_from_git
-        msg = `git --git-dir ../../repo log --format=%B -n 1 #{sha1}` rescue nil
-        msg if msg && !msg.strip.empty?
+        `git --git-dir ../../repo log --format=%B -n 1 #{sha1}` rescue nil
+      end
+    end
+
+    def self.normalize_string(string)
+      if string
+        string = string.strip
+        string.empty? ? nil : string
       end
     end
   end
