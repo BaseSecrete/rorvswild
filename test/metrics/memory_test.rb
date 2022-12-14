@@ -9,6 +9,6 @@ class RorVsWild::Metrics::MemoryTest < Minitest::Test
     assert(memory.ram_total > memory.ram_cached)
 
     assert(memory.swap_total > 0)
-    assert(memory.swap_total > memory.swap_free)
+    assert(memory.swap_total >= memory.swap_free)
   end
 end
