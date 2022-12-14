@@ -16,6 +16,10 @@ module RorVsWild
       RUBY_DESCRIPTION
     end
 
+    def self.rails
+      Rails.version if defined?(Rails)
+    end
+
     def self.name
       if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
         gae_instance
@@ -51,7 +55,7 @@ module RorVsWild
     end
 
     def self.to_h
-      @to_h ||= {os: os, user: user, host: name, ruby: ruby, pid: pid, cwd: cwd, revision: revision, revision_description: revision_description}
+      @to_h ||= {os: os, user: user, host: name, ruby: ruby, rails: rails, pid: pid, cwd: cwd, revision: revision, revision_description: revision_description}.compact
     end
 
     private
