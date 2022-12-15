@@ -10,6 +10,5 @@ class RorVsWild::HostTest < Minitest::Test
     assert(hash[:pid])
     assert(hash[:cwd])
     assert(hash[:revision])
-    assert(hash[:revision_description])
   end
 end

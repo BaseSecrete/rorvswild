@@ -55,7 +55,7 @@ module RorVsWild
     end
 
     def self.to_h
-      @to_h ||= {os: os, user: user, host: name, ruby: ruby, rails: rails, pid: pid, cwd: cwd, revision: revision, revision_description: revision_description}.compact
+      @to_h ||= {os: os, user: user, host: name, ruby: ruby, rails: rails, pid: pid, cwd: cwd, revision: revision}.compact
     end
 
     private

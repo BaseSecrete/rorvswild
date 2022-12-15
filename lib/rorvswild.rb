@@ -11,6 +11,8 @@ module RorVsWild
   def self.start(config)
     @logger = initialize_logger(config[:logger])
     @agent = Agent.new(config)
+    @agent.send_deployment
+    @agent
   rescue Exception => ex
     logger.error(ex)
     raise

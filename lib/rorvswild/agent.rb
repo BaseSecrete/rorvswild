@@ -153,6 +153,12 @@ module RorVsWild
       config[:ignore_jobs].include?(name)
     end
 
+    def send_deployment
+      params = Host.to_h.slice(:revision, :ruby, :rails)
+      params[:description] = Host.revision_description
+      response = client.post("/deployments", deployment: params)
+    end
+
     #######################
     ### Private methods ###
     #######################
