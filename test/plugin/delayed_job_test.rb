@@ -28,13 +28,13 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
   end
 
   def test_callback
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     SampleBackend.enqueue(SampleJob.new(true))
     assert_equal("RorVsWild::Plugin::DelayedJobTest::SampleJob", agent.current_data[:name])
   end
 
   def test_callback_on_exception
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     SampleBackend.enqueue(job = SampleJob.new(false))
   rescue
   ensure

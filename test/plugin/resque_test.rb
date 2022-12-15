@@ -16,13 +16,13 @@ class RorVsWild::Plugin::ResqueTest < Minitest::Test
   end
 
   def test_callback
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     Resque.enqueue(SampleJob, true)
     assert_equal("RorVsWild::Plugin::ResqueTest::SampleJob", agent.current_data[:name])
   end
 
   def test_callback_on_exception
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     Resque.enqueue(SampleJob, false)
   rescue
   ensure

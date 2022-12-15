@@ -14,7 +14,7 @@ class RorVsWild::Plugin::FaktoryTest < Minitest::Test
   end
 
   def test_callback
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     Faktory.worker_middleware.add(RorVsWild::Plugin::Faktory)
 
     job = SampleFaktoryJob.new
@@ -33,7 +33,7 @@ class RorVsWild::Plugin::FaktoryTest < Minitest::Test
   end
 
   def test_callback_on_exception
-    agent.expects(:post_job)
+    agent.expects(:queue_job)
     Faktory.worker_middleware.add(RorVsWild::Plugin::Faktory)
 
     job = SampleFaktoryJob.new

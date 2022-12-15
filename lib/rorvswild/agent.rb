@@ -85,7 +85,7 @@ module RorVsWild
         raise
       ensure
         current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
-        post_job
+        queue_job
       end
     end
 
@@ -96,7 +96,7 @@ module RorVsWild
     def stop_request
       return unless current_data
       current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
-      post_request
+      queue_request
     end
 
     def catch_error(extra_details = nil, &block)
@@ -180,11 +180,11 @@ module RorVsWild
       result
     end
 
-    def post_request
+    def queue_request
       (data = cleanup_data) && data[:name] && queue.push_request(data)
     end
 
-    def post_job
+    def queue_job
       queue.push_job(cleanup_data)
     end
 
