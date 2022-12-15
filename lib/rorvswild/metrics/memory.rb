@@ -23,7 +23,7 @@ module RorVsWild
       SWAP_FREE = "SwapFree" # Amount of swap space that is currently unused.
 
       def update
-        info = read_meminfo
+        return unless info = read_meminfo
         @ram_total = convert_to_bytes(info[MEM_TOTAL])
         @ram_free = convert_to_bytes(info[MEM_FREE])
         @ram_available = convert_to_bytes(info[MEM_AVAILABLE])
