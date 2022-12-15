@@ -25,7 +25,6 @@ module RorVsWild
         "Content-Type" => "application/json",
         "X-RorVsWild-Version" => RorVsWild::VERSION,
         "X-Ruby-Version" => RUBY_VERSION,
-        "X-Application-Revision" => Host.revision,
       }
       @headers["X-Rails-Version"] = Rails.version if defined?(Rails)
     end
