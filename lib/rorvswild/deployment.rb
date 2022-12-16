@@ -18,8 +18,20 @@ module RorVsWild
       read_once && @email
     end
 
+    def self.ruby
+      RUBY_VERSION
+    end
+
+    def self.rails
+      Rails.version if defined?(Rails)
+    end
+
+    def self.rorvswild
+      RorVsWild::VERSION
+    end
+
     def self.to_h
-      @to_h ||= {revision: revision, description: description, author: author, email: email}.compact
+      @to_h ||= {revision: revision, description: description, author: author, email: email, ruby: ruby, rails: rails, rorvswild: rorvswild}.compact
     end
 
     def self.read

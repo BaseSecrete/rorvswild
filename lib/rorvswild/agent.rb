@@ -154,9 +154,7 @@ module RorVsWild
     end
 
     def send_deployment
-      params = Host.to_h.slice(:revision, :ruby, :rails)
-      params[:description] = Host.revision_description
-      response = client.post("/deployments", deployment: params)
+      response = client.post("/deployments", deployment: Deployment.to_h)
     end
 
     #######################
