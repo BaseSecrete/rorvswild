@@ -57,7 +57,7 @@ module RorVsWild
     end
 
     def self.read_from_git
-      @revision = `git rev-parse HEAD` rescue nil
+      @revision = normalize_string(`git rev-parse HEAD`) rescue nil
       return unless @revision
       lines = `git log -1 --pretty=%an%n%ae%n%B`.lines rescue nil
       @author = normalize_string(lines[0])
@@ -68,8 +68,8 @@ module RorVsWild
 
     def self.read_from_capistrano
       return unless File.readable?("REVISION")
-      reutrn unless @revision = File.read("REVISION")
-      lines = `git --git-dir ../../repo log --format=%an%n%ae%n%B -n 1 #{sha1}`.lines rescue nil
+      return unless @revision = File.read("REVISION")
+      lines = `git --git-dir ../../repo log --format=%an%n%ae%n%B -n 1 #{@revision}`.lines rescue nil
       @author = normalize_string(lines[0])
       @email = normalize_string(lines[1])
       @description = lines[2..-1] && normalize_string(lines[2..-1].join)
