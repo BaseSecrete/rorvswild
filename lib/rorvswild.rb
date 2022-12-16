@@ -1,5 +1,6 @@
 require "rorvswild/version"
 require "rorvswild/host"
+require "rorvswild/deployment"
 require "rorvswild/locator"
 require "rorvswild/section"
 require "rorvswild/client"
