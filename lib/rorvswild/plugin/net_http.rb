@@ -19,7 +19,7 @@ module RorVsWild
           end
 
           def request_with_rorvswild(req, body = nil, &block)
-            return request_without_rorvswild(req, body, &block) if request_called_twice?
+            return request_without_rorvswild(req, body, &block) if !RorVsWild.agent || request_called_twice?
             RorVsWild.agent.measure_section("#{req.method} #{address}", kind: HTTP) do
               request_without_rorvswild(req, body, &block)
             end

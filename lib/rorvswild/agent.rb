@@ -34,6 +34,7 @@ module RorVsWild
       RorVsWild.logger.debug("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
       cleanup_data
+      send_deployment
     end
 
     def load_features
@@ -154,7 +155,7 @@ module RorVsWild
     end
 
     def send_deployment
-      response = client.post("/deployments", deployment: Deployment.to_h)
+      client.post("/deployments", deployment: Deployment.to_h)
     end
 
     #######################
