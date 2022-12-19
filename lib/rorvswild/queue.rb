@@ -52,7 +52,7 @@ module RorVsWild
     end
 
     def pull_server_metrics
-      @metrics && @metrics.update && @metrics.to_h
+      @metrics && @metrics.update_every_minute && @metrics.to_h
     end
 
     def flush_indefinetely

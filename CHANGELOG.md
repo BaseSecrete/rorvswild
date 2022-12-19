@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 * Track deployment revisions
+* Update server metrics every minute
 
 ## [1.5.17] - 2022-10-25
 

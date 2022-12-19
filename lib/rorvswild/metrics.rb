@@ -1,7 +1,5 @@
 module RorVsWild
   class Metrics
-    UPDATE_INTERVAL_MS = 30_000 # two metrics every minute
-
     attr_reader :cpu, :memory, :storage, :updated_at
 
     def initialize
@@ -11,16 +9,16 @@ module RorVsWild
     end
 
     def update
-      if staled?
-        cpu.update
-        memory.update
-        storage.update
-        @updated_at = RorVsWild.clock_milliseconds
-      end
+      cpu.update
+      memory.update
+      storage.update
     end
 
-    def staled?
-      !updated_at || RorVsWild.clock_milliseconds - updated_at > UPDATE_INTERVAL_MS
+    def update_every_minute
+      if !@updated_at || @updated_at.min != Time.now.min
+        @updated_at = Time.now
+        update
+      end
     end
 
     def to_h
