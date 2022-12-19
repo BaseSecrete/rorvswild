@@ -4,6 +4,8 @@
 
 * Track deployment revisions
 * Update server metrics every minute
+* Link requests and jobs performances to server name
+* Add Rails version to environment details
 
 ## [1.5.17] - 2022-10-25
 
