@@ -39,8 +39,7 @@ module RorVsWild
 
     def load_features
       features = config[:features] || []
-      features.include?("server_metrics")
-      require "rorvswild/metrics" if features.include?("server_metrics")
+      RorVsWild.logger.info("Server metrics are now monitored enabled by default") if features.include?("server_metrics")
     end
 
     def setup_plugins
