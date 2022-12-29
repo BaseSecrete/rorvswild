@@ -76,6 +76,10 @@
           flex-direction: column !important;
 }
 
+.rorvswild-local-panel.is-hidden {
+  display: none !important;
+}
+
 .rorvswild-local-panel * {
   font-family: inherit !important;
   font-size: inherit !important;
