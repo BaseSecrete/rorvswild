@@ -18,7 +18,7 @@ module RorVsWild
             @idle = (new_stat.idle - @old_stat.idle) * 100 / total
             @waiting = (new_stat.iowait - @old_stat.iowait) * 100 / total
             @stolen = (new_stat.steal - @old_stat.steal) * 100 / total
-            old_stat = new_stat
+            @old_stat = new_stat
           end
         end
 

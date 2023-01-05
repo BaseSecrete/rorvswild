@@ -7,6 +7,7 @@
 * Link requests and jobs performances to server name
 * Add Rails version to environment details
 * Enable server metrics monitoring by default
+* Fix CPU usage report
 
 ## [1.5.17] - 2022-10-25
 
