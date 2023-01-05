@@ -6,6 +6,7 @@ class RorVsWild::Metrics::CpuTest < Minitest::Test
   def test_to_h
     agent
     metrics = RorVsWild::Metrics.new
+    sleep(0.01) # Let the CPU runs few cycles
     assert(metrics.update)
     assert_kind_of(Hash, hash = metrics.to_h)
     assert(hash[:hostname])
