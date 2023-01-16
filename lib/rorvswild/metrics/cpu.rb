@@ -21,10 +21,7 @@ module RorVsWild
             @old_stat = new_stat
           end
         end
-
-        if uptime = execute("uptime")
-          @load_average = uptime.split[-3].to_f
-        end
+        @load_average = File.read("/proc/loadavg").to_f if File.readable?("/proc/loadavg")
         if nproc = execute("nproc")
           @count = nproc.to_i
         end
