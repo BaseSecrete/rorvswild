@@ -15,6 +15,7 @@ module RorVsWild
     end
 
     def update_every_minute
+      return unless Host.os.include?("Linux")
       if !@updated_at || @updated_at.min != Time.now.min
         @updated_at = Time.now
         update
