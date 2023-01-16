@@ -1,6 +1,6 @@
 module RorVsWild
   class Queue
-    SLEEP_TIME = 30
+    SLEEP_TIME = 10
     FLUSH_TRESHOLD = 10
 
     attr_reader :mutex, :thread, :client
