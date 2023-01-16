@@ -22,15 +22,7 @@ module RorVsWild
           end
         end
         @load_average = File.read("/proc/loadavg").to_f if File.readable?("/proc/loadavg")
-        if nproc = execute("nproc")
-          @count = nproc.to_i
-        end
-      end
-
-      def execute(command)
-        `#{command}`
-      rescue => ex
-        nil
+        @count = `nproc`.to_i rescue nil
       end
 
       class Stat
