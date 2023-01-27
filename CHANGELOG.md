@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## [Unreleased]
+## 1.6.0 (2023-01-27)
 
 * Track deployment revisions
 * Update server metrics every minute
@@ -9,11 +9,11 @@
 * Enable server metrics monitoring by default
 * Fix CPU usage report
 
-## [1.5.17] - 2022-10-25
+## 1.5.17 (2022-10-25)
 
 * Fix monitoring for Redis 5
 
-## [1.5.16] - 2022-10-03
+## 1.5.16 (2022-10-03)
 
 * Retrieve pretty dyno's hostnames for Heroku
 
