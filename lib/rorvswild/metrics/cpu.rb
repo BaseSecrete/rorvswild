@@ -44,7 +44,11 @@ module RorVsWild
 
         def self.parse(string)
           for row in string.lines
-            return new(*row.split[1..-1].map(&:to_i)) if row.start_with?("cpu ")
+            if row.start_with?("cpu ")
+              array = row.split[1..-1].map(&:to_i)[0,10]
+              array.fill(0, array.size, 10 - array.size) if array.size < 10
+              return new(*array)
+            end
           end
           nil
         end
