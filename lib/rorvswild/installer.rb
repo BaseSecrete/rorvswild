@@ -4,7 +4,7 @@ module RorVsWild
 
     def self.create_rails_config(api_key)
       if File.directory?("config")
-        if !File.exists?(PATH)
+        if !File.exist?(PATH)
           File.write(PATH, template(api_key))
           puts "File #{PATH} has been created. Restart / deploy your app to start collecting data."
         else
