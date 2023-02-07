@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+### UNRELEASED
+
+* Fix installer for Ruby 3.2 (Miha Rekar)
+
 ## 1.6.0 (2023-01-27)
 
 * Track deployment revisions
