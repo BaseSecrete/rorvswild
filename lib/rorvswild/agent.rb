@@ -30,6 +30,8 @@ module RorVsWild
       @client = Client.new(@config)
       @queue = config[:queue] || Queue.new(client)
       @locator = RorVsWild::Locator.new
+      Host.load_config(config)
+      Deployment.load_config(config)
 
       RorVsWild.logger.debug("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins

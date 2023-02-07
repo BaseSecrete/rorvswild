@@ -2,6 +2,10 @@
 
 module RorVsWild
   module Host
+    def self.load_config(config)
+      @name = config.dig(:server, :name)
+    end
+
     def self.os
       @os_description ||= `uname -sr`.strip
     rescue Exception => ex
@@ -21,7 +25,7 @@ module RorVsWild
     end
 
     def self.name
-      if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
+      @name ||= if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
         gae_instance
       elsif dyno = ENV["DYNO"] # Heroku
         dyno.start_with?("run.") ? "run.*" :

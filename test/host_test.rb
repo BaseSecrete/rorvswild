@@ -11,4 +11,10 @@ class RorVsWild::HostTest < Minitest::Test
     assert(hash[:cwd])
     assert(hash[:revision])
   end
+
+  def test_initialize_config
+    refute_equal("test_initialize_config", RorVsWild::Host.name)
+    RorVsWild::Host.load_config(server: {name: "test_initialize_config"})
+    assert_equal("test_initialize_config", RorVsWild::Host.name)
+  end
 end

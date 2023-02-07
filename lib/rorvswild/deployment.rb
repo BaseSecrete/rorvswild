@@ -2,20 +2,30 @@
 
 module RorVsWild
   module Deployment
+    def self.load_config(config)
+      read
+      if hash = config[:deployment]
+        @description = hash[:description]
+        @revision = hash[:revision]
+        @author = hash[:author]
+        @email = hash[:email]
+      end
+    end
+
     def self.revision
-      read_once && @revision
+      @revision
     end
 
     def self.description
-      read_once && @description
+      @description
     end
 
     def self.author
-      read_once && @author
+      @author
     end
 
     def self.email
-      read_once && @email
+      @email
     end
 
     def self.ruby
@@ -36,11 +46,6 @@ module RorVsWild
 
     def self.read
       read_from_heroku || read_from_scalingo || read_from_git || read_from_capistrano
-    end
-
-    def self.read_once
-      @already_read || read
-      @already_read = true
     end
 
     private

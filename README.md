@@ -218,29 +218,70 @@ In the case you want a custom logger such as Syslog, you can only do it by initi
 RorVsWild.start(api_key: "API_KEY", logger: Logger::Syslog.new)
 ```
 
-#### Server metrics monitoring
+### Deployment tracking
 
-We are adding server metrics as a beta feature.
-It monitors load average, CPU, memory, swap and disk space.
-For now, only Linux is supported.
-It has to be explicitly enabled with a feature flag :
+Since version 1.6.0, RorVsWild compares performances between each deployment.
+That is convenient to detect quickly a performance deterioration.
+
+It is working without any actions from your part if the application is :
+
+- Deployed via Capistrano
+- Inside a Git repositoriy
+- Hosted on Heroku if [Dyno metadata](https://devcenter.heroku.com/articles/dyno-metadata) is enabled
+- Hosted on Scalingo
+
+Because we are not aware of all cloud hosting providers, there is a generic method to provide these data via the configuration :
 
 ```yaml
 # config/rorvswild.yml
 production:
   api_key: API_KEY
-  features:
-    - server_metrics
+  deployment:
+    revision: <%= "Anything that will return the deployment version" %> # Mandatory
+    description: <%= "Eventually if you have a description such as a Git message" %>
+    author: <%= "Author's name of the deployment" %>
+    email: <%= "emailOf@theAuthor.com" %>
 ```
 
 Here is the equivalent if you prefer initialising RorVsWild manually :
 
 ```ruby
 # config/initializers/rorvswild.rb
-RorVsWild.start(api_key: "API_KEY", features: ["server_metrics"])
+RorVsWild.start(api_key: "API_KEY", deployment: {
+  revision: "Unique version number such as Git commit ID",
+  description: "Message such as in Git",
+  author: "Deployer's name",
+  email: "Deployer's email"
+})
 ```
 
+Only the revision is mandatory, but it's better if you are able to provide more information.
+
+
+#### Server metrics monitoring
+
+Since version 1.6.0 RorVsWild monitors server metrics such as load average, CPU, memory, swap and disk space.
+For now, only Linux is supported.
 The data are available in a server tab beside requests and jobs.
+
+Metrics are grouped by hostnames.
+Cloud providers give random hostnames which change on every deployment.
+You can manually define them:
+
+```yaml
+# config/rorvswild.yml
+production:
+  api_key: API_KEY
+  server:
+    name: <%= "Some code that return a relevant hostname" %>
+```
+
+Here is the equivalent if you prefer initialising RorVsWild manually :
+
+```ruby
+# config/initializers/rorvswild.rb
+RorVsWild.start(api_key: "API_KEY", server: {name: "host.name"})
+```
 
 ## Contributing
 

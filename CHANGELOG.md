@@ -2,6 +2,8 @@
 
 ### UNRELEASED
 
+* Add generic way to provide server hostname
+* Add generic way to provide deployment data
 * Fix installer for Ruby 3.2 (Miha Rekar)
 
 ## 1.6.0 (2023-01-27)
