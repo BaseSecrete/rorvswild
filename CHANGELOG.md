@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-### UNRELEASED
+### 1.6.0 (2023-02-07)
 
 * Add generic way to provide server hostname
 * Add generic way to provide deployment data
