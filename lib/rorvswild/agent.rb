@@ -105,13 +105,13 @@ module RorVsWild
       begin
         block.call
       rescue Exception => ex
-        record_error(ex, extra_details) if !ignored_exception?(ex)
+        record_error(ex, extra_details)
         ex
       end
     end
 
     def record_error(exception, extra_details = nil)
-      send_error(exception_to_hash(exception, extra_details))
+      send_error(exception_to_hash(exception, extra_details)) if !ignored_exception?(exception)
     end
 
     def push_exception(exception, options = nil)
@@ -159,6 +159,11 @@ module RorVsWild
       client.post("/deployments", deployment: Deployment.to_h)
     end
 
+    def ignored_exception?(exception)
+      return false unless config[:ignore_exceptions]
+      config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === exception.class.to_s }
+    end
+
     #######################
     ### Private methods ###
     #######################
@@ -204,10 +209,6 @@ module RorVsWild
         extra_details: context,
         environment: Host.to_h,
       }
-    end
-
-    def ignored_exception?(exception)
-      (config[:ignored_exceptions] || config[:ignore_exceptions]).include?(exception.class.to_s)
     end
   end
 end

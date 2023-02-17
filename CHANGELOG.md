@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+### Unrealeased
+
+* Ignore exceptions with regex
+
 ### 1.6.0 (2023-02-07)
 
 * Add generic way to provide server hostname

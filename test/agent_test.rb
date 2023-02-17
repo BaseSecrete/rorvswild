@@ -49,6 +49,15 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("child", agent.current_data[:sections][0].command)
   end
 
+  def test_ignored_exception?
+    agent = initialize_agent(ignore_exceptions: ["ZeroDivisionError"])
+    assert(agent.ignored_exception?(ZeroDivisionError.new))
+    refute(agent.ignored_exception?(StandardError.new))
+    agent = initialize_agent(ignore_exceptions: [/.*/])
+    assert(agent.ignored_exception?(ZeroDivisionError.new))
+    assert(agent.ignored_exception?(StandardError.new))
+  end
+
   def test_hostname
     old_dyno = ENV["DYNO"]
     old_gae = ENV["GAE_INSTANCE"]

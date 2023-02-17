@@ -19,7 +19,7 @@ class RorVsWildTest < Minitest::Test
   end
 
   def test_mesure_block_when_exception_is_ignored
-    agent = initialize_agent(ignored_exceptions: %w[ZeroDivisionError])
+    agent = initialize_agent(ignore_exceptions: %w[ZeroDivisionError])
     agent.expects(:queue_job)
     assert_raises(ZeroDivisionError) { RorVsWild.measure("1/0") }
     refute(agent.current_data[:error])
