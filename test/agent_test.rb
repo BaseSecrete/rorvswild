@@ -49,6 +49,26 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("child", agent.current_data[:sections][0].command)
   end
 
+  def test_ignored_request?
+    agent = initialize_agent(ignore_requests: ["ApplicationController#secret"])
+    assert(agent.ignored_request?("ApplicationController#secret"))
+    refute(agent.ignored_request?("ApplicationController#index"))
+    agent = initialize_agent(ignore_requests: [/SecretController/])
+    assert(agent.ignored_request?("SecretController#index"))
+    assert(agent.ignored_request?("SecretController#show"))
+    refute(agent.ignored_request?("ApplicationController#index"))
+  end
+
+  def test_ignored_jobs?
+    agent = initialize_agent(ignore_jobs: ["SecretJob"])
+    assert(agent.ignored_job?("SecretJob"))
+    refute(agent.ignored_job?("ApplicationJob"))
+    agent = initialize_agent(ignore_jobs: [/SecretJob/])
+    assert(agent.ignored_job?("SecretJob"))
+    assert(agent.ignored_job?("AnotherSecretJob"))
+    refute(agent.ignored_job?("ApplicationJob"))
+  end
+
   def test_ignored_exception?
     agent = initialize_agent(ignore_exceptions: ["ZeroDivisionError"])
     assert(agent.ignored_exception?(ZeroDivisionError.new))

@@ -148,20 +148,20 @@ module RorVsWild
     end
 
     def ignored_request?(name)
-      (config[:ignore_actions] || config[:ignore_requests]).include?(name)
+      config[:ignore_requests].any? { |str_or_regex| str_or_regex === name }
     end
 
     def ignored_job?(name)
-      config[:ignore_jobs].include?(name)
-    end
-
-    def send_deployment
-      client.post("/deployments", deployment: Deployment.to_h)
+      config[:ignore_jobs].any? { |str_or_regex| str_or_regex === name }
     end
 
     def ignored_exception?(exception)
       return false unless config[:ignore_exceptions]
       config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === exception.class.to_s }
+    end
+
+    def send_deployment
+      client.post("/deployments", deployment: Deployment.to_h)
     end
 
     #######################

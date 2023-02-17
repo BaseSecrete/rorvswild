@@ -2,7 +2,7 @@
 
 ### Unrealeased
 
-* Ignore exceptions with regex
+* Ignore jobs, requests and exceptions with regexes
 
 ### 1.6.0 (2023-02-07)
 

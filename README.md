@@ -155,12 +155,15 @@ From the configuration file, you can tell RorVsWild to skip monitoring some requ
 production:
   api_key: API_KEY
   ignore_requests:
-    - SecretController#index
+    - HeartbeatController#show
+    - !ruby/regexp /SecretController/ # Ignore the entire controller
   ignore_jobs:
     - SecretJob
+    - !ruby/regexp /Secret::/ # Ignore the entire Secret namespace
   ignore_exceptions:
     - ActionController::RoutingError  # Ignore by default any 404
     - ZeroDivisionError
+    - !ruby/regexp /Secret::/ # Ignore all secret errors
   ignore_plugins:
     - Sidekiq # If you don't want to monitor your Sidekiq jobs
 ```
@@ -171,9 +174,9 @@ Here is the equivalent if you prefer initialising RorVsWild manually.
 # config/initializers/rorvswild.rb
 RorVsWild.start(
   api_key: "API_KEY",
-  ignore_requests: ["SecretController#index"],
-  ignore_jobs: ["SecretJob"],
-  ignore_exceptions: ["ActionController::RoutingError", "ZeroDivisionError"],
+  ignore_requests: ["ApplicationController#heartbeat", /SecretController/],
+  ignore_jobs: ["SecretJob", /Secret::/],
+  ignore_exceptions: ["ActionController::RoutingError", "ZeroDivisionError", /Secret::/],
   ignore_plugins: ["Sidekiq"])
 ```
 
