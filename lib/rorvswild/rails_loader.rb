@@ -21,7 +21,7 @@ module RorVsWild
     def self.load_config
       if (path = Rails.root.join("config/rorvswild.yml")).exist?
         yaml = ERB.new(path.read).result
-        hash = YAML.load(yaml, permitted_classes: [Regexp])
+        hash = YAML.safe_load(yaml, permitted_classes: [Regexp])
         hash[Rails.env] && hash[Rails.env].deep_symbolize_keys
       end
     end
