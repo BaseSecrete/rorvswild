@@ -35,7 +35,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     assert_equal("GET", data[:error][:request][:method])
     assert(data[:error][:environment][:os])
     assert(data[:error][:environment][:revision])
-    assert_equal({user_id: 123, other_id: 456}, data[:error][:extra_details])
+    assert_equal({user_id: 123, other_id: 456}, data[:error][:context])
   end
 
   def test_around_action_for_api_controller

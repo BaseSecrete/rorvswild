@@ -101,17 +101,17 @@ module RorVsWild
       queue_request
     end
 
-    def catch_error(extra_details = nil, &block)
+    def catch_error(context = nil, &block)
       begin
         block.call
       rescue Exception => ex
-        record_error(ex, extra_details)
+        record_error(ex, context)
         ex
       end
     end
 
-    def record_error(exception, extra_details = nil)
-      send_error(exception_to_hash(exception, extra_details)) if !ignored_exception?(exception)
+    def record_error(exception, context = nil)
+      send_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
     end
 
     def push_exception(exception, options = nil)
@@ -206,7 +206,7 @@ module RorVsWild
         message: exception.message,
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
-        extra_details: context,
+        context: context,
         environment: Host.to_h,
       }
     end

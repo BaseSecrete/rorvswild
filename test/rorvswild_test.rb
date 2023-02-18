@@ -51,7 +51,7 @@ class RorVsWildTest < Minitest::Test
     assert_equal(ZeroDivisionError, exception.class)
   end
 
-  def test_catch_error_with_extra_details
+  def test_catch_error_with_context
     agent.expects(:send_error)
     exception = RorVsWild.catch_error(foo: "bar") { 1 / 0 }
     assert_equal(ZeroDivisionError, exception.class)

@@ -38,12 +38,12 @@ module RorVsWild
     agent ? agent.measure_block(name , &block) : block.call
   end
 
-  def self.catch_error(extra_details = nil, &block)
-    agent ? agent.catch_error(extra_details, &block) : block.call
+  def self.catch_error(context = nil, &block)
+    agent ? agent.catch_error(context, &block) : block.call
   end
 
-  def self.record_error(exception, extra_details = nil)
-    agent.record_error(exception, extra_details) if agent
+  def self.record_error(exception, context = nil)
+    agent.record_error(exception, context) if agent
   end
 
   def self.merge_error_context(hash)
