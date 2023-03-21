@@ -2,9 +2,11 @@
 
 ### Unrealeased
 
+### 1.6.1 (2023-02-23)
+
 * Ignore jobs, requests and exceptions with regexes
 
-### 1.6.0 (2023-02-07)
+### 1.6.1 (2023-02-07)
 
 * Add generic way to provide server hostname
 * Add generic way to provide deployment data
