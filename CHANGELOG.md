@@ -2,6 +2,8 @@
 
 ### Unrealeased
 
+* Ignore errors with a rescue handler (rescue_from, retry_on and discard_on)
+
 ### 1.6.1 (2023-02-23)
 
 * Ignore jobs, requests and exceptions with regexes

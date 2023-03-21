@@ -16,6 +16,8 @@ module RorVsWild
             section.file, section.line = job.method(:perform).source_location
             section.file = RorVsWild.agent.locator.relative_path(section.file)
             block.call
+          rescue Exception => ex
+            job.rescue_with_handler(ex) or raise
           ensure
             RorVsWild::Section.stop
           end
