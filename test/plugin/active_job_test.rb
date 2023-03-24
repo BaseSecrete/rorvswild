@@ -5,15 +5,15 @@ require "active_job"
 class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
   include RorVsWild::AgentHelper
 
+  class RetriedError < StandardError; end
+  class DiscardedError < StandardError; end
   class RescuedError < StandardError; end
-  class DiscardError < StandardError; end
-  class RetryError < StandardError; end
 
   class SampleJob < ::ActiveJob::Base
     queue_as :default
 
-    retry_on RetryError
-    discard_on DiscardError
+    retry_on RetriedError
+    discard_on DiscardedError
     rescue_from(RescuedError) { |ex| } # Do nothing
 
     def perform(exception = nil)
@@ -43,20 +43,19 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
 
   def test_rescued_error_is_ignored
     SampleJob.perform_now(RescuedError)
-    refute(agent.current_data[:error])
+    refute(agent.current_data[:error], "Rescued error should be ignored")
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
   end
 
-  def test_discard_error_is_ignored
-    SampleJob.perform_now(DiscardError)
-    refute(agent.current_data[:error])
+  def test_discarded_error_is_ignored
+    SampleJob.perform_now(DiscardedError)
+    refute(agent.current_data[:error], "Discarded error should be ignored")
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
   end
 
-  def test_retry_error_ignored
-    SampleJob.perform_now(RetryError)
-    refute(agent.current_data[:error])
+  def test_retried_error_ignored
+    SampleJob.perform_now(RetriedError)
+    refute(agent.current_data[:error], "Retried error should be ignored")
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
   end
 end
-
