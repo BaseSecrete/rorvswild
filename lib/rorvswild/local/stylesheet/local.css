@@ -4,9 +4,10 @@
 
 .rorvswild-local-toggler {
   background: rgb(16, 20, 28) !important;
-  color: rgb(135, 173, 250) !important;
-  box-shadow: 0 0 0 1px rgb(24,28,36), 0 1px 4px 0px rgba(14,18,26,0.9) !important;
-  border-radius: 4px !important;
+  color: rgb(135,173,250) !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 0 1px rgba(69,74,84,1) inset, 0 1px 4px 0px rgba(14,18,26,0.96) !important;
+  border-radius: 2px !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
   line-height: 24px !important;
@@ -20,7 +21,8 @@
 
 .rorvswild-local-toggler small {
   color: rgb(133,139,150) !important;
-  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-size: 10px !important;
   margin-left: 4px !important;
   display: inline-block !important;
 }
@@ -54,8 +56,9 @@
 /********************************************/
 
 .rorvswild-local-panel {
-  background: rgb(16, 20, 28) !important;
-  box-shadow: 0 0 0 48px rgba(219,234,241, 0.95) !important;
+  background: rgb(16,20,28) !important;
+  box-shadow: 0 0 0 48px rgba(69,74,84, 0.95),
+    0 1px 16px 2px rgba(14,18,26,0.96) !important;
   color: rgb(168,174,186) !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
@@ -99,8 +102,9 @@
 
 .rorvswild-local-panel small {
   color: rgb(133,139,150) !important;
-  font-size: 12px !important;
-  margin-left: 4px !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  margin-left: 2px !important;
 }
 
 /* Panel Header */
@@ -223,7 +227,7 @@
 }
 
 .rorvswild-local-panel__request__started-at {
-  color: rgb(168,174,186) !important;
+  color: rgb(133,139,150) !important;
   margin-left: 12px !important;
 }
 .rorvswild-local-panel__request__runtime { 
