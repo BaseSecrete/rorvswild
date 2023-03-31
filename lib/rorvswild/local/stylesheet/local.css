@@ -3,9 +3,9 @@
 /********************************************/
 
 .rorvswild-local-toggler {
-  background: #1d242f !important;
-  color: #80abe3 !important;
-  box-shadow: 0 0 0 1px rgba(159, 169, 187, 0.3), 0 1px 4px 0px rgba(25, 32, 42, 0.9) !important;
+  background: rgb(16, 20, 28) !important;
+  color: rgb(135, 173, 250) !important;
+  box-shadow: 0 0 0 1px rgb(24,28,36), 0 1px 4px 0px rgba(14,18,26,0.9) !important;
   border-radius: 4px !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
@@ -19,7 +19,7 @@
 }
 
 .rorvswild-local-toggler small {
-  color: #9fa9bb !important;
+  color: rgb(133,139,150) !important;
   font-size: 12px !important;
   margin-left: 4px !important;
   display: inline-block !important;
@@ -54,9 +54,9 @@
 /********************************************/
 
 .rorvswild-local-panel {
-  background: #1d242f !important;
-  box-shadow: 0 0 0 48px rgba(25, 32, 42, 0.9) !important;
-  color: #eceef1 !important;
+  background: rgb(16, 20, 28) !important;
+  box-shadow: 0 0 0 48px rgba(219,234,241, 0.95) !important;
+  color: rgb(168,174,186) !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   font-size: 15px !important;
   line-height: 24px !important;
@@ -88,34 +88,34 @@
 }
 
 .rorvswild-local-panel ::-moz-selection {
-  background: #eceef1 !important;
-  color: #222835 !important;
+  background: rgb(69,74,84) !important;
+  color: rgb(219,234,241) !important;
 }
 
 .rorvswild-local-panel ::selection {
-  background: #eceef1 !important;
-  color: #222835 !important;
+  background: rgb(69,74,84) !important;
+  color: rgb(219,234,241) !important;
 }
 
 .rorvswild-local-panel small {
-  color: #9fa9bb !important;
+  color: rgb(133,139,150) !important;
   font-size: 12px !important;
   margin-left: 4px !important;
 }
 
 /* Panel Header */
 .rorvswild-local-panel__header {
-  background: #212834 !important;
+  background: rgb(24,28,36) !important;
   z-index: 100000000000000005 !important;
   padding: 12px !important;
-  box-shadow: 0 1px 2px 0 rgba(25, 32, 42, .8) !important;
+  box-shadow: 0 1px 2px 0 rgba(14,18,26, .8) !important;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
 .rorvswild-local-panel__header__title {
-  color: #9fa9bb !important;
+  color: rgb(168,174,186) !important;
   text-transform: uppercase !important;
   font-size: 12px !important;
   letter-spacing: 2px !important;
@@ -131,13 +131,13 @@
   stroke-width: 2 !important;
   fill: none !important;
   stroke-linecap: square !important;
-  stroke: #9fa9bb !important;
+  stroke: rgb(133,139,150) !important;
   stroke-miterlimit: 10 !important;
   vertical-align: middle !important;
 }
 
 .rorvswild-local-panel svg:hover {
-  stroke: #eceef1 !important;
+  stroke: rgb(193,204,214) !important;
 }
 
 .rorvswild-local-panel__logo {
@@ -161,12 +161,12 @@
 
 .rorvswild-local-panel__github svg {
   stroke: none !important;
-  fill: #9fa9bb !important;
+  fill: rgb(133,139,150) !important;
 }
 
 .rorvswild-local-panel__github svg:hover {
   stroke: none !important;
-  fill: #eceef1 !important;
+  fill: rgb(193,204,214) !important;
 }
 
 /* Panel Content */
@@ -179,7 +179,7 @@
   overflow-x: auto !important;
 }
 
-.rorvswild-local-panel__content::-webkit-scrollbar { width: 3px !important; }
+.rorvswild-local-panel__content::-webkit-scrollbar { width: 4px !important; }
 
 .rorvswild-local-panel__content::-webkit-scrollbar-corner { background: transparent !important; }
 
@@ -189,8 +189,8 @@
 }
 
 .rorvswild-local-panel__content::-webkit-scrollbar-thumb {
-  background-color: #9fa9bb !important;
-  outline: 1px solid #9fa9bb !important;
+  background-color: rgb(100,106,116) !important;
+  outline: 1px solid rgb(100,106,116) !important;
 }
 
 /* Panel request summary */
@@ -200,30 +200,36 @@
   display: -ms-flexbox !important;
   display: flex !important;
   padding: 12px 12px 11px !important;
-  border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
+  border-bottom: 1px solid rgb(24,28,36) !important;
   cursor: pointer !important;
   -ms-flex-wrap: wrap !important;
   flex-wrap: wrap !important;
 }
 
-.rorvswild-local-panel__request:hover { background: #222835 !important; }
+.rorvswild-local-panel__request:hover { background: rgb(21,25,34) !important; }
 
 .rorvswild-local-panel__request__name {
   word-break: break-all !important;
   overflow-wrap: break-word !important;
   width: 100% !important;
+  color: rgb(193,204,214) !important;
+  font-weight: 700;
 }
 
 .rorvswild-local-panel__request__path {
-  color: #9fa9bb !important;
+  color: rgb(133,139,150) !important;
+  font-weight: 400;
   display: block !important;
 }
 
 .rorvswild-local-panel__request__started-at {
-  color: #9fa9bb !important;
+  color: rgb(168,174,186) !important;
   margin-left: 12px !important;
 }
-.rorvswild-local-panel__request__runtime { color: #80abe3 !important; }
+.rorvswild-local-panel__request__runtime { 
+  color: rgb(135,173,250) !important; 
+  font-weight: bold !important;
+}
 
 /* Panel request details */
 
@@ -257,12 +263,12 @@ h2.rorvswild-local-panel__request__name__title {
 
 .rorvswild-local-panel__request-details__section {
   padding: 12px 12px 11px !important;
-  border-bottom: 1px solid rgba(25, 32, 42, 1) !important;
+  border-bottom: 1px solid rgb(24,28,36) !important;
   display: block !important;
 }
 
 .rorvswild-local-panel__request-details__section:hover {
-  background: #212834 !important;
+  background: rgb(21,25,34) !important;
   -webkit-transition: all .3s !important;
   transition: all .3s !important;
 }
@@ -281,22 +287,26 @@ h2.rorvswild-local-panel__request__name__title {
   word-break: break-all !important;
   overflow-wrap: break-word !important;
   min-width: 0 !important;
+  color: rgb(193,204,214) !important;
 }
 
 .rorvswild-local-panel__request-details__section__average {
-  color: #80abe3 !important;
+  color: rgb(135,173,250) !important;
+  font-weight: 700 !important;
   width: 48px !important;
   margin:0 12px 0 0 !important;
 }
 
 .rorvswild-local-panel__request-details__section__calls {
-  color: #9fa9bb !important;
+  color: rgb(168,174,186) !important;
   width: 48px !important;
   margin: 0 12px 0 0 !important;
 }
 
 .rorvswild-local-panel__request-details__section__impact {
+  color: rgb(193,204,214) !important;
   width: 48px !important;
+  font-weight: 700 !important;
   margin: 0 12px 0 0 !important;
 }
 
@@ -304,10 +314,12 @@ h2.rorvswild-local-panel__request__name__title {
   display: -webkit-box !important;
   display: -ms-flexbox !important;
   display: flex !important;
+  color: rgb(133,139,150) !important;
+  margin-top: 8px !important;
 }
 
 .rorvswild-local-panel__request-details__section__kind {
-  background: rgba(25, 32, 42, 1) !important;
+  background: rgb(40,44,54) !important;
   font-size: 10px !important;
   text-transform: uppercase !important;
   text-align: center !important;
@@ -318,7 +330,7 @@ h2.rorvswild-local-panel__request__name__title {
 }
 
 .rorvswild-local-panel__request-details__section__command {
-  color: #9fa9bb !important;
+  color: rgb(133,139,150) !important;
   -webkit-box-flex: 1 !important;
   -ms-flex: 1 !important;
   flex: 1 !important;
@@ -331,14 +343,14 @@ h2.rorvswild-local-panel__request__name__title {
 
 .rorvswild-local-panel__footer {
   width: 100% !important;
-  background: #212834 !important;
-  color: #9fa9bb !important;
+  background: rgb(34,44,64) !important;
+  color: rgb(135,173,250) !important;
   padding: 12px !important;
   text-align: center !important;
 }
 
 a.rorvswild-local-panel__footer__link {
-  color: #eceef1 !important;
+  color: rgb(193,204,214) !important;
   text-decoration: underline !important;
   line-height: inherit !important;
 }
