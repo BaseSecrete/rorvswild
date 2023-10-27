@@ -31,8 +31,8 @@ class RorVsWild::SectionTest < Minitest::Test
 
   def test_section_command_setter
     section = RorVsWild::Section.new
-    section.command = " " * 2000
-    assert_equal(" " * 1000 + " [TRUNCATED]", section.command)
+    section.command = " " * 20_000
+    assert_equal(" " * 10_000 + " [TRUNCATED]", section.command)
   end
 
   def section1
