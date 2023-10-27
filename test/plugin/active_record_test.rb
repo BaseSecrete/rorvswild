@@ -35,5 +35,19 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert(sql2.self_runtime >= 40)
     assert_equal(2, sql2.calls)
   end
+
+  def test_normalize_sql_query
+    plugin = RorVsWild::Plugin::ActiveRecord.new
+    assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = $1"))
+    assert_equal("SELECT * FROM table WHERE col1 = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col1 = 1"))
+    assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = 1.3"))
+    assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = 'foo'"))
+    assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = 'J''aime l''avion l''été'"))
+    assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = 'J\\'aime l\\'avion l\\'été'"))
+    assert_equal("SELECT * FROM table WHERE col >= ? + pow(? * ?, ? + ?) + length(?)", plugin.normalize_sql_query("SELECT * FROM table WHERE col >= ? + pow($1 * 2, 3 + 4) + length('foo')"))
+    assert_equal("SELECT * FROM table WHERE col1 IN (?) AND col2 in (?)", plugin.normalize_sql_query("SELECT * FROM table WHERE col1 IN ('foo', 'bar') AND col2 in (1,2)"))
+    assert_equal("SELECT * FROM table", plugin.normalize_sql_query("SELECT * FROM table -- Comment"))
+    assert_equal("SELECT ? FROM table col = ?", plugin.normalize_sql_query("SELECT 'Test'/* 'Comment' 1 */ FROM table /* Comment 2 */col = /* Comment 3 */1"))
+  end
 end
 
