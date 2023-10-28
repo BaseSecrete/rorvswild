@@ -3,6 +3,8 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in rorvswild.gemspec
 gemspec
 
+gem "rake"
+
 gem "mocha"
 gem "top_tests"
 
