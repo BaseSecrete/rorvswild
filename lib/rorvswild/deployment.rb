@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "open3"
+
 module RorVsWild
   module Deployment
     def self.load_config(config)
@@ -57,15 +59,13 @@ module RorVsWild
     end
 
     def self.read_from_scalingo
-      return unless ENV["SOURCE_VERSION"]
       @revision = ENV["SOURCE_VERSION"]
     end
 
     def self.read_from_git
-      @revision = normalize_string(`git rev-parse HEAD`) rescue nil
-      return unless @revision
-      lines = `git log -1 --pretty=%an%n%ae%n%B`.lines rescue nil
-      return unless lines
+      return unless @revision = normalize_string(shell("git rev-parse HEAD"))
+      return @revision unless log_stdout = shell("git log -1 --pretty=%an%n%ae%n%B")
+      lines = log_stdout.lines
       @author = normalize_string(lines[0])
       @email = normalize_string(lines[1])
       @description = lines[2..-1] && normalize_string(lines[2..-1].join)
@@ -75,8 +75,8 @@ module RorVsWild
     def self.read_from_capistrano
       return unless File.readable?("REVISION")
       return unless @revision = File.read("REVISION")
-      lines = `git --git-dir ../../repo log --format=%an%n%ae%n%B -n 1 #{@revision}`.lines rescue nil
-      return unless lines
+      return unless stdout = shell("git --git-dir ../../repo log --format=%an%n%ae%n%B -n 1 #{@revision}")
+      lines = stdout.lines
       @author = normalize_string(lines[0])
       @email = normalize_string(lines[1])
       @description = lines[2..-1] && normalize_string(lines[2..-1].join)
@@ -88,6 +88,11 @@ module RorVsWild
         string = string.strip
         string.empty? ? nil : string
       end
+    end
+
+    def self.shell(command)
+      stdout, stderr, process = Open3.capture3(command) rescue nil
+      stdout if process && process.success?
     end
   end
 end
