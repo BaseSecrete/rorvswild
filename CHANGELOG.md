@@ -2,9 +2,12 @@
 
 ### Unrealeased
 
+* Fix not git repository stderr
+* Normalize SQL queries
+* Increase command max length to 10_000 characters
 * Ignore errors with a rescue handler (rescue_from, retry_on and discard_on)
 
-### 1.6.1 (2023-02-23)
+### 1.6.2 (2023-02-23)
 
 * Ignore jobs, requests and exceptions with regexes
 
