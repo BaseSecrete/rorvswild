@@ -68,6 +68,7 @@ module RorVsWild
 
   def self.check
     api_key = RorVsWild.agent.config[:api_key]
+    agent.client.instance_variable_set(:@http_unauthorized, false)
     return puts "You API key is missing and has to be defined in config/rorvswild.yml." if !api_key || api_key.empty?
     puts case response = agent.client.post("/jobs", jobs: [{sections: [], name: "RorVsWild.check", runtime: 0}])
     when Net::HTTPOK then "Connection to RorVsWild works fine !"

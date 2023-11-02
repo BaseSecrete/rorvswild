@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "set"
 require "uri"
 require "json/ext"
@@ -27,6 +29,7 @@ module RorVsWild
         "X-Ruby-Version" => RUBY_VERSION,
       }
       @headers["X-Rails-Version"] = Rails.version if defined?(Rails)
+      @http_unauthorized = false
     end
 
     def post(path, data)
@@ -60,8 +63,10 @@ module RorVsWild
     end
 
     def transmit(request)
-      if http = take_or_create_connection
-        http.request(request)
+      if !@http_unauthorized && http = take_or_create_connection
+        response = http.request(request)
+        @http_unauthorized = true if response.code == "401"
+        response
       end
     rescue Exception => ex
       RorVsWild.logger.error(ex.full_message)
