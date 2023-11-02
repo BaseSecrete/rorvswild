@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RorVsWild
   class Queue
     SLEEP_TIME = 10
@@ -56,6 +58,7 @@ module RorVsWild
     end
 
     def flush_indefinetely
+      client.post("/deployments", deployment: Deployment.to_h)
       sleep(SLEEP_TIME) and flush while true
     rescue Exception => ex
       RorVsWild.logger.error(ex)

@@ -36,7 +36,6 @@ module RorVsWild
       RorVsWild.logger.debug("Start RorVsWild #{RorVsWild::VERSION}")
       setup_plugins
       cleanup_data
-      send_deployment
     end
 
     def load_features
@@ -158,10 +157,6 @@ module RorVsWild
     def ignored_exception?(exception)
       return false unless config[:ignore_exceptions]
       config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === exception.class.to_s }
-    end
-
-    def send_deployment
-      client.post("/deployments", deployment: Deployment.to_h)
     end
 
     #######################
