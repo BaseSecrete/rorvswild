@@ -39,7 +39,7 @@ module RorVsWild
       SQL_MULTI_LINE_COMMENT_REGEX = /\/\*.*?\*\//m
 
       def normalize_sql_query(sql)
-        sql = sql.gsub(SQL_STRING_REGEX, "?")
+        sql = sql.to_s.gsub(SQL_STRING_REGEX, "?")
         sql.gsub!(SQL_PARAMETER_REGEX, "?")
         sql.gsub!(SQL_NUMERIC_REGEX, "?")
         sql.gsub!(SQL_IN_REGEX, '\1?\3')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
 require "active_job"
@@ -38,6 +40,9 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
 
   def test_normalize_sql_query
     plugin = RorVsWild::Plugin::ActiveRecord.new
+    assert_equal("", plugin.normalize_sql_query(nil))
+    assert_equal("?", plugin.normalize_sql_query(1))
+    assert_equal("", plugin.normalize_sql_query(""))
     assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = $1"))
     assert_equal("SELECT * FROM table WHERE col1 = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col1 = 1"))
     assert_equal("SELECT * FROM table WHERE col = ?", plugin.normalize_sql_query("SELECT * FROM table WHERE col = 1.3"))
