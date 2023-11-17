@@ -1,10 +1,12 @@
 # Changelog of RorVsWild
 
-### Unrealeased
+### 1.6.3 (2023-11-17)
 
 * Fix not git repository stderr
 * Normalize SQL queries
 * Ignore errors with a rescue handler (rescue_from, retry_on and discard_on)
+* Update local profiler colors
+* Wait for queue to start before sending deployment information
 
 ### 1.6.2 (2023-02-23)
 
