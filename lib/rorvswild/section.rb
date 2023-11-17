@@ -61,7 +61,7 @@ module RorVsWild
       total_runtime - children_runtime
     end
 
-    COMMAND_MAX_SIZE = 10_000
+    COMMAND_MAX_SIZE = 1_000
 
     def command=(value)
       @command = value && value.size > COMMAND_MAX_SIZE ? value[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : value
