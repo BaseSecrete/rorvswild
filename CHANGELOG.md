@@ -1,6 +1,13 @@
 # Changelog of RorVsWild
 
-### 1.6.3 (2023-11-17)
+## Unreleased
+
+* Close local profiler details panel with Escape key
+* Remove margins to display local profiler details panel in full screen
+* Hide local profiler mini button when details panel is open
+* Reduce CSS size
+
+## 1.6.3 (2023-11-17)
 
 * Fix not git repository stderr
 * Normalize SQL queries
@@ -8,11 +15,11 @@
 * Update local profiler colors
 * Wait for queue to start before sending deployment information
 
-### 1.6.2 (2023-02-23)
+## 1.6.2 (2023-02-23)
 
 * Ignore jobs, requests and exceptions with regexes
 
-### 1.6.1 (2023-02-07)
+## 1.6.1 (2023-02-07)
 
 * Add generic way to provide server hostname
 * Add generic way to provide deployment data
