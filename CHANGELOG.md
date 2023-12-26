@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Open file from link with URL scheme
 * Increase max command size to 5 000 characters
 * Close local profiler details panel with Escape key
 * Remove margins to display local profiler details panel in full screen

@@ -1,5 +1,5 @@
 <div id="RorVsWild.Local" class="<%= widget_css %>">
-  <div data-barber="RorVsWild.Local">
+  <div data-barber="RorVsWild.Local" data-editor="<%= editor %>">
   </div>
 </div>
 
@@ -101,7 +101,7 @@
   <div class="rorvswild-local-panel__request-details__section">
     <div class="rorvswild-local-panel__request-details__section__main">
       <span class="rorvswild-local-panel__request-details__section__file">
-        {{file}}:{{line}}
+        <a href="{{url}}">{{file}}:{{line}}</a>
         <div class="rorvswild-local-panel__request-details__section__code">
           <span class="rorvswild-local-panel__request-details__section__kind">{{kind}}</span>
           <span class="rorvswild-local-panel__request-details__section__command">

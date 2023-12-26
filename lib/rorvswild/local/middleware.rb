@@ -61,6 +61,10 @@ module RorVsWild
         config && config[:widget] && "is-#{config[:widget]}"
       end
 
+      def editor
+        RorVsWild.agent.config[:editor] || ENV["EDITOR"]
+      end
+
       def inject_into(html)
         if index = html.index("</body>")
           markup = File.read(File.join(LOCAL_FOLDER, "local.html.erb"))
