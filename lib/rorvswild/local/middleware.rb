@@ -61,8 +61,8 @@ module RorVsWild
         config && config[:widget] && "is-#{config[:widget]}"
       end
 
-      def editor
-        RorVsWild.agent.config[:editor] || ENV["EDITOR"]
+      def editor_url
+        RorVsWild.agent.config[:editor_url]
       end
 
       def inject_into(html)

@@ -17,6 +17,12 @@ module RorVsWild
 
     def self.template(api_key)
       <<YAML
+development:
+  # Widget position
+  # widget: top-left, top-right, bottom-left, bottom-right
+  # Specify text editor's URL template to open file with a click from the widget
+  # editor_url: "vscode://file${path}:${line}" # Click to open in Visual Studio Code
+  # editor_url: "subl://${path}:${line}" # Click to open in Sublime Text
 production:
   api_key: #{api_key}
   # ignore_requests: # Do not monitor the following actions
@@ -46,7 +52,7 @@ production:
   #   revision: <%= "Anything that will return the deployment version" %> # Mandatory
   #   description: <%= "Eventually if you have a description such as a Git message" %>
   #   author: <%= "Author's name of the deployment" %>
-    #   email: <%= "emailOf@theAuthor.com" %>
+  #   email: <%= "emailOf@theAuthor.example" %>
 YAML
     end
   end
