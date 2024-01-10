@@ -7,15 +7,16 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
  */
 .rorvswild-local-panel code[class*="language-"],
 .rorvswild-local-panel pre[class*="language-"] {
-  color: rgb(133,139,150) !important;
+  color: rgb(199 203 214) !important;
   background: none !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
   text-align: left !important;
   text-shadow: 0 0 0 !important;
   word-spacing: normal !important;
 
-  font-size: 15px !important;
+  font-size: 14px !important;
   line-height: 24px !important;
+  font-weight: 300 !important;
 
   white-space: pre-line !important;
   word-wrap: break-word !important;
@@ -60,7 +61,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.prolog,
 .rorvswild-local-panel .token.doctype,
 .rorvswild-local-panel .token.cdata {
-  color: rgb(133,139,150) !important;
+  color: rgb(146 149 159) !important;
   font-style: italic !important;
   opacity: 0.7 !important;
 }
@@ -77,7 +78,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.boolean,
 .rorvswild-local-panel .token.number,
 .rorvswild-local-panel .token.deleted {
-  color: rgb(195,116,112) !important;
+  color: rgb(255 185 173) !important;
 }
 
 .rorvswild-local-panel .token.property,
@@ -85,7 +86,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.symbol,
 .rorvswild-local-panel .token.builtin,
 .rorvswild-local-panel .token.string {
-  color: rgb(108,138,200) !important;
+  color: rgb(182 202 255) !important;
 }
 
 .rorvswild-local-panel .token.attr-name,
@@ -98,17 +99,17 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .token.atrule,
 .rorvswild-local-panel .token.attr-value,
 .rorvswild-local-panel .token.keyword {
-  color: rgb(171,120,176) !important;
+  color: rgb(248 185 227) !important;
 }
 
 .rorvswild-local-panel .token.constant,
 .rorvswild-local-panel .token.regex,
 .rorvswild-local-panel .token.important {
-  color: rgb(167,133,61) !important;
+  color: rgb(227 201 134) !important;
 }
 
 .rorvswild-local-panel .token.function {
-  color: rgb(30,151,162) !important;
+  color: rgb(124 218 210) !important;
 }
 
 .rorvswild-local-panel .token.important,
@@ -132,5 +133,5 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
 .rorvswild-local-panel .language-markup .token.tag,
 .rorvswild-local-panel .language-markup .token.attr-name,
 .rorvswild-local-panel .language-markup .token.punctuation {
-  color: rgb(133,139,150) !important;
+  color: rgb(146 149 159) !important;
 }
