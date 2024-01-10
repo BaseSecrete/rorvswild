@@ -253,6 +253,29 @@ h2.rorvswild-local-panel__request__name__title {
   color: rgb(193,204,214) !important;
 }
 
+a.rorvswild-local-panel__request-details__section__file__name {
+  text-decoration-color: rgb(133,139,150);
+  font-weight: 700;
+}
+
+a.rorvswild-local-panel__request-details__section__file__name:hover { text-decoration-color: rgb(193,204,214); }
+
+a.rorvswild-local-panel__request-details__section__file__name::after {
+  content: '↗';
+  text-decoration: none;
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 0.5;
+}
+
+a.rorvswild-local-panel__request-details__section__file__name:hover::after { opacity: 1; }
+
+.rorvswild-local-panel__request-details__section__file__name span {
+  background: rgb(40,44,54);
+  text-decoration: none;
+  display: inline-block;
+}
+
 .rorvswild-local-panel__request-details__section__average {
   color: rgb(135,173,250) !important;
   font-weight: 700 !important;

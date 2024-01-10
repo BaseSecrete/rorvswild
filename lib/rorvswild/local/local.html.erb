@@ -101,7 +101,12 @@
   <div class="rorvswild-local-panel__request-details__section">
     <div class="rorvswild-local-panel__request-details__section__main">
       <span class="rorvswild-local-panel__request-details__section__file">
-        <a href="{{url}}">{{file}}:{{line}}</a>
+        {{#url}}
+          <a href="{{url}}" class="rorvswild-local-panel__request-details__section__file__name" title="Open in your editor">{{file}}<span>:{{line}}</span></a>
+        {{/url}}
+        {{^url}}
+          <span class="rorvswild-local-panel__request-details__section__file__name">{{file}}<span>:{{line}}</span></span>
+        {{/url}}
         <div class="rorvswild-local-panel__request-details__section__code">
           <span class="rorvswild-local-panel__request-details__section__kind">{{kind}}</span>
           <span class="rorvswild-local-panel__request-details__section__command">
