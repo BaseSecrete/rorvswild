@@ -19,10 +19,14 @@ module RorVsWild
       <<YAML
 development:
   # Widget position
-  # widget: top-left, top-right, bottom-left, bottom-right
-  # Specify text editor's URL template to open file with a click from the widget
-  # editor_url: "vscode://file${path}:${line}" # Click to open in Visual Studio Code
-  # editor_url: "subl://${path}:${line}" # Click to open in Sublime Text
+  # widget: top-left, top-right, bottom-left, bottom-right or hidden
+
+  # Open files in your text editor by clicking from the local widget.
+  # VSCode: vscode://file${path}:${line}
+  # Sublime: subl://${path}:${line}
+  # It should be set with an env variable when developers are not using the same editor.
+  editor_url: <%= ENV.fetch("RORVSWILD_EDITOR_URL", "vscode://file${path}:${line}") %>
+
 production:
   api_key: #{api_key}
   # ignore_requests: # Do not monitor the following actions

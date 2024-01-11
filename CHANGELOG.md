@@ -2,7 +2,18 @@
 
 ## Unreleased
 
-* Open file from link with URL scheme
+* Open files in your text editor by clicking from the local widget
+
+  It should be set with an env variable when developers are not using the same editor.
+
+  ```yaml
+  # config/rorvswild.yml
+  development:
+    # VSCode: vscode://file${path}:${line}
+    # Sublime: subl://${path}:${line}
+    editor_url: <%= ENV.fetch("RORVSWILD_EDITOR_URL", "vscode://file${path}:${line}") %>
+  ```
+
 * Increase max command size to 5 000 characters
 * Close local profiler details panel with Escape key
 * Remove margins to display local profiler details panel in full screen
