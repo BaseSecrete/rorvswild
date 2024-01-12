@@ -9,7 +9,7 @@ module RorVsWild
   class Client
     HTTPS = "https".freeze
     CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../../cacert.pem", __FILE__)
-    DEFAULT_TIMEOUT = 3
+    DEFAULT_TIMEOUT = 10
 
     attr_reader :api_url, :api_key, :timeout, :threads
 

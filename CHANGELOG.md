@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Change default open timeout to 10 seconds
 * Open files in your text editor by clicking from the local widget
 
   It should be set with an env variable when developers are not using the same editor.
