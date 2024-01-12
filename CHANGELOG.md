@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.6.4 (2024-01-12)
 
 * Change default open timeout to 10 seconds
 * Open files in your text editor by clicking from the local widget
