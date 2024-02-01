@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix issue #28 when for Rodauth authentication
+
 ## 1.6.4 (2024-01-12)
 
 * Change default open timeout to 10 seconds

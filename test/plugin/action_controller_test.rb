@@ -13,6 +13,20 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
 
     assert_equal(1, agent.current_data[:sections].size)
     assert(agent.current_data[:sections][0].total_runtime >= 10)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:sections][0].command)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:name])
+  end
+
+  def test_around_action_when_method_for_action_returns_nil
+    agent.start_request
+    controller = SampleController.new
+    controller.action_name = "index"
+    controller.stubs(method_for_action: nil)
+    RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
+
+    assert_equal(1, agent.current_data[:sections].size)
+    assert(agent.current_data[:sections][0].total_runtime >= 10)
+    refute(agent.current_data[:sections][0].command)
     assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:name])
   end
 
