@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Limit exception message to 1 millions chars
 * Fix issue #28 when for Rodauth authentication
 
 ## 1.6.4 (2024-01-12)

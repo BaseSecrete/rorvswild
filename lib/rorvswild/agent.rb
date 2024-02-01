@@ -198,7 +198,7 @@ module RorVsWild
       {
         line: line.to_i,
         file: locator.relative_path(file),
-        message: exception.message,
+        message: exception.message[0,1_000_000],
         backtrace: exception.backtrace || ["No backtrace"],
         exception: exception.class.to_s,
         context: context,
