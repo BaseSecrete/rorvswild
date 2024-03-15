@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RorVsWild
   module Local
     class Middleware
@@ -99,7 +101,7 @@ module RorVsWild
       end
 
       def empty_html_page
-        "<!DOCTYPE html>\n<html><head></head><body></body></html>"
+        "<!DOCTYPE html>\n<html><head></head><body></body></html>".dup
       end
 
       def log_incompatible_middleware_warning

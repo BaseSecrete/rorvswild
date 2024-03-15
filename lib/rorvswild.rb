@@ -50,6 +50,10 @@ module RorVsWild
     agent.merge_error_context(hash) if agent
   end
 
+  def self.send_server_timing=(boolean)
+    agent.send_server_timing = boolean if agent
+  end
+
   def self.initialize_logger(destination = nil)
     if destination.respond_to?(:info) && destination.respond_to?(:warn) && destination.respond_to?(:error)
       destination

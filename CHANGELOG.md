@@ -14,6 +14,23 @@
     api_key: API_KEY
     job_sampling_rate: 0.5 # 50% of jobs are sent
     request_sampling_rate: 0.25 # 25% of requests are sent
+
+* Add Server-Timing headers
+
+  Server-Timing is a HTTP header to provide metrics about backend runtimes.
+  It's disabled by default, and it has to be enabled for each request.
+  You will probably prefer to limit to privileged users in production to prevent from exposing sensitive data.
+  Here is a good default setup, to enable server timing in all environments and only for admins in production:
+
+  ```ruby
+  class ApplicationController < ActionController::Base
+    before_action :expose_server_timing_headers
+
+    def expose_server_timing_headers
+      # Assuming there are current_user and admin? methods
+      RorVsWild.send_server_timing = !Rails.env.production? || current_user.try(:admin?)
+    end
+  end
   ```
 
 ## 1.6.5 (2024-04-18)
