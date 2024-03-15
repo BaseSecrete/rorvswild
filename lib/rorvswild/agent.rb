@@ -133,6 +133,14 @@ module RorVsWild
       current_data[:error_context] = hash if current_data
     end
 
+    def send_server_timing?
+      current_data[:send_server_timing]
+    end
+
+    def send_server_timing=(boolean)
+      current_data[:send_server_timing] = boolean if current_data
+    end
+
     def current_data
       Thread.current[:rorvswild_data]
     end
