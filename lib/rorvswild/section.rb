@@ -37,6 +37,7 @@ module RorVsWild
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
       @line = location.lineno
+      @command = nil
       @appendable_command = false
     end
 
