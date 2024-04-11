@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Fix DelayedJob callback
 * Limit exception message to 1 millions chars
 * Fix issue #28 when for Rodauth authentication
 

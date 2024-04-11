@@ -3,13 +3,15 @@ module RorVsWild
     module DelayedJob
       def self.setup
         return if @installed
-        return unless defined?(Delayed::Worker)
-        Delayed::Worker.lifecycle.around(:invoke_job, &method(:around_perform))
+        return unless defined?(Delayed::Plugin)
+        Delayed::Worker.plugins << Class.new(Delayed::Plugin) do
+          callbacks do |lifecycle|
+            lifecycle.around(:invoke_job) do |job, *args, &block|
+              RorVsWild.agent.measure_job(job.name, parameters: job.payload_object) { block.call(job) }
+            end
+          end
+        end
         @installed = true
-      end
-
-      def self.around_perform(job, &block)
-        RorVsWild.agent.measure_job(job.name, parameters: job.payload_object) { block.call(job) }
       end
     end
   end

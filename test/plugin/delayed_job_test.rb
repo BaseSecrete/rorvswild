@@ -15,27 +15,24 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
     end
   end
 
-  Delayed::Worker.delay_jobs = false
-
   class SampleBackend
     include Delayed::Backend::Base
-
     attr_accessor :handler
-
-    def initialize(options)
-      @payload_object = options[:payload_object]
-    end
   end
 
   def test_callback
     agent.expects(:queue_job)
-    SampleBackend.enqueue(SampleJob.new(true))
+    backend = SampleBackend.new
+    backend.payload_object = SampleJob.new(true)
+    backend.invoke_job
     assert_equal("RorVsWild::Plugin::DelayedJobTest::SampleJob", agent.current_data[:name])
   end
 
   def test_callback_on_exception
     agent.expects(:queue_job)
-    SampleBackend.enqueue(job = SampleJob.new(false))
+    backend = SampleBackend.new
+    backend.payload_object = job = SampleJob.new(false)
+    backend.invoke_job
   rescue
   ensure
     assert_equal(job, agent.current_data[:error][:parameters])
