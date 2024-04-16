@@ -1,5 +1,21 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Sample requests and jobs to lower our customers' bills
+
+  These parameters should be used by large volume applications only.
+  When the volume is significant, sending more does not improve precision and sending less does not decrease it.
+  More precisely, for a large volume of requests but a low volume of jobs, it makes sens to sample requests only.
+
+  ```yaml
+  # config/rorvswild.yml
+  production:
+    api_key: API_KEY
+    job_sampling_rate: 0.5 # 50% of jobs are sent
+    request_sampling_rate: 0.25 # 25% of requests are sent
+  ```
+
 ## 1.6.5 (2024-04-18)
 
 * Fix DelayedJob callback

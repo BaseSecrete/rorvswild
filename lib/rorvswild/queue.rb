@@ -14,15 +14,17 @@ module RorVsWild
       @client = client
       @mutex = Mutex.new
       @metrics = RorVsWild::Metrics.new if defined?(Metrics)
+      @request_sampling_rate = client.config[:request_sampling_rate]
+      @job_sampling_rate = client.config[:job_sampling_rate]
       Kernel.at_exit { flush }
     end
 
     def push_job(data)
-      push_to(jobs, data)
+      push_to(jobs, data) if !@job_sampling_rate || rand <= @job_sampling_rate
     end
 
     def push_request(data)
-      push_to(requests, data)
+      push_to(requests, data) if !@request_sampling_rate || rand <= @request_sampling_rate
     end
 
     def push_to(array, data)

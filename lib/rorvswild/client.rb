@@ -11,7 +11,7 @@ module RorVsWild
     CERTIFICATE_AUTHORITIES_PATH = File.expand_path("../../../cacert.pem", __FILE__)
     DEFAULT_TIMEOUT = 10
 
-    attr_reader :api_url, :api_key, :timeout, :threads
+    attr_reader :api_url, :api_key, :timeout, :threads, :config
 
     def initialize(config)
       Kernel.at_exit(&method(:at_exit))
