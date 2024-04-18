@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.6.5 (2024-04-18)
 
 * Fix DelayedJob callback
 * Limit exception message to 1 millions chars
