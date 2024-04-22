@@ -18,7 +18,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   line-height: 24px !important;
   font-weight: 300 !important;
 
-  white-space: pre-line !important;
+  white-space: pre-wrap !important;
   word-wrap: break-word !important;
   word-break: keep-all !important;
 

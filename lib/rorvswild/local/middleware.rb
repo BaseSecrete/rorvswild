@@ -17,6 +17,9 @@ module RorVsWild
         when "/rorvswild.css" then serve_stylesheet
         when "/rorvswild.js" then serve_javascript
         when "/rorvswild.json" then serve_json
+        when "/rorvswild/requests.json" then serve_requests
+        when "/rorvswild/jobs.json" then serve_jobs
+        when "/rorvswild/errors.json" then serve_errors
         else serve_embed_profiler(env)
         end
       end
@@ -34,6 +37,7 @@ module RorVsWild
             log_incompatible_middleware_warning
           elsif body.respond_to?(:each)
             content_length = 0
+            @current_request = RorVsWild.agent.queue.requests.first
             body.each do |string|
               inject_into(string)
               content_length += string.size
@@ -54,6 +58,18 @@ module RorVsWild
 
       def serve_json
         [200, {"Content-Type" => "application/json"}, StringIO.new(RorVsWild.agent.queue.requests.to_json)]
+      end
+
+      def serve_requests
+        [200, {"Content-Type" => "application/json"}, StringIO.new(RorVsWild.agent.queue.requests.to_json)]
+      end
+
+      def serve_jobs
+        [200, {"Content-Type" => "application/json"}, StringIO.new(RorVsWild.agent.queue.jobs.to_json)]
+      end
+
+      def serve_errors
+        [200, {"Content-Type" => "application/json"}, StringIO.new(RorVsWild.agent.queue.errors.to_json)]
       end
 
       private

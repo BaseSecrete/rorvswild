@@ -110,7 +110,7 @@ module RorVsWild
     end
 
     def record_error(exception, context = nil)
-      send_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
+      queue_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
     end
 
     def push_exception(exception, options = nil)
@@ -193,8 +193,8 @@ module RorVsWild
       queue.push_job(cleanup_data)
     end
 
-    def send_error(hash)
-      client.post_async("/errors".freeze, error: hash)
+    def queue_error(hash)
+      queue.push_error(hash)
     end
 
     def exception_to_hash(exception, context = nil)

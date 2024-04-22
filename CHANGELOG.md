@@ -1,6 +1,7 @@
 # Changelog of RorVsWild
 
 * Limit server timing header to 10 entries
+* Store requests, jobs and errors into the local profiler
 * Print ASCII server timing in logs
 * Improve widget UI
 

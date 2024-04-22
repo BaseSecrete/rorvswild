@@ -1,6 +1,9 @@
-<div id="RorVsWild.Local" class="<%= widget_css %>">
-  <div data-barber="RorVsWild.Local" data-editor-url="<%= editor_url %>">
-  </div>
+<div id="RorVsWild.Local" class="<%= widget_css %>" >
+  <% if @current_request %>
+    <div data-barber="RorVsWild.Local" data-editor-url="<%= editor_url %>" data-request-uuid="<%= @current_request["uuid"] %>"></div>
+  <% else %>
+    <div data-barber="RorVsWild.Local" data-editor-url="<%= editor_url %>"></div>
+  <% end %>
 </div>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local">
@@ -16,12 +19,14 @@
           </svg>
         </a>
 
-        {{#currentRequest}}
-          <span class="rorvswild-local-panel__header__title">breakdown</span>
-        {{/currentRequest}}
-        {{^currentRequest}}
-          <span class="rorvswild-local-panel__header__title">history</span>
-        {{/currentRequest}}
+        <nav id="rorvswild-local-nav">
+          <ul>
+            <li data-events="click->goToRequestIndex" class="tab--requests">Requests</li>
+            <li data-events="click->goToJobIndex" class="tab--jobs">Jobs</li>
+            <li data-events="click->goToErrors" class="tab--errors">Errors</li>
+          </ul>
+        </nav>
+
         <span class="rorvswild-local-panel__header__icons">
           <a href="https://github.com/BaseSecrete/rorvswild" class="rorvswild-local-panel__github" title="Source code">
             <svg width="16px" height="16px" viewBox="0 0 16 16">
@@ -38,23 +43,10 @@
         </span>
       </div>
     </div>
+
     <div class="rorvswild-local-panel__content">
       <div class="rorvswild-local-panel__width-limiter">
-        {{#currentRequest}}
-          <div data-events="click->goToHistory" class="rorvswild-local-panel__back-button" title="Go to history">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <line x1="20" y1="12" x2="4" y2="12"></line>
-              <polyline points="10 18 4 12 10 6"></polyline>
-            </svg>
-          </div>
-          {{> RorVsWild.Local.RequestDetails}}
-        {{/currentRequest}}
-
-        {{^currentRequest}}
-          {{#requests}}
-            {{> RorVsWild.Local.RequestSummary}}
-          {{/requests}}
-        {{/currentRequest}}
+        {{{renderBody}}}
       </div>
     </div>
     <div class="rorvswild-local-panel__footer">
@@ -62,71 +54,277 @@
     </div>
   </div>
 
-  {{#embedded}}
-    <div class="rorvswild-local-toggler" data-events="click->toggle">{{lastRuntime}}<small>ms</small></div>
-  {{/embedded}}
+  <% if @current_request %>
+    {{#embedded}}
+      <div class="rorvswild-local-toggler" data-events="click->toggle" data-uuid="<%= @current_request["uuid"] %>"><%= @current_request["runtime"] %><small>ms</small></div>
+    {{/embedded}}
+  <% end %>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestIndex">
+  {{^requests}}
+    <h2 class="rorvswild-local-panel--blank">No requests</h2>
+  {{/requests}}
+  {{#requests}}
+    <div data-events="click->goToRequestDetail" data-uuid="{{uuid}}" class="rorvswild-local-panel__row">
+      <div class="rorvswild-local-panel__name">
+        <span>{{name}}</span>
+        <div class="rorvswild-local-panel__path">{{path}}</div>
+      </div>
+      <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
+      <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+    </div>
+  {{/requests}}
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.JobIndex">
+  {{^jobs}}
+    <h2 class="rorvswild-local-panel--blank">No jobs</h2>
+  {{/jobs}}
+  {{#jobs}}
+    <div data-events="click->goToJobDetail" data-uuid="{{uuid}}"" class="rorvswild-local-panel__row">
+      <div class="rorvswild-local-panel__name">
+        <span>{{name}}</span>
+        <div class="rorvswild-local-panel__path">{{path}}</div>
+      </div>
+      <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
+      <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+    </div>
+  {{/jobs}}
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestSummary">
-  <div data-events="click->goToRequestDetails" data-request-id="{{id}}" class="rorvswild-local-panel__request">
-    <div class="rorvswild-local-panel__request__name">
+  <div data-events="click->goToRequestDetail" data-uuid="{{uuid}}" class="rorvswild-local-panel__row">
+    <div class="rorvswild-local-panel__name">
       <span>{{name}}</span>
-      <div class="rorvswild-local-panel__request__path">
+      <div class="rorvswild-local-panel__path">
         {{path}}
       </div>
     </div>
-    <span class="rorvswild-local-panel__request__runtime">{{runtime}}<small>ms</small></span>
-    <span class="rorvswild-local-panel__request__started-at">{{queuedAt}}</span>
+    <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
+    <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestDetails">
-  <div class="rorvswild-local-panel__request-details">
-    <div class="rorvswild-local-panel__request-details__request">
-      <span class="rorvswild-local-panel__request__name">
-        <h2 class="rorvswild-local-panel__request__name__title">{{name}}</h2>
-        <span class="rorvswild-local-panel__request__path">
-          {{path}}
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestDetail">
+  {{#currentRequest}}
+    <div class="rorvswild-local-panel__details">
+      <div class="rorvswild-local-panel__details__header">
+        <span class="rorvswild-local-panel__name">
+          <h2 class="rorvswild-local-panel__title">{{name}}</h2>
+          <span class="rorvswild-local-panel__path">
+            {{path}}
+          </span>
         </span>
-      </span>
-      <span class="rorvswild-local-panel__request__runtime">{{runtime}}<small>ms</small></span>
-      <span class="rorvswild-local-panel__request__started-at">{{queuedAt}}</span>
+        <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
+        <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+      </div>
+      {{> RorVsWild.Local.Sections}}
     </div>
-    <div class="rorvswild-local-panel__request-details__sections">
-      {{#sections}}
-        {{> RorVsWild.Local.Section}}
-      {{/sections}}
+  {{/currentRequest}}
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.JobDetail">
+  {{#currentJob}}
+    <div class="rorvswild-local-panel__details">
+      <div class="rorvswild-local-panel__details__header">
+        <span class="rorvswild-local-panel__name">
+          <h2 class="rorvswild-local-panel__title">{{name}}</h2>
+          <span class="rorvswild-local-panel__path">
+            {{path}}
+          </span>
+        </span>
+        <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
+        <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+      </div>
+      {{> RorVsWild.Local.Sections}}
     </div>
+  {{/currentJob}}
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections">
+  <div class="rorvswild-local-panel__details__sections">
+    {{> RorVsWild.Local.SectionImpactPerKind}}
+    {{#sections}}
+      {{> RorVsWild.Local.Section}}
+    {{/sections}}
   </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
+  <ul class="rorvswild-local-panel__breakdown">
+    {{#sectionsImpactPerKind}}
+      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%">
+        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}%</span>
+      </li>
+    {{/sectionsImpactPerKind}}
+  </ul>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__request-details__section" id="section-{{id}}">
-    <div class="rorvswild-local-panel__request-details__section__main">
-      <span class="rorvswild-local-panel__request-details__section__file">
-        {{#command}}
-          <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__request-details__section__kind"><span>{{kind}}</button>
-        {{/command}}
-        {{^command}}
-          <span class="rorvswild-local-panel__request-details__section__kind">{{kind}}</span>
-        {{/command}}
-        {{#url}}
-          <a href="{{url}}" class="rorvswild-local-panel__request-details__section__file__name" title="Open in your editor">{{file}}<span>:{{line}}</span></a>
-        {{/url}}
-        {{^url}}
-          <span class="rorvswild-local-panel__request-details__section__file__name">{{file}}<span>:{{line}}</span></span>
-        {{/url}}
+  <div class="rorvswild-local-panel__details__section" id="section-{{id}}">
+    <div class="rorvswild-local-panel__details__section__main">
+      <span class="rorvswild-local-panel__details__section__file">
+        <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
+        {{#locationUrl}}
+          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{location}}</a>
+        {{/locationUrl}}
+        {{^locationUrl}}
+          <span class="rorvswild-local-panel__file__name">{{file}}<span>:{{line}}</span></span>
+        {{/locationUrl}}
       </span>
-      <span class="rorvswild-local-panel__request-details__section__average" title="average runtime">{{averageRuntime}}<small>ms</small></span>
-      <span class="rorvswild-local-panel__request-details__section__calls" title="calls">x{{calls}}</span>
-      <span class="rorvswild-local-panel__request-details__section__impact" title="impact">{{impact}}<small>&#37;</small></span>
+      <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>
+      <span class="rorvswild-local-panel__details__section__impact" title="Impact">{{impact}}<small>&#37;</small></span>
     </div>
-    {{#command}}
-      <div class="rorvswild-local-panel__request-details__section__code">
+
+    <div class="rorvswild-local-panel__details__section__code">
+      <dl>
+        <div>
+          <dt title="self + children">Total runtime</dt>
+          <dd title="{{selfRuntime}} + {{childrenRuntime}}">{{totalRuntime}}<small>ms</small></dd>
+        </div>
+        <div>
+          <dt title="total - self">Children runtime</dt>
+          <dd title="{{totalRuntime}} - {{selfRuntime}}">{{childrenRuntime}}<small>ms</small></dd>
+        </div>
+        <div>
+          <dt title="total - children">Self runtime</dt>
+          <dd title="{{totalRuntime}} - {{childrenRuntime}}">{{selfRuntime}}<small>ms</small></dd>
+        </div>
+        <div>
+          <dt>Calls</dt>
+          <dd class="dd--calls">{{calls}}<small>x</small></dd>
+        </div>
+        <div>
+          <dt title="self runtime / calls">Average runtime</dt>
+          <dd title="{{selfRuntime}} / {{calls}}">{{averageRuntime}}<small>ms</small></dd>
+        </div>
+      </dl>
+      {{#command}}
         <pre><code class="{{language}}">{{command}}</code></pre>
-      </div>
-    {{/command}}
+      {{/command}}
+    </div>
   </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.ErrorIndex">
+  {{^errors}}
+    <h2 class="rorvswild-local-panel--blank">No errors</h2>
+  {{/errors}}
+  {{#errors}}
+    <div data-events="click->goToErrorDetail" data-uuid="{{uuid}}" class="rorvswild-local-panel__row rorvswild-local-panel__error">
+      <div class="rorvswild-local-panel__name">
+        <span>{{exception}}</span> {{shortMessage}}
+        <div class="rorvswild-local-panel__path">{{file}}:{{line}}</div>
+      </div>
+      <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+    </div>
+  {{/errors}}
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.ErrorDetail">
+  {{#currentError}}
+    <div class="rorvswild-local-panel__details rorvswild-local-panel__error">
+      <div class="rorvswild-local-panel__details__header">
+        <span class="rorvswild-local-panel__name">
+          <h2 class="rorvswild-local-panel__title">{{exception}}</h2>
+          <span class="rorvswild-local-panel__path">
+            {{#locationUrl}}
+              <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{file}}:{{line}}</a>
+            {{/locationUrl}}
+            {{^locationUrl}}
+              {{file}}:{{line}}
+            {{/locationUrl}}
+          </span>
+        </span>
+        <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+      </div>
+
+      {{#message}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Message</h3>
+          <code><pre class="language-none">{{message}}</pre></code>
+        </div>
+      {{/message}}
+
+      <div class="rorvswild-local-panel__card">
+        <h3 class="rorvswild-local-panel__card__title">Backtrace</h3>
+        {{#compactBacktraceLocations}}
+          <pre class="language-markup"><a href="{{url}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{path}}</a></pre>
+        {{/compactBacktraceLocations}}
+        <details>
+          <summary>
+            view full trace
+          </summary>
+          <code><pre class="language-none">{{formattedBacktrace}}</pre></code>
+        </details>
+      </div>
+
+      {{#request}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Request</h3>
+          <dl>
+            <div><dt>name</dt><dd>{{name}}</dd></div>
+            <div><dt>method</dt><dd>{{method}}</dd></div>
+            <div><dt>URL</dt><dd>{{url}}</dd></div>
+          </dl>
+        </div>
+      {{/request}}
+
+      {{#job}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Job</h3>
+          <dl>
+            <div><dt>name</dt><dd>{{name}}</dd></div>
+          </dl>
+        </div>
+      {{/job}}
+
+      {{#hasParameters}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Parameters</h3>
+          <pre class="language-json"><code>{{parametersInJson}}</code></pre>
+        </div>
+      {{/hasParameters}}
+
+      {{#hasRequestHeaders}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Headers</h3>
+          <dl>
+            {{#eachRequestHeader}}
+              <div>
+                <dt>{{name}}</dt><dd>{{value}}</dd>
+              </div>
+            {{/eachRequestHeader}}
+          </dl>
+        </div>
+      {{/hasRequestHeaders}}
+
+      {{#hasContext}}
+        <div class="rorvswild-local-panel__card">
+          <h3 class="rorvswild-local-panel__card__title">Context</h3>
+          <dl>
+            {{#eachContext}}
+              <div>
+                <dt>{{name}}</dt><dd>{{value}}</dd>
+              </div>
+            {{/eachContext}}
+          </dl>
+        </div>
+      {{/hasContext}}
+
+      <div class="rorvswild-local-panel__card">
+        <h3 class="rorvswild-local-panel__card__title">Environment</h3>
+        <dl>
+          {{#eachEnvironment}}
+            <div>
+              <dt>{{name}}</dt><dd>{{value}}</dd>
+            </div>
+          {{/eachEnvironment}}
+        </dl>
+      </div>
+    </div>
+  {{/currentError}}
 </script>
 
 <link rel="stylesheet" media="all" href="/rorvswild.css"/>

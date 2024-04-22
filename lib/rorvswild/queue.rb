@@ -27,6 +27,10 @@ module RorVsWild
       push_to(requests, data) if !@request_sampling_rate || rand <= @request_sampling_rate
     end
 
+    def push_error(data)
+      client.post_async("/errors", error: data)
+    end
+
     def push_to(array, data)
       mutex.synchronize do
         wakeup_thread if array.push(data).size >= FLUSH_TRESHOLD || !thread
