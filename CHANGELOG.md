@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.7.0 (2024-04-22)
 
 * Sample requests and jobs to lower our customers' bills
 
