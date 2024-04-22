@@ -14,6 +14,7 @@
     api_key: API_KEY
     job_sampling_rate: 0.5 # 50% of jobs are sent
     request_sampling_rate: 0.25 # 25% of requests are sent
+  ```
 
 * Add Server-Timing headers
 
