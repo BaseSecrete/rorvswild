@@ -59,7 +59,7 @@ module RorVsWild
     end
 
     def self.read_from_scalingo
-      @revision = ENV["SOURCE_VERSION"]
+      @revision = ENV["CONTAINER_VERSION"] || ENV["SOURCE_VERSION"]
     end
 
     def self.read_from_git
