@@ -1,6 +1,7 @@
 # Changelog of RorVsWild
 
 * Print ASCII server timing in logs
+* Improve widget UI
 
 ## 1.7.0 (2024-04-22)
 

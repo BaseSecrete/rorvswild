@@ -96,10 +96,14 @@
 /* Panel Header */
 .rorvswild-local-panel__header {
   background: rgb(26 29 36) !important;
-  padding: 12px !important;
   box-shadow: 0 1px 2px 0 rgba(14,18,26, .8) !important;
-  display: flex;
 }
+
+.rorvswild-local-panel__header .rorvswild-local-panel__width-limiter {
+  display: flex;
+  padding: 12px !important;
+}
+
 
 .rorvswild-local-panel__header__title {
   color: rgb(199 203 214) !important;
@@ -113,7 +117,7 @@
 .rorvswild-local-panel svg {
   height: 24px !important;
   width: 24px !important;
-  stroke-width: 2 !important;
+  stroke-width: 2.5 !important;
   fill: none !important;
   stroke-linecap: square !important;
   stroke: rgb(146 149 159) !important;
@@ -150,7 +154,7 @@
 .rorvswild-local-panel__content {
   flex: 1 !important;
   height: calc(100% - 48px) !important;
-  overflow-y: auto;
+  overflow-y: scroll;
   overscroll-behavior: contain;
 }
 
@@ -187,10 +191,20 @@
   font-weight: 700;
 }
 
+.rorvswild-local-panel__request__name > span {
+  text-decoration-color: rgb(146 149 159);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 1px;
+}
+
 .rorvswild-local-panel__request__path {
   color: rgb(146 149 159) !important;
   font-weight: 400;
   display: block !important;
+  text-decoration: none !important;
+  text-decoration-thickness: 0 !important;
+  text-decoration-color: transparent !important;
 }
 
 .rorvswild-local-panel__request__started-at {
@@ -241,6 +255,7 @@ h2.rorvswild-local-panel__request__name__title {
 
 .rorvswild-local-panel__request-details__section__main {
   display: flex !important;
+  gap: 8px;
   width: 100% !important;
   flex-wrap: wrap !important;
 }
@@ -251,16 +266,18 @@ h2.rorvswild-local-panel__request__name__title {
   overflow-wrap: break-word !important;
   min-width: 0 !important;
   color: rgb(199 203 214) !important;
+  display: flex;
+  gap: 8px;
 }
 
 a.rorvswild-local-panel__request-details__section__file__name {
   text-decoration-color: rgb(146 149 159);
   font-weight: 700;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 1px;
 }
 
-a.rorvswild-local-panel__request-details__section__file__name:hover { 
-  text-decoration-color: rgb(199 203 214);
-}
+a.rorvswild-local-panel__request-details__section__file__name:hover { text-decoration-color: rgb(199 203 214); }
 
 a.rorvswild-local-panel__request-details__section__file__name::after {
   content: '↗';
@@ -282,45 +299,96 @@ a.rorvswild-local-panel__request-details__section__file__name:hover::after { opa
   color: rgb(182 202 255) !important;
   font-weight: 700 !important;
   width: 48px !important;
-  margin:0 12px 0 0 !important;
+  text-align: right;
+  margin-left: auto;
 }
 
 .rorvswild-local-panel__request-details__section__calls {
   color: rgb(199 203 214) !important;
   width: 48px !important;
-  margin: 0 12px 0 0 !important;
+  text-align: right;
 }
 
 .rorvswild-local-panel__request-details__section__impact {
   color: rgb(199 203 214) !important;
   width: 48px !important;
   font-weight: 700 !important;
-  margin: 0 12px 0 0 !important;
+  text-align: right;
 }
 
 .rorvswild-local-panel__request-details__section__code {
-  display: flex !important;
   color: rgb(146 149 159) !important;
-  margin-top: 8px !important;
+  background: rgb(14 15 20);
+  padding: 12px;
+  margin: 12px -12px -12px;
+  overflow: hidden !important;
+  display: none;
 }
 
 .rorvswild-local-panel__request-details__section__kind {
-  background: rgb(38 41 49) !important;
+  background: rgb(38 41 49);
   font-size: 10px !important;
   text-transform: uppercase !important;
   text-align: center !important;
-  letter-spacing: 2px !important;
-  width: 72px !important;
+  letter-spacing: 1px !important;
+  width: 64px !important;
   height: 24px !important;
+  min-height: 24px;
+  padding: 0;
   display: inline-block !important;
+  flex-shrink: 0;
 }
 
-.rorvswild-local-panel__request-details__section__command {
-  color: rgb(146 149 159) !important;
-  flex: 1 !important;
-  margin-left: 12px !important;
-  opacity: 1;
-  overflow: hidden !important;
+button.rorvswild-local-panel__request-details__section__kind {
+  box-shadow: 0 0 0 1px rgb(72 75 80) inset;
+  border: none;
+  font-weight: 700;
+  position: relative;
+}
+
+button.rorvswild-local-panel__request-details__section__kind span {
+  display: inline-block;
+  max-width: calc(5ch + 5px);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+button.rorvswild-local-panel__request-details__section__kind:hover { box-shadow: 0 0 0 1px rgb(147 149 156) inset; }
+
+button.rorvswild-local-panel__request-details__section__kind::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-bottom: 1px solid rgb(146 149 159);
+  border-right: 1px solid rgb(146 149 159);
+  transform: rotate(45deg);
+  right: 6px;
+  top:calc(50% - 3px);
+}
+
+button.rorvswild-local-panel__request-details__section__kind:hover::after { border-color: inherit; }
+
+span.rorvswild-local-panel__request-details__section__kind { 
+  background: rgb(14 15 20) !important;
+  color: rgb(146 149 159)!important;
+}
+
+.rorvswild-local-panel__request-details__section.is-open .rorvswild-local-panel__request-details__section__code {
+  display: flex;
+  border-bottom: 1px solid rgb(26 29 36) !important
+}
+
+.rorvswild-local-panel__request-details__section.is-open .rorvswild-local-panel__request-details__section__kind {
+  color: rgb(182 202 255) !important;
+  background-color: rgb(14 15 20) !important;
+}
+
+.rorvswild-local-panel__request-details__section.is-open .rorvswild-local-panel__request-details__section__kind::after {
+  transform: rotate(225deg);
+  transform-origin: 2.5px 3px;
 }
 
 /* Panel Footer */
@@ -346,10 +414,8 @@ a.rorvswild-local-panel__footer__link {
 
   .rorvswild-local-panel__request__runtime { margin-left: 12px !important; }
 
-  .rorvswild-local-panel__request-details__section__average,
-  .rorvswild-local-panel__request-details__section__calls,
-  .rorvswild-local-panel__request-details__section__impact {
-    text-align: right !important;
-    margin: 0 0 0 12px !important;
+  .rorvswild-local-panel__width-limiter {
+    max-width: 1520px;
+    margin: 0 auto;
   }
 }
