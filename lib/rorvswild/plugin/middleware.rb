@@ -43,7 +43,7 @@ module RorVsWild
       end
 
       def format_server_timing_ascii(sections, total_width = 80)
-        max_time = sections.map(&:self_runtime).max
+        max_time = sections[0,10].map(&:self_runtime).max
         chart_width = (total_width * 0.25).to_i
         rows = sections.map { |section|
           [
