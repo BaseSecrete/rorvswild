@@ -68,9 +68,9 @@ module RorVsWild
         sections = sections.sort_by(&:self_runtime).reverse
         headers["Server-Timing"] = format_server_timing_header(sections)
         if data[:name] && RorVsWild.logger.level <= Logger::Severity::DEBUG
-          RorVsWild.logger.debug(["| #{data[:name]} |".center(80, "―"),
+          RorVsWild.logger.debug(["┤ #{data[:name]} ├".center(80, "─"),
             format_server_timing_ascii(sections),
-            "―" * 80, nil].join("\n")
+            "─" * 80, nil].join("\n")
           )
         end
       end
