@@ -46,13 +46,14 @@ module RorVsWild
     end
 
     def merge(section)
-      self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
-      if section
-        if appendable_command
+      if command
+        if appendable_command || section.appendable_command
           self.command = self.command.dup if self.command.frozen?
-          self.command << "\n" + section.command
+          self.command << "\n" + section.command if !command.include?(section.command)
+        else
+          self.calls += section.calls
         end
       else
         self.command = section.command

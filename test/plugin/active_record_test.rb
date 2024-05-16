@@ -38,6 +38,21 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert_equal(2, sql2.calls)
   end
 
+  def test_transaction_begin_insert_into_and_commit
+    agent.locator.stubs(current_path: File.dirname(__FILE__))
+    agent.measure_block("test") do
+      3.times do
+        instrument_sql("BEGIN")
+        instrument_sql("INSERT INTO users")
+        instrument_sql("COMMIT")
+      end
+    end
+    p sections = agent.current_data[:sections]
+    assert_equal(1, sections.size)
+    assert_equal(3, sections[0].calls)
+    assert_equal("BEGIN\nINSERT INTO users\nCOMMIT", sections[0].command)
+  end
+
   def test_normalize_sql_query
     plugin = RorVsWild::Plugin::ActiveRecord.new
     assert_equal("", plugin.normalize_sql_query(nil))
@@ -53,6 +68,12 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert_equal("SELECT * FROM table WHERE col1 IN (?) AND col2 in (?)", plugin.normalize_sql_query("SELECT * FROM table WHERE col1 IN ('foo', 'bar') AND col2 in (1,2)"))
     assert_equal("SELECT * FROM table", plugin.normalize_sql_query("SELECT * FROM table -- Comment"))
     assert_equal("SELECT ? FROM table col = ?", plugin.normalize_sql_query("SELECT 'Test'/* 'Comment' 1 */ FROM table /* Comment 2 */col = /* Comment 3 */1"))
+  end
+
+  private
+
+  def instrument_sql(query)
+    ActiveSupport::Notifications.instrument("sql.active_record", {sql: query}) { }
   end
 end
 
