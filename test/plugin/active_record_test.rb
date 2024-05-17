@@ -32,7 +32,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert(sql1.self_runtime >= 10)
 
     assert_equal("sql", sql2.kind)
-    assert_equal("SELECT * FROM users", sql2.command)
+    assert_equal("SELECT * FROM users 2x", sql2.command)
     assert_equal(line2, sql2.line.to_i)
     assert(sql2.self_runtime >= 40)
     assert_equal(2, sql2.calls)
@@ -47,10 +47,10 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
         instrument_sql("COMMIT")
       end
     end
-    p sections = agent.current_data[:sections]
+    sections = agent.current_data[:sections]
     assert_equal(1, sections.size)
-    assert_equal(3, sections[0].calls)
-    assert_equal("BEGIN\nINSERT INTO users\nCOMMIT", sections[0].command)
+    assert_equal(9, sections[0].calls)
+    assert_equal("BEGIN 3x\nINSERT INTO users 3x\nCOMMIT 3x", sections[0].command)
   end
 
   def test_normalize_sql_query

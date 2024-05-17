@@ -15,8 +15,7 @@ module RorVsWild
       module V4
         def process(commands, &block)
           string = commands.map(&:first).join("\n")
-          appendable = APPENDABLE_COMMANDS.include?(commands[0][0])
-          RorVsWild.agent.measure_section(string, appendable_command: appendable, kind: "redis") do
+          RorVsWild.agent.measure_section(string, kind: "redis") do
             super(commands, &block)
           end
         end
@@ -24,8 +23,7 @@ module RorVsWild
 
       module V5
         def send_command(command, &block)
-          appendable = APPENDABLE_COMMANDS.include?(command)
-          RorVsWild.agent.measure_section(command[0], appendable_command: appendable, kind: "redis") do
+          RorVsWild.agent.measure_section(command[0], kind: "redis") do
             super(command, &block)
           end
         end
@@ -38,8 +36,6 @@ module RorVsWild
           RorVsWild.agent.measure_section("multi", kind: "redis") { super }
         end
       end
-
-      APPENDABLE_COMMANDS = [:auth, :select]
     end
   end
 end

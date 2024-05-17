@@ -21,12 +21,7 @@ class RorVsWild::SectionTest < Minitest::Test
     assert_equal(3, section1.calls)
     assert_equal(3, section1.total_runtime)
     assert_equal(3, section1.children_runtime)
-    assert_equal("command1", section1.command)
-  end
-
-  def test_merge_with_appendable_command
-    section3.merge(section1)
-    assert_equal("command3\ncommand1", section3.command)
+    assert_equal("command1\ncommand2", section1.command)
   end
 
   def test_section_command_setter
@@ -75,7 +70,6 @@ class RorVsWild::SectionTest < Minitest::Test
       s.total_runtime = 3
       s.children_runtime = 3
       s.command = "command3"
-      s.appendable_command = true
       @section3 = s
     end
     @section3

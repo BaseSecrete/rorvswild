@@ -15,12 +15,10 @@ module RorVsWild
       end
 
       IGNORED_QUERIES = %w[EXPLAIN SCHEMA].freeze
-      APPENDABLE_QUERIES = ["BEGIN", "COMMIT"].freeze
 
       def start(name, id, payload)
         return if IGNORED_QUERIES.include?(payload[:name])
         RorVsWild::Section.start do |section|
-          section.appendable_command = APPENDABLE_QUERIES.include?(payload[:sql])
           section.command = normalize_sql_query(payload[:sql])
           section.kind = "sql"
         end

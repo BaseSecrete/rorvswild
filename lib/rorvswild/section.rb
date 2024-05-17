@@ -2,8 +2,8 @@
 
 module RorVsWild
   class Section
-    attr_reader :started_at
-    attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime, :appendable_command
+    attr_reader :started_at, :commands
+    attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime
 
     def self.start(&block)
       section = Section.new
@@ -38,7 +38,7 @@ module RorVsWild
       @file = RorVsWild.agent.locator.relative_path(location.path)
       @line = location.lineno
       @command = nil
-      @appendable_command = false
+      @commands = Hash.new(0)
     end
 
     def sibling?(section)
@@ -46,19 +46,10 @@ module RorVsWild
     end
 
     def merge(section)
+      self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
-      if command
-        if appendable_command || section.appendable_command
-          self.command = self.command.dup if self.command.frozen?
-          self.command << "\n" + section.command if !command.include?(section.command)
-        else
-          self.calls += section.calls
-        end
-      else
-        self.command = section.command
-      end
-      self.appendable_command = appendable_command && section.appendable_command
+      section.commands.each { |cmd, calls| add_command(cmd, calls) }
     end
 
     def self_runtime
@@ -68,7 +59,8 @@ module RorVsWild
     COMMAND_MAX_SIZE = 5_000
 
     def command=(value)
-      @command = value && value.size > COMMAND_MAX_SIZE ? value[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : value
+      #@command = value && value.size > COMMAND_MAX_SIZE ? value[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : value
+      @commands[value] += 1
     end
 
     def to_h
@@ -77,6 +69,16 @@ module RorVsWild
 
     def to_json(options = {})
       to_h.to_json(options)
+    end
+
+    def add_command(command, calls = 1)
+      @commands[command] += calls
+    end
+
+    def command
+      return if @commands.empty?
+      string = @commands.map { |cmd, calls| calls == 1 ? cmd : "#{cmd} #{calls}x" }.join("\n")
+      string.size > COMMAND_MAX_SIZE ? string[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : string
     end
   end
 end

@@ -61,11 +61,10 @@ module RorVsWild
       current_data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
-    def measure_section(name, kind: "code", appendable_command: false, &block)
+    def measure_section(name, kind: "code", &block)
       return block.call unless current_data
       begin
         RorVsWild::Section.start do |section|
-          section.appendable_command = appendable_command
           section.command = name
           section.kind = kind
         end
