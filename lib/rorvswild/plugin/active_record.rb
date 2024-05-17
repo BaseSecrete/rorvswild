@@ -19,7 +19,7 @@ module RorVsWild
       def start(name, id, payload)
         return if IGNORED_QUERIES.include?(payload[:name])
         RorVsWild::Section.start do |section|
-          section.command = normalize_sql_query(payload[:sql])
+          section.commands << normalize_sql_query(payload[:sql])
           section.kind = "sql"
         end
       end

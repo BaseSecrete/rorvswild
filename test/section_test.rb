@@ -26,7 +26,7 @@ class RorVsWild::SectionTest < Minitest::Test
 
   def test_section_command_setter
     section = RorVsWild::Section.new
-    section.command = " " * 6_000
+    section.add_command(" " * 6_000)
     assert_equal(" " * 5_000 + " [TRUNCATED]", section.command)
   end
 
@@ -39,7 +39,7 @@ class RorVsWild::SectionTest < Minitest::Test
       s.calls = 1
       s.total_runtime = 1
       s.children_runtime = 1
-      s.command = "command1"
+      s.add_command("command1")
       @section1 = s
     end
     @section1
@@ -54,7 +54,7 @@ class RorVsWild::SectionTest < Minitest::Test
       s.calls = 2
       s.total_runtime = 2
       s.children_runtime = 2
-      s.command = "command2"
+      s.add_command("command2")
       @section2 = s
     end
     @section2

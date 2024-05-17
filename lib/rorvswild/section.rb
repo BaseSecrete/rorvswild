@@ -3,7 +3,7 @@
 module RorVsWild
   class Section
     attr_reader :started_at, :commands
-    attr_accessor :kind, :file, :line, :calls, :command, :children_runtime, :total_runtime
+    attr_accessor :kind, :file, :line, :calls, :children_runtime, :total_runtime
 
     def self.start(&block)
       section = Section.new
@@ -37,8 +37,7 @@ module RorVsWild
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
       @line = location.lineno
-      @command = nil
-      @commands = Hash.new(0)
+      @commands = Set.new
     end
 
     def sibling?(section)
@@ -49,21 +48,14 @@ module RorVsWild
       self.calls += section.calls
       self.total_runtime += section.total_runtime
       self.children_runtime += section.children_runtime
-      section.commands.each { |cmd, calls| add_command(cmd, calls) }
+      commands.merge(section.commands)
     end
 
     def self_runtime
       total_runtime - children_runtime
     end
 
-    COMMAND_MAX_SIZE = 5_000
-
-    def command=(value)
-      #@command = value && value.size > COMMAND_MAX_SIZE ? value[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : value
-      @commands[value] += 1
-    end
-
-    def to_h
+    def as_json(options = nil)
       {calls: calls, total_runtime: total_runtime, children_runtime: children_runtime, kind: kind, started_at: started_at, file: file, line: line, command: command}
     end
 
@@ -71,13 +63,14 @@ module RorVsWild
       to_h.to_json(options)
     end
 
-    def add_command(command, calls = 1)
-      @commands[command] += calls
+    def add_command(command)
+      commands << command
     end
 
+    COMMAND_MAX_SIZE = 5_000
+
     def command
-      return if @commands.empty?
-      string = @commands.map { |cmd, calls| calls == 1 ? cmd : "#{cmd} #{calls}x" }.join("\n")
+      string = @commands.join("\n")
       string.size > COMMAND_MAX_SIZE ? string[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : string
     end
   end

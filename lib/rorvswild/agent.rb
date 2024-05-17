@@ -65,7 +65,7 @@ module RorVsWild
       return block.call unless current_data
       begin
         RorVsWild::Section.start do |section|
-          section.command = name
+          section.commands << name
           section.kind = kind
         end
         block.call

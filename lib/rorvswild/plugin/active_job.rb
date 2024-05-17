@@ -12,7 +12,7 @@ module RorVsWild
         RorVsWild.agent.measure_job(job.class.name, parameters: job.arguments) do
           begin
             section = RorVsWild::Section.start
-            section.command = "#{job.class}#perform"
+            section.commands << "#{job.class}#perform"
             section.file, section.line = job.method(:perform).source_location
             section.file = RorVsWild.agent.locator.relative_path(section.file)
             block.call

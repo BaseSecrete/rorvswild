@@ -26,7 +26,7 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
 
     assert_equal(1, agent.current_data[:sections].size)
     assert(agent.current_data[:sections][0].total_runtime >= 10)
-    refute(agent.current_data[:sections][0].command)
+    assert_equal("", agent.current_data[:sections][0].command)
     assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:name])
   end
 

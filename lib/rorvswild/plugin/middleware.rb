@@ -18,7 +18,7 @@ module RorVsWild
         RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
-        section.command = "Rails::Engine#call"
+        section.commands << "Rails::Engine#call"
         code, headers, body = @app.call(env)
         [code, headers, body]
       ensure

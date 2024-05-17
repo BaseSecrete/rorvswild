@@ -14,7 +14,7 @@ module RorVsWild
 
       def finish(name, id, payload)
         RorVsWild::Section.stop do |section|
-          section.command = payload[:mailer]
+          section.commands << payload[:mailer]
           section.kind = "mail".freeze
         end
       end
