@@ -94,8 +94,9 @@ module RorVsWild
     end
 
     def stop_request
-      return unless current_data
-      current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
+      return unless data = current_data
+      data[:sections] << Section.stop_gc_timing(data[:gc_section])
+      data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
       queue_request
     end
 
@@ -170,10 +171,11 @@ module RorVsWild
 
     def initialize_data
       Thread.current[:rorvswild_data] = {
-        sections: [],
-        section_stack: [],
-        environment: Host.to_h,
         started_at: RorVsWild.clock_milliseconds,
+        gc_section: Section.start_gc_timing,
+        environment: Host.to_h,
+        section_stack: [],
+        sections: [],
       }
     end
 

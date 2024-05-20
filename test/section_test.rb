@@ -30,6 +30,18 @@ class RorVsWild::SectionTest < Minitest::Test
     assert_equal(" " * 5_000 + " [TRUNCATED]", section.command)
   end
 
+  def test_gc_time_ms
+    GC::Profiler.enable
+    agent.measure_job("job") do
+      agent.measure_section("section") { GC.start; GC.start }
+    end
+    agent.stop_request
+    section, gc = agent.current_data[:sections]
+    assert(section.self_runtime < section.gc_time_ms)
+    assert_equal(gc.total_runtime, section.gc_time_ms)
+    assert_equal(2, gc.calls)
+  end
+
   def section1
     unless @section1
       s = RorVsWild::Section.new
