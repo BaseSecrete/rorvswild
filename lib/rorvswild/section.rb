@@ -2,7 +2,7 @@
 
 module RorVsWild
   class Section
-    attr_reader :started_at, :commands, :gc_offset_ms
+    attr_reader :started_at, :commands, :gc_started_at
     attr_accessor :kind, :file, :line, :calls, :children_runtime, :total_runtime, :gc_time_ms
 
     def self.start(&block)
@@ -15,8 +15,7 @@ module RorVsWild
     def self.stop(&block)
       return unless stack && section = stack.pop
       block.call(section) if block_given?
-      section.gc_time_ms = gc_total_ms - section.gc_offset_ms
-      section.total_runtime = (RorVsWild.clock_milliseconds - section.started_at - section.gc_time_ms).round
+      section.stop
       current.children_runtime += section.total_runtime if current
       RorVsWild.agent.add_section(section)
     end
@@ -34,37 +33,47 @@ module RorVsWild
       section.calls = GC.count
       section.file, section.line = "ruby/gc.c", 42
       section.add_command("GC.start")
+      section.kind = "gc"
       section
     end
 
     def self.stop_gc_timing(section)
-      section.total_runtime = gc_total_ms - section.gc_offset_ms
+      section.total_runtime = gc_total_ms - section.gc_started_at
       section.calls = GC.count - section.calls
       section
     end
 
     if GC.respond_to?(:total_time)
       def self.gc_total_ms
-        GC.total_time / 1_000_000
+        GC.total_time / 1_000_000.0 # nanosecond -> millisecond
       end
     else
       def self.gc_total_ms
-        (GC::Profiler.total_time * 1000).round
+        GC::Profiler.total_time * 1000 # second -> millisecond
       end
     end
 
     def initialize
       @started_at = RorVsWild.clock_milliseconds
-      @gc_offset_ms = Section.gc_total_ms
+      @ended_at = nil
+      @gc_started_at = Section.gc_total_ms
+      @gc_ended_at = nil
+      @gc_time_ms = 0
       @calls = 1
       @total_runtime = 0
       @children_runtime = 0
-      @gc_time_ms = 0
       @kind = "code"
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
       @line = location.lineno
       @commands = Set.new
+    end
+
+    def stop
+      @gc_ended_at = self.class.gc_total_ms
+      @gc_time_ms = @gc_ended_at - @gc_started_at
+      @ended_at = RorVsWild.clock_milliseconds
+      @total_runtime = @ended_at - @started_at - gc_time_ms
     end
 
     def sibling?(section)

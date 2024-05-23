@@ -35,9 +35,9 @@ module RorVsWild
       def format_server_timing_header(sections)
         sections.map do |section|
           if section.kind == "view"
-            "#{section.kind};dur=#{section.self_runtime};desc=\"#{section.file}\""
+            "#{section.kind};dur=#{section.self_runtime.round};desc=\"#{section.file}\""
           else
-            "#{section.kind};dur=#{section.self_runtime};desc=\"#{section.file}:#{section.line}\""
+            "#{section.kind};dur=#{section.self_runtime.round};desc=\"#{section.file}:#{section.line}\""
           end
         end.join(", ")
       end
@@ -49,7 +49,7 @@ module RorVsWild
           [
             section.kind == "view" ? section.file : "#{section.file}:#{section.line}",
             "█" * (section.self_runtime * (chart_width-1) / max_time),
-            "#{section.self_runtime}ms"
+            "%.1fms" % section.self_runtime,
           ]
         }
         time_width = rows.map { |cols| cols[2].size }.max + 1

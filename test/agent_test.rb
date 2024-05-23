@@ -32,7 +32,7 @@ class RorVsWild::AgentTest < Minitest::Test
         end
       end
     end
-    assert_equal(2, agent.current_data[:sections].size)
+    assert_equal(2, current_sections_without_gc.size)
   end
 
   def test_measure_job_when_ignored
@@ -45,8 +45,8 @@ class RorVsWild::AgentTest < Minitest::Test
     agent.measure_job("parent") do
       agent.measure_job("child") { }
     end
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("child", agent.current_data[:sections][0].command)
+    assert_equal(1, (sections = current_sections_without_gc).size)
+    assert_equal("child", sections[0].command)
   end
 
   def test_ignored_request?

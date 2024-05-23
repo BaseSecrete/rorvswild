@@ -67,7 +67,7 @@ module RorVsWild
   end
 
   def self.clock_milliseconds
-    Process.clock_gettime(Process::CLOCK_MONOTONIC, :millisecond)
+    Process.clock_gettime(Process::CLOCK_MONOTONIC, :float_millisecond)
   end
 
   def self.check

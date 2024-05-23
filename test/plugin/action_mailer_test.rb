@@ -13,14 +13,13 @@ class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
       end
     end
 
-    section = agent.current_data[:sections][0]
-
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("Mailer", section.command)
-    assert_equal(line, section.line.to_i)
-    assert_equal("mail", section.kind)
-    assert(section.self_runtime >= 10)
-    assert_equal(1, section.calls)
+    sections = current_sections_without_gc
+    assert_equal(1, sections.size)
+    assert_equal("Mailer", sections[0].command)
+    assert_equal(line, sections[0].line.to_i)
+    assert_equal("mail", sections[0].kind)
+    assert(sections[0].self_runtime >= 10)
+    assert_equal(1, sections[0].calls)
   end
 end
 

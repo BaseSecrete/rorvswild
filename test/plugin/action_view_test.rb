@@ -18,7 +18,7 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
       end
     end
 
-    sections = agent.current_data[:sections]
+    sections = current_sections_without_gc
     sub_partial, partial, template = sections[0], sections[1], sections[2]
     assert_equal(3, sections.size)
 

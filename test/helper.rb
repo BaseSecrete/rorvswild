@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 path = File.expand_path("#{File.dirname(__FILE__)}/../lib")
 $LOAD_PATH.unshift(path)
 
@@ -24,5 +26,9 @@ module RorVsWild::AgentHelper
       # A stub has no effect, since everythings are unstub before at_exit.
     end
     agent
+  end
+
+  def current_sections_without_gc
+    agent.current_data[:sections].select { |s| s.kind != "gc" }
   end
 end

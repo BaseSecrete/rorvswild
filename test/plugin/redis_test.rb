@@ -7,9 +7,10 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
 
   def test_callback
     agent.measure_code("::Redis.new.get('foo')")
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("redis", agent.current_data[:sections][0].kind)
-    assert_equal("get", agent.current_data[:sections][0].command.to_s)
+    sections = current_sections_without_gc
+    assert_equal(1, sections.size)
+    assert_equal("redis",sections[0].kind)
+    assert_equal("get",sections[0].command.to_s)
   end
 
   def test_callback_when_pipelined
@@ -19,12 +20,13 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
         pipeline.set("foo", "bar")
       end
     end
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("redis", agent.current_data[:sections][0].kind)
+    sections = current_sections_without_gc
+    assert_equal(1, sections.size)
+    assert_equal("redis", sections[0].kind)
     if Redis::VERSION >= "5"
-      assert_equal("pipeline", agent.current_data[:sections][0].command)
+      assert_equal("pipeline", sections[0].command)
     else
-      assert_equal("get\nset", agent.current_data[:sections][0].command)
+      assert_equal("get\nset", sections[0].command)
     end
   end
 
@@ -35,12 +37,13 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
         transaction.set("foo", "bar")
       end
     end
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("redis", agent.current_data[:sections][0].kind)
+    sections = current_sections_without_gc
+    assert_equal(1, sections.size)
+    assert_equal("redis", sections[0].kind)
     if Redis::VERSION >= "5"
-      assert_equal("multi", agent.current_data[:sections][0].command)
+      assert_equal("multi", sections[0].command)
     else
-      assert_equal("multi\nget\nset\nexec", agent.current_data[:sections][0].command)
+      assert_equal("multi\nget\nset\nexec", sections[0].command)
     end
   end
 end

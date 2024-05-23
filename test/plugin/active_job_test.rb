@@ -28,16 +28,18 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
 
   def test_callback
     SampleJob.perform_now
+    sections = current_sections_without_gc
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", agent.current_data[:sections][0].command)
+    assert_equal(1, sections.size)
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", sections[0].command)
   end
 
   def test_callback_on_exception
     assert_raises { SampleJob.perform_now("Error") }
+    sections = current_sections_without_gc
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", agent.current_data[:sections][0].command)
+    assert_equal(1, sections.size)
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", sections[0].command)
     assert_equal(["Error"], agent.current_data[:error][:parameters])
   end
 

@@ -84,6 +84,8 @@ module RorVsWild
         push_exception(ex, parameters: parameters, job: {name: name})
         raise
       ensure
+        gc = Section.stop_gc_timing(current_data[:gc_section])
+        current_data[:sections] << gc if gc.total_runtime > 0
         current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
         queue_job
       end
@@ -95,7 +97,8 @@ module RorVsWild
 
     def stop_request
       return unless data = current_data
-      data[:sections] << Section.stop_gc_timing(data[:gc_section])
+      gc = Section.stop_gc_timing(data[:gc_section])
+      data[:sections] << gc if gc.total_runtime > 0
       data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
       queue_request
     end

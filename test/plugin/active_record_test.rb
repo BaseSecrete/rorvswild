@@ -21,7 +21,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
       end
     end
 
-    sections = agent.current_data[:sections]
+    sections = current_sections_without_gc
     sql1, sql2 = sections[0], sections[1]
     assert_equal(2, sections.size)
 
@@ -47,7 +47,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
         instrument_sql("COMMIT")
       end
     end
-    sections = agent.current_data[:sections]
+    sections = current_sections_without_gc
     assert_equal(1, sections.size)
     assert_equal(9, sections[0].calls)
     assert_equal("BEGIN\nINSERT INTO users\nCOMMIT", sections[0].command)
