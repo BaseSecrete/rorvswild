@@ -1,7 +1,24 @@
 # Changelog of RorVsWild
 
-* Limit server timing header to 10 entries
+* Time garbage collector
+
+  A section with the kind `gc` measures how long the GC ran during a request or a job.
+  All GC executions are added together in a single section.
+  For each section, the time spent in the GC is substracted.
+
+  It might not be listed for all requests and jobs, since the GC is triggered when Ruby is running out of memory.
+  You can force that in development by calling `GC.start`.
+
+  From Ruby 3.1 it is enabled by default via and the agent uses `GC.total_time`.
+  Before Ruby 3.1 the agent uses `GC::Profiler.total_time` and it must be enabled with `GC::Profiler.enable`.
+
 * Store requests, jobs and errors into the local profiler
+
+  Even after restarting the server, past requests, jobs and error are still viewable from the local profiler.
+  Upto the last 100 entries are stored per type.
+  They are stored into JSON files located in tmp directory.
+
+* Limit server timing header to 10 entries
 * Print ASCII server timing in logs
 * Improve widget UI
 
