@@ -35,21 +35,21 @@ module RorVsWild
       def format_server_timing_header(sections)
         sections.map do |section|
           if section.kind == "view"
-            "#{section.kind};dur=#{section.self_runtime.round};desc=\"#{section.file}\""
+            "#{section.kind};dur=#{section.self_ms.round};desc=\"#{section.file}\""
           else
-            "#{section.kind};dur=#{section.self_runtime.round};desc=\"#{section.file}:#{section.line}\""
+            "#{section.kind};dur=#{section.self_ms.round};desc=\"#{section.file}:#{section.line}\""
           end
         end.join(", ")
       end
 
       def format_server_timing_ascii(sections, total_width = 80)
-        max_time = sections[0,10].map(&:self_runtime).max
+        max_time = sections[0,10].map(&:self_ms).max
         chart_width = (total_width * 0.25).to_i
         rows = sections.map { |section|
           [
             section.kind == "view" ? section.file : "#{section.file}:#{section.line}",
-            "█" * (section.self_runtime * (chart_width-1) / max_time),
-            "%.1fms" % section.self_runtime,
+            "█" * (section.self_ms * (chart_width-1) / max_time),
+            "%.1fms" % section.self_ms,
           ]
         }
         time_width = rows.map { |cols| cols[2].size }.max + 1
@@ -65,7 +65,7 @@ module RorVsWild
 
       def inject_server_timing(data, headers)
         return if !data || !data[:send_server_timing] || !(sections = data[:sections])
-        sections = sections.sort_by(&:self_runtime).reverse
+        sections = sections.sort_by(&:self_ms).reverse
         headers["Server-Timing"] = format_server_timing_header(sections)
         if data[:name] && RorVsWild.logger.level <= Logger::Severity::DEBUG
           RorVsWild.logger.debug(["┤ #{data[:name]} ├".center(80, "─"),

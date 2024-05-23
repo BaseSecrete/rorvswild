@@ -19,8 +19,8 @@ class RorVsWild::SectionTest < Minitest::Test
   def test_merge
     section1.merge(section2)
     assert_equal(3, section1.calls)
-    assert_equal(3, section1.total_runtime)
-    assert_equal(3, section1.children_runtime)
+    assert_equal(3, section1.total_ms)
+    assert_equal(3, section1.children_ms)
     assert_equal("command1\ncommand2", section1.command)
   end
 
@@ -36,8 +36,8 @@ class RorVsWild::SectionTest < Minitest::Test
     end
     gc = agent.current_data[:sections].find { |s| s.kind == "gc" }
     section = agent.current_data[:sections].find { |s| s.kind != "gc" }
-    assert(section.self_runtime < section.gc_time_ms, section.inspect)
-    assert_equal(gc.total_runtime, section.gc_time_ms)
+    assert(section.self_ms < section.gc_time_ms, section.inspect)
+    assert_equal(gc.total_ms, section.gc_time_ms)
     assert_equal("gc", gc.kind)
     assert_equal(2, gc.calls)
   end
@@ -61,8 +61,8 @@ class RorVsWild::SectionTest < Minitest::Test
       s.file = "file"
       s.line = 1
       s.calls = 1
-      s.total_runtime = 1
-      s.children_runtime = 1
+      s.total_ms = 1
+      s.children_ms = 1
       s.add_command("command1")
       @section1 = s
     end
@@ -76,8 +76,8 @@ class RorVsWild::SectionTest < Minitest::Test
       s.file = "file"
       s.line = 2
       s.calls = 2
-      s.total_runtime = 2
-      s.children_runtime = 2
+      s.total_ms = 2
+      s.children_ms = 2
       s.add_command("command2")
       @section2 = s
     end
@@ -91,8 +91,8 @@ class RorVsWild::SectionTest < Minitest::Test
       s.file = "file"
       s.line = 3
       s.calls = 0
-      s.total_runtime = 3
-      s.children_runtime = 3
+      s.total_ms = 3
+      s.children_ms = 3
       s.command = "command3"
       @section3 = s
     end

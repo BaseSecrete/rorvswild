@@ -2,8 +2,8 @@
 
 module RorVsWild
   class Section
-    attr_reader :started_at, :commands, :gc_started_at
-    attr_accessor :kind, :file, :line, :calls, :children_runtime, :total_runtime, :gc_time_ms
+    attr_reader :start_ms, :commands, :gc_start_ms
+    attr_accessor :kind, :file, :line, :calls, :children_ms, :total_ms, :gc_time_ms
 
     def self.start(&block)
       section = Section.new
@@ -16,7 +16,7 @@ module RorVsWild
       return unless stack && section = stack.pop
       block.call(section) if block_given?
       section.stop
-      current.children_runtime += section.total_runtime if current
+      current.children_ms += section.total_ms if current
       RorVsWild.agent.add_section(section)
     end
 
@@ -38,7 +38,7 @@ module RorVsWild
     end
 
     def self.stop_gc_timing(section)
-      section.total_runtime = gc_total_ms - section.gc_started_at
+      section.total_ms = gc_total_ms - section.gc_start_ms
       section.calls = GC.count - section.calls
       section
     end
@@ -54,14 +54,14 @@ module RorVsWild
     end
 
     def initialize
-      @started_at = RorVsWild.clock_milliseconds
-      @ended_at = nil
-      @gc_started_at = Section.gc_total_ms
-      @gc_ended_at = nil
+      @start_ms = RorVsWild.clock_milliseconds
+      @end_ms = nil
+      @gc_start_ms = Section.gc_total_ms
+      @gc_end_ms = nil
       @gc_time_ms = 0
       @calls = 1
-      @total_runtime = 0
-      @children_runtime = 0
+      @total_ms = 0
+      @children_ms = 0
       @kind = "code"
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
@@ -70,10 +70,10 @@ module RorVsWild
     end
 
     def stop
-      @gc_ended_at = self.class.gc_total_ms
-      @gc_time_ms = @gc_ended_at - @gc_started_at
-      @ended_at = RorVsWild.clock_milliseconds
-      @total_runtime = @ended_at - @started_at - gc_time_ms
+      @gc_end_ms = self.class.gc_total_ms
+      @gc_time_ms = @gc_end_ms - @gc_start_ms
+      @end_ms = RorVsWild.clock_milliseconds
+      @total_ms = @end_ms - @start_ms - gc_time_ms
     end
 
     def sibling?(section)
@@ -82,18 +82,18 @@ module RorVsWild
 
     def merge(section)
       self.calls += section.calls
-      self.total_runtime += section.total_runtime
-      self.children_runtime += section.children_runtime
+      self.total_ms += section.total_ms
+      self.children_ms += section.children_ms
       self.gc_time_ms += section.gc_time_ms
       commands.merge(section.commands)
     end
 
-    def self_runtime
-      total_runtime - children_runtime
+    def self_ms
+      total_ms - children_ms
     end
 
     def as_json(options = nil)
-      {calls: calls, total_runtime: total_runtime, children_runtime: children_runtime, kind: kind, started_at: started_at, file: file, line: line, command: command}
+      {calls: calls, total_runtime: total_ms, children_runtime: children_ms, kind: kind, started_at: start_ms, file: file, line: line, command: command}
     end
 
     def to_json(options = {})

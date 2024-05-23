@@ -31,10 +31,10 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
     assert_equal("view", template.kind)
     assert_equal("template.html.erb", template.command)
 
-    assert(sub_partial.self_runtime > partial.self_runtime)
-    assert(partial.self_runtime > template.self_runtime)
-    assert(partial.total_runtime < template.total_runtime)
-    assert(sub_partial.total_runtime < partial.total_runtime)
+    assert(sub_partial.self_ms > partial.self_ms)
+    assert(partial.self_ms > template.self_ms)
+    assert(partial.total_ms < template.total_ms)
+    assert(sub_partial.total_ms < partial.total_ms)
   end
 end
 

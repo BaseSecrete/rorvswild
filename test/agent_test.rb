@@ -18,10 +18,10 @@ class RorVsWild::AgentTest < Minitest::Test
     parent, child = sections[1], sections[0]
     assert_equal("child", child.command)
     assert_equal("parent", parent.command)
-    assert(child.self_runtime >= 20)
-    assert(parent.self_runtime >= 10)
-    assert(child.self_runtime > parent.self_runtime)
-    assert_equal(child.total_runtime + parent.self_runtime, parent.total_runtime)
+    assert(child.self_ms >= 20)
+    assert(parent.self_ms >= 10)
+    assert(child.self_ms > parent.self_ms)
+    assert_equal(child.total_ms + parent.self_ms, parent.total_ms)
   end
 
   def test_measure_section_with_exception

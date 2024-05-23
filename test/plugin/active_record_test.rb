@@ -29,12 +29,12 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert_equal("SELECT COUNT(*) FROM users", sql1.command)
     assert_equal(line1, sql1.line.to_i)
     assert_equal(1, sql1.calls)
-    assert(sql1.self_runtime >= 10)
+    assert(sql1.self_ms >= 10)
 
     assert_equal("sql", sql2.kind)
     assert_equal("SELECT * FROM users", sql2.command)
     assert_equal(line2, sql2.line.to_i)
-    assert(sql2.self_runtime >= 40)
+    assert(sql2.self_ms >= 40)
     assert_equal(2, sql2.calls)
   end
 
