@@ -56,7 +56,7 @@
 
   <% if @current_request %>
     {{#embedded}}
-      <div class="rorvswild-local-toggler" data-events="click->toggle" data-uuid="<%= @current_request["uuid"] %>"><%= @current_request["runtime"] %><small>ms</small></div>
+      <div class="rorvswild-local-toggler" data-events="click->toggle" data-uuid="<%= @current_request["uuid"] %>"><%= @current_request["runtime"].round %><small>ms</small></div>
     {{/embedded}}
   <% end %>
 </script>
