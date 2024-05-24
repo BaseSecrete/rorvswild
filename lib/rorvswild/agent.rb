@@ -98,7 +98,7 @@ module RorVsWild
     def stop_request
       return unless data = current_data
       gc = Section.stop_gc_timing(data[:gc_section])
-      data[:sections] << gc if gc.calls > 0
+      data[:sections] << gc if gc.calls > 0 && gc.total_ms > 0
       data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
       queue_request
     end
