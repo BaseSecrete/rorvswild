@@ -26,8 +26,14 @@ module RorVsWild
     @logger ||= initialize_logger
   end
 
-  def self.measure(code_or_name = nil, &block)
-    block ? measure_block(code_or_name, &block) : measure_code(code_or_name)
+  def self.measure(method_or_code = nil, &block)
+    if block
+      measure_block(method_or_code, &block)
+    elsif method_or_code.is_a?(Method) || method_or_code.is_a?(UnboundMethod)
+      measure_method(method_or_code)
+    else
+      measure_code(method_or_code)
+    end
   end
 
   def self.measure_code(code)
@@ -36,6 +42,10 @@ module RorVsWild
 
   def self.measure_block(name, &block)
     agent ? agent.measure_block(name , &block) : block.call
+  end
+
+  def self.measure_method(method)
+    agent.measure_method(method) if agent
   end
 
   def self.catch_error(context = nil, &block)

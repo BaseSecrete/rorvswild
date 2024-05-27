@@ -49,6 +49,38 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("child", sections[0].command)
   end
 
+  class Example
+    def self.foo
+      1
+    end
+
+    def bar
+      2
+    end
+  end
+
+  def test_measure_class_method
+    file, line = Example.method(:foo).source_location
+    agent.measure_method(Example.method(:foo))
+    agent.measure_job("job") { assert_equal(1, Example.foo) }
+    section = current_sections_without_gc.first
+    assert_equal("code", section.kind)
+    assert_equal("/agent_test.rb", section.file)
+    assert_equal(line, section.line)
+    assert_equal("RorVsWild::AgentTest::Example.foo", section.commands.join)
+  end
+
+  def test_measure_instance_method
+    file, line = Example.instance_method(:bar).source_location
+    agent.measure_method(Example.instance_method(:bar))
+    agent.measure_job("job") { assert_equal(2, Example.new.bar) }
+    section = current_sections_without_gc.first
+    assert_equal("code", section.kind)
+    assert_equal("/agent_test.rb", section.file)
+    assert_equal(line, section.line)
+    assert_equal("RorVsWild::AgentTest::Example#bar", section.commands.join)
+  end
+
   def test_ignored_request?
     agent = initialize_agent(ignore_requests: ["ApplicationController#secret"])
     assert(agent.ignored_request?("ApplicationController#secret"))

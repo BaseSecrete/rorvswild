@@ -61,6 +61,29 @@ module RorVsWild
       current_data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
+    def measure_method(method)
+      return if method.name.end_with?("_measured_by_rorvswild")
+      if method.is_a?(Method)
+        method_full_name = [method.receiver, method.name].join(".") # Method => class method
+      else
+        method_full_name = [method.owner, method.name].join("#") # UnboundMethod => instance method
+      end
+      method_alias = :"#{method.name}_measured_by_rorvswild"
+      return if method.owner.method_defined?(method_alias)
+      method.owner.alias_method(method_alias, method.name)
+      method_file, method_line = method.source_location
+      method_file = locator.relative_path(File.expand_path(method_file))
+      method.owner.define_method(method.name) do |*args|
+        section = Section.start
+        section.file = method_file
+        section.line = method_line
+        section.commands << method_full_name
+        result = send(method_alias, *args)
+        Section.stop
+        result
+      end
+    end
+
     def measure_section(name, kind: "code", &block)
       return block.call unless current_data
       begin

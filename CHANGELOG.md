@@ -1,5 +1,22 @@
 # Changelog of RorVsWild
 
+* Measure easily any Ruby method:
+
+  ```ruby
+  class Model
+    def self.foo
+      # ...
+    end
+
+    def bar
+      # ...
+    end
+
+    RorVswild.measure(method(:foo))
+    RorVswild.measure(instance_method(:bar))
+  end
+  ```
+
 * Time garbage collector
 
   A section with the kind `gc` measures how long the GC ran during a request or a job.
