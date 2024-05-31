@@ -1,5 +1,8 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix DelayedJob name and args for ActiveJob wrappers
 * Limit server timing header to 10 entries
 * Print ASCII server timing in logs
 * Improve widget UI
