@@ -1,5 +1,7 @@
 # Changelog of RorVsWild
 
+* Fix DelayedJob name and args for ActiveJob wrappers
+
 * Measure easily any Ruby method:
 
   ```ruby

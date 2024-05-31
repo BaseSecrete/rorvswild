@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
 require "delayed_job"
@@ -38,4 +40,3 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
     assert_equal(job, agent.current_data[:error][:parameters])
   end
 end
-
