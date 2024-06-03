@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-* Fix DelayedJob name and args for ActiveJob wrappers
+## Unreleased
 
 * Measure easily any Ruby method:
 
@@ -37,6 +37,9 @@
   Upto the last 100 entries are stored per type.
   They are stored into JSON files located in tmp directory.
 
+## 1.7.1 (2024-06-03)
+
+* Fix DelayedJob name and args for ActiveJob wrappers
 * Limit server timing header to 10 entries
 * Print ASCII server timing in logs
 * Improve widget UI
