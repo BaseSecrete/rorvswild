@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.7.1 (2024-06-03)
 
 * Fix DelayedJob name and args for ActiveJob wrappers
 * Limit server timing header to 10 entries
