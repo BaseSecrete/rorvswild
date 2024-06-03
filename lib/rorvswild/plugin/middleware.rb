@@ -43,7 +43,7 @@ module RorVsWild
       end
 
       def format_server_timing_ascii(sections, total_width = 80)
-        max_time = sections.map(&:self_runtime).max
+        max_time = sections.map(&:self_ms).max
         chart_width = (total_width * 0.25).to_i
         rows = sections.map { |section|
           [
@@ -65,7 +65,7 @@ module RorVsWild
 
       def inject_server_timing(data, headers)
         return if !data || !data[:send_server_timing] || !(sections = data[:sections])
-        sections = sections.sort_by(&:self_runtime).reverse[0,10]
+        sections = sections.sort_by(&:self_ms).reverse[0,10]
         headers["Server-Timing"] = format_server_timing_header(sections)
         if data[:name] && RorVsWild.logger.level <= Logger::Severity::DEBUG
           RorVsWild.logger.debug(["┤ #{data[:name]} ├".center(80, "─"),
