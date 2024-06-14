@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+GC::Profiler.enable # Enable for Ruby < 3.1
+
 path = File.expand_path("#{File.dirname(__FILE__)}/../lib")
 $LOAD_PATH.unshift(path)
 
