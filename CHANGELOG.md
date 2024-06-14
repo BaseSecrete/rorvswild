@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.8.0 (2024-06-14)
 
 * Measure easily any Ruby method:
 
