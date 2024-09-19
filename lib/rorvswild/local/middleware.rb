@@ -35,9 +35,9 @@ module RorVsWild
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
           if headers["Content-Encoding"]
             log_incompatible_middleware_warning
-          elsif body.respond_to?(:each)
+          elsif body.respond_to?(:each) && widget_position != "hidden"
             content_length = 0
-            @current_request = RorVsWild.agent.queue.requests.first
+            @current_request =  RorVsWild.agent.queue.requests.first
             body.each do |string|
               inject_into(string)
               content_length += string.size
@@ -74,9 +74,8 @@ module RorVsWild
 
       private
 
-      def widget_css
-        config = RorVsWild.agent.config
-        config && config[:widget] && "is-#{config[:widget]}"
+      def widget_position
+        (config = RorVsWild.agent.config) && config[:widget]
       end
 
       def editor_url

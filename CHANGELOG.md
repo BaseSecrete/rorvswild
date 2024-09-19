@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Hide widget does not inject anything in HTML response
+
 ## 1.8.0 (2024-06-14)
 
 * Measure easily any Ruby method:
