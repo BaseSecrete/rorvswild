@@ -37,11 +37,11 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     controller = SampleController.new
     controller.action_name = "index"
     controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
+    RorVsWild.agent.current_data[:controller] = controller
     assert_raises(ZeroDivisionError) { RorVsWild::Plugin::ActionController.after_exception(ZeroDivisionError.new, controller) }
 
     data = agent.current_data
     assert_equal("ZeroDivisionError", data[:error][:exception])
-    assert_equal({id: "session"}, data[:error][:session])
     assert_equal({foo: "bar"}, data[:error][:parameters])
     assert_equal({"Content-Type" => "HTML"}, data[:error][:request][:headers])
     assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", data[:error][:request][:name])
@@ -68,17 +68,9 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     refute(agent.current_data[:name])
   end
 
-  def test_format_header_name
-    assert_equal("Content-Type", RorVsWild::Plugin::ActionController.format_header_name("HTTP_CONTENT_TYPE"))
-  end
-
   class SampleController < ActionController::Base
     def index
       sleep(0.01)
-    end
-
-    def session
-      {id: "session"}
     end
   end
 

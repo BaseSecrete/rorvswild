@@ -36,7 +36,7 @@ module RorVsWild
       uri = URI(api_url + path)
       post = Net::HTTP::Post.new(uri.path, @headers)
       post.basic_auth(nil, api_key)
-      post.body = data.to_json
+      post.body = JSON.generate(data)
       transmit(post)
     end
 

@@ -7,6 +7,7 @@ require "rorvswild/section"
 require "rorvswild/client"
 require "rorvswild/plugins"
 require "rorvswild/queue"
+require "rorvswild/error"
 require "rorvswild/agent"
 
 module RorVsWild
