@@ -14,11 +14,17 @@ require "rorvswild"
 require "rorvswild/metrics"
 require "minitest/autorun"
 require "mocha/minitest"
+require "minitest/stub_const"
 require "top_tests"
+require "active_support"
 
 module RorVsWild::AgentHelper
   def agent
     @agent ||= initialize_agent(ignore_requests: ["RorVsWild::Plugin::ActionControllerTest::SecretController#index"])
+  end
+
+  def setup
+    ActiveSupport::ExecutionContext.clear
   end
 
   def initialize_agent(options = {})

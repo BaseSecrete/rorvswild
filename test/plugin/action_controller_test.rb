@@ -32,24 +32,25 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
 
   def test_after_exception
     agent.start_request
+    RorVsWild::Plugin::RailsError.stubs(installed?: false)
     RorVsWild.merge_error_context(user_id: 123)
     RorVsWild.merge_error_context(other_id: 456)
     controller = SampleController.new
     controller.action_name = "index"
     controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
+    RorVsWild.agent.current_data[:controller] = controller
     assert_raises(ZeroDivisionError) { RorVsWild::Plugin::ActionController.after_exception(ZeroDivisionError.new, controller) }
 
-    data = agent.current_data
-    assert_equal("ZeroDivisionError", data[:error][:exception])
-    assert_equal({id: "session"}, data[:error][:session])
-    assert_equal({foo: "bar"}, data[:error][:parameters])
-    assert_equal({"Content-Type" => "HTML"}, data[:error][:request][:headers])
-    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", data[:error][:request][:name])
-    assert_equal("http://localhost:3000/test", data[:error][:request][:url])
-    assert_equal("GET", data[:error][:request][:method])
-    assert(data[:error][:environment][:os])
-    assert(data[:error][:environment][:revision])
-    assert_equal({user_id: 123, other_id: 456}, data[:error][:context])
+    data = agent.current_data[:error].as_json
+    assert_equal("ZeroDivisionError", data[:exception])
+    assert_equal({foo: "bar"}, data[:parameters])
+    assert_equal({"Content-Type" => "HTML"}, data[:request][:headers])
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", data[:request][:name])
+    assert_equal("http://localhost:3000/test", data[:request][:url])
+    assert_equal("GET", data[:request][:method])
+    assert(data[:environment][:os])
+    assert(data[:environment][:revision])
+    assert_equal({user_id: 123, other_id: 456}, data[:context])
   end
 
   def test_around_action_for_api_controller
@@ -68,17 +69,9 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     refute(agent.current_data[:name])
   end
 
-  def test_format_header_name
-    assert_equal("Content-Type", RorVsWild::Plugin::ActionController.format_header_name("HTTP_CONTENT_TYPE"))
-  end
-
   class SampleController < ActionController::Base
     def index
       sleep(0.01)
-    end
-
-    def session
-      {id: "session"}
     end
   end
 

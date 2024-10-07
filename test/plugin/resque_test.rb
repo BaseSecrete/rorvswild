@@ -26,7 +26,7 @@ class RorVsWild::Plugin::ResqueTest < Minitest::Test
     Resque.enqueue(SampleJob, false)
   rescue
   ensure
-    assert_equal([false], agent.current_data[:error][:parameters])
+    assert_equal([false], agent.current_data[:error].as_json[:parameters])
   end
 end
 

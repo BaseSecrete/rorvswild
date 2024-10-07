@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* Add plugin RailsError to subscribre to ActiveSupport::ErrorReporter
+
+  Any errors forwarded to `Rails.error` is sent to RorVsWild.
+  Thus you can call `Rails.error.report` instead of `RorVsWild.record_error`,
+  and `Rails.error.handle` instead of `RorVsWild.catch_error`.
+
 * Normalize MongoDB by removing any variables
 * Fix MongoDB monitoring
 * Add root section to Sidekiq tn ensure not missing any timings

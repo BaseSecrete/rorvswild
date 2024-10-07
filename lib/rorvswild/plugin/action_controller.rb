@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RorVsWild
   module Plugin
     class ActionController
@@ -24,7 +26,10 @@ module RorVsWild
               section.file = RorVsWild.agent.locator.relative_path(section.file)
               section.commands << "#{controller.class}##{method_name}"
             end
-            RorVsWild.agent.current_data[:name] = controller_action if RorVsWild.agent.current_data
+            if current_data = RorVsWild.agent.current_data
+              current_data[:name] = controller_action
+              current_data[:controller] = controller
+            end
           end
           block.call
         ensure
@@ -33,32 +38,8 @@ module RorVsWild
       end
 
       def self.after_exception(exception, controller)
-        if hash = RorVsWild.agent.push_exception(exception)
-          hash[:session] = controller.session.to_hash
-          hash[:parameters] = controller.request.filtered_parameters
-          hash[:request] = {
-            headers: extract_http_headers(controller.request.filtered_env),
-            name: "#{controller.class}##{controller.action_name}",
-            method: controller.request.method,
-            url: controller.request.url,
-          }
-        end
+        RorVsWild.agent.push_exception(exception)
         raise exception
-      end
-
-      def self.extract_http_headers(headers)
-        headers.reduce({}) do |hash, (name, value)|
-          if name.index("HTTP_".freeze) == 0 && name != "HTTP_COOKIE".freeze
-            hash[format_header_name(name)] = value
-          end
-          hash
-        end
-      end
-
-      HEADER_REGEX = /^HTTP_/.freeze
-
-      def self.format_header_name(name)
-        name.sub(HEADER_REGEX, ''.freeze).split("_".freeze).map(&:capitalize).join("-".freeze)
       end
     end
   end

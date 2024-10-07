@@ -37,6 +37,6 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
     backend.invoke_job
   rescue
   ensure
-    assert_equal(job, agent.current_data[:error][:parameters])
+    assert_equal(job, agent.current_data[:error].as_json[:parameters])
   end
 end

@@ -13,6 +13,7 @@ class RorVsWildTest < Minitest::Test
   def test_measure_code_when_raising
     agent.expects(:queue_job)
     assert_raises(RuntimeError) { RorVsWild.measure("raise 'error'") }
+    #RorVsWild.measure("raise 'error'")
     assert_equal(("raise 'error'"), agent.current_data[:name])
     assert(agent.current_data[:runtime])
     assert(agent.current_data[:error])

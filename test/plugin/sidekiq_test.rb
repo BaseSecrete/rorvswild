@@ -32,7 +32,7 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
     Sidekiq::Testing.inline! { SampleJob.perform_async(false) }
   rescue
   ensure
-    assert_equal([false], agent.current_data[:error][:parameters])
+    assert_equal([false], agent.current_data[:error].as_json[:parameters])
   end
 end
 

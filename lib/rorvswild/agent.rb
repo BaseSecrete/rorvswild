@@ -15,7 +15,7 @@ module RorVsWild
     end
 
     def self.default_ignored_exceptions
-      if defined?(Rails)
+      if defined?(ActionDispatch::ExceptionWrapper)
         ActionDispatch::ExceptionWrapper.rescue_responses.keys
       else
         []
@@ -101,10 +101,11 @@ module RorVsWild
       return measure_section(name, &block) if current_data # For recursive jobs
       return block.call if ignored_job?(name)
       initialize_data[:name] = name
+      current_data[:execution] = Execution::Job.new(name, parameters)
       begin
         block.call
       rescue Exception => ex
-        push_exception(ex, parameters: parameters, job: {name: name})
+        push_exception(ex)
         raise
       ensure
         gc = Section.stop_gc_timing(current_data[:gc_section])
@@ -136,15 +137,17 @@ module RorVsWild
     end
 
     def record_error(exception, context = nil)
-      queue_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
+      if !ignored_exception?(exception)
+        current_error = current_data && current_data[:error]
+        if !current_error || current_error.exception != exception
+          queue_error(Error.new(exception, context).as_json)
+        end
+      end
     end
 
     def push_exception(exception, options = nil)
-      return if ignored_exception?(exception)
-      return unless current_data
-      current_data[:error] = exception_to_hash(exception)
-      current_data[:error].merge!(options) if options
-      current_data[:error]
+      return if ignored_exception?(exception) || !current_data
+      current_data[:error] = Error.new(exception)
     end
 
     def merge_error_context(hash)
@@ -161,6 +164,10 @@ module RorVsWild
 
     def current_data
       Thread.current[:rorvswild_data]
+    end
+
+    def current_execution
+      current_data && current_data[:execution]
     end
 
     def add_section(section)
@@ -208,30 +215,18 @@ module RorVsWild
     end
 
     def queue_request
-      (data = cleanup_data) && data[:name] && queue.push_request(data)
-      data
+      if (data = cleanup_data) && data[:name]
+        data.delete(:controller)
+        queue.push_request(data.as_json)
+      end
     end
 
     def queue_job
-      queue.push_job(cleanup_data)
+      queue.push_job(cleanup_data.as_json)
     end
 
     def queue_error(hash)
       queue.push_error(hash)
-    end
-
-    def exception_to_hash(exception, context = nil)
-      file, line = locator.find_most_relevant_file_and_line_from_exception(exception)
-      context = context ? error_context.merge(context) : error_context if error_context
-      {
-        line: line.to_i,
-        file: locator.relative_path(file),
-        message: exception.message[0,1_000_000],
-        backtrace: exception.backtrace || ["No backtrace"],
-        exception: exception.class.to_s,
-        context: context,
-        environment: Host.to_h,
-      }
     end
   end
 end

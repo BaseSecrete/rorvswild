@@ -40,7 +40,7 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
     assert_equal(1, sections.size)
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", sections[0].command)
-    assert_equal(["Error"], agent.current_data[:error][:parameters])
+    assert_equal(["Error"], agent.current_data[:error].as_json[:parameters])
   end
 
   def test_rescued_error_is_ignored
