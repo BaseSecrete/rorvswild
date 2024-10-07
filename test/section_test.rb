@@ -31,6 +31,7 @@ class RorVsWild::SectionTest < Minitest::Test
   end
 
   def test_gc_time_ms
+    GC.disable
     agent.measure_job("job") do
       agent.measure_section("section") { GC.start; GC.start }
     end
@@ -40,6 +41,8 @@ class RorVsWild::SectionTest < Minitest::Test
     assert_equal(gc.total_ms, section.gc_time_ms)
     assert_equal("gc", gc.kind)
     assert_equal(2, gc.calls)
+  ensure
+    GC.enable
   end
 
   def test_no_gc_section_when_it_did_not_run

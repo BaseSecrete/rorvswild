@@ -6,6 +6,7 @@ class RorVsWild::Plugin::ElasticsearchTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_callback
+    skip # TODO: Install Elasticsearch in CI
     agent.measure_block("elastic") do
       ::Elasticsearch::Client.new.search(q: "test")
     end
