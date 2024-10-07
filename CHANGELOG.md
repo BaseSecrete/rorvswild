@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Hide widget does not inject anything in HTML response
+* Fix Set#join undefined method since it has been added from Ruby 3.0
 
 ## 1.8.0 (2024-06-14)
 

@@ -107,7 +107,7 @@ module RorVsWild
     COMMAND_MAX_SIZE = 5_000
 
     def command
-      string = @commands.join("\n")
+      string = @commands.to_a.join("\n")
       string.size > COMMAND_MAX_SIZE ? string[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : string
     end
   end
