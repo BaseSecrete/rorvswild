@@ -67,7 +67,7 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("code", section.kind)
     assert_equal("/agent_test.rb", section.file)
     assert_equal(line, section.line)
-    assert_equal("RorVsWild::AgentTest::Example.foo", section.commands.join)
+    assert_equal("RorVsWild::AgentTest::Example.foo", section.commands.to_a.join)
   end
 
   def test_measure_instance_method
@@ -78,7 +78,7 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("code", section.kind)
     assert_equal("/agent_test.rb", section.file)
     assert_equal(line, section.line)
-    assert_equal("RorVsWild::AgentTest::Example#bar", section.commands.join)
+    assert_equal("RorVsWild::AgentTest::Example#bar", section.commands.to_a.join)
   end
 
   def test_ignored_request?
