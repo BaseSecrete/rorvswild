@@ -20,3 +20,5 @@ gem "delayed_job"
 gem "sidekiq"
 gem "resque"
 gem "faktory_worker_ruby"
+
+gem "minitest-stub-const"
