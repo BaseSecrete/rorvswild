@@ -15,7 +15,7 @@ module RorVsWild
     end
 
     def self.default_ignored_exceptions
-      if defined?(Rails)
+      if defined?(ActionDispatch::ExceptionWrapper)
         ActionDispatch::ExceptionWrapper.rescue_responses.keys
       else
         []
@@ -136,13 +136,13 @@ module RorVsWild
     end
 
     def record_error(exception, context = nil)
-      queue_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
+      queue_error(Error.new(exception, context).as_json) if !ignored_exception?(exception)
     end
 
     def push_exception(exception, options = nil)
       return if ignored_exception?(exception)
       return unless current_data
-      current_data[:error] = exception_to_hash(exception)
+      current_data[:error] = Error.new(exception).as_json
       current_data[:error].merge!(options) if options
       current_data[:error]
     end
@@ -222,20 +222,6 @@ module RorVsWild
 
     def queue_error(hash)
       queue.push_error(hash)
-    end
-
-    def exception_to_hash(exception, context = nil)
-      file, line = locator.find_most_relevant_file_and_line_from_exception(exception)
-      context = context ? error_context.merge(context) : error_context if error_context
-      {
-        line: line.to_i,
-        file: locator.relative_path(file),
-        message: exception.message[0,1_000_000],
-        backtrace: exception.backtrace || ["No backtrace"],
-        exception: exception.class.to_s,
-        context: context,
-        environment: Host.to_h,
-      }
     end
   end
 end
