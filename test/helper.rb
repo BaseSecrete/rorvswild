@@ -14,6 +14,7 @@ require "rorvswild"
 require "rorvswild/metrics"
 require "minitest/autorun"
 require "mocha/minitest"
+require "minitest/stub_const"
 require "top_tests"
 
 module RorVsWild::AgentHelper

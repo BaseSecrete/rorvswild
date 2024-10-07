@@ -15,7 +15,7 @@ module RorVsWild
     end
 
     def self.default_ignored_exceptions
-      if defined?(Rails)
+      if defined?(ActionDispatch::ExceptionWrapper)
         ActionDispatch::ExceptionWrapper.rescue_responses.keys
       else
         []
@@ -136,12 +136,16 @@ module RorVsWild
     end
 
     def record_error(exception, context = nil)
-      queue_error(exception_to_hash(exception, context)) if !ignored_exception?(exception)
+      if !ignored_exception?(exception)
+        current_data && current_data[:last_exception_id] = exception.object_id
+        queue_error(exception_to_hash(exception, context))
+      end
     end
 
     def push_exception(exception, options = nil)
       return if ignored_exception?(exception)
       return unless current_data
+      return if current_data[:last_exception_id] == exception.object_id
       current_data[:error] = exception_to_hash(exception)
       current_data[:error].merge!(options) if options
       current_data[:error]
