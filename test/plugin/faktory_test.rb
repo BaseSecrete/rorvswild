@@ -50,7 +50,7 @@ class RorVsWild::Plugin::FaktoryTest < Minitest::Test
     Faktory.worker_middleware.invoke(job, payload) { job.perform(*payload["args"]) }
   rescue
   ensure
-    assert_equal([false], agent.current_data[:error][:parameters])
+    assert_equal([false], agent.current_data[:error].as_json[:parameters])
   end
 end
 
