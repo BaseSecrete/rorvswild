@@ -3,6 +3,52 @@
 module RorVsWild
   module Plugin
     class Middleware
+      module RequestQueueTime
+        REQUEST_START_HEADER = 'HTTP_X_REQUEST_START'.freeze
+        QUEUE_START_HEADER = 'HTTP_X_QUEUE_START'.freeze
+        MIDDLEWARE_START_HEADER = 'HTTP_X_MIDDLEWARE_START'.freeze
+
+        ACCEPTABLE_HEADERS = [
+          REQUEST_START_HEADER,
+          QUEUE_START_HEADER,
+          MIDDLEWARE_START_HEADER
+        ].freeze
+
+        MINIMUM_TIMESTAMP = 1577836800.freeze # 2020/01/01 UTC
+        DIVISORS = [1_000_000, 1_000, 1].freeze
+
+        def parse_queue_time_header(headers)
+          return unless headers
+
+          earliest = nil
+
+          ACCEPTABLE_HEADERS.each do |header|
+            next unless headers[header]
+
+            timestamp = parse_timestamp(headers[header].gsub("t=", ""))
+            if timestamp && (!earliest || timestamp < earliest)
+              earliest = timestamp
+            end
+          end
+
+          [earliest, Time.now.to_f].min if earliest
+        end
+
+        private
+
+        def parse_timestamp(timestamp)
+          DIVISORS.each do |divisor|
+            begin
+              t = (timestamp.to_f / divisor)
+              return t if t > MINIMUM_TIMESTAMP
+            rescue RangeError
+            end
+          end
+        end
+      end
+
+      include RequestQueueTime
+
       def self.setup
         return if @installed
         Rails.application.config.middleware.unshift(RorVsWild::Plugin::Middleware, nil) if defined?(Rails)
@@ -16,6 +62,7 @@ module RorVsWild
       def call(env)
         RorVsWild.agent.start_request
         RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
+        RorVsWild.agent.current_data[:queue_time] = calculate_queue_time(env)
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
         section.commands << "Rails::Engine#call"
@@ -27,6 +74,12 @@ module RorVsWild
       end
 
       private
+
+      def calculate_queue_time(headers)
+        queue_time_from_header = parse_queue_time_header(headers)
+
+        ((Time.now.to_f - queue_time_from_header) * 1000).round if queue_time_from_header
+      end
 
       def rails_engine_location
         @rails_engine_location = ::Rails::Engine.instance_method(:call).source_location
