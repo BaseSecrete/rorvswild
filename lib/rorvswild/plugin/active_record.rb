@@ -29,6 +29,16 @@ module RorVsWild
         RorVsWild::Section.stop
       end
 
+      # Async queries
+      def publish_event(event)
+        section = Section.new
+        section.total_ms = event.payload[:lock_wait]
+        section.gc_time_ms = event.gc_time
+        section.commands << normalize_sql_query(event.payload[:sql])
+        section.kind = "sql"
+        RorVsWild.agent.add_section(section)
+      end
+
       SQL_STRING_REGEX = /'((?:''|\\'|[^'])*)'/
       SQL_NUMERIC_REGEX = /(?<!\w)\d+(\.\d+)?(?!\w)/
       SQL_PARAMETER_REGEX = /\$\d+/
