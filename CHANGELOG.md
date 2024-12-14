@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+### Unreleased
+
+* Measure render collection
+
 ## 1.8.1 (2024-10-17)
 
 * Hide widget does not inject anything in HTML response
