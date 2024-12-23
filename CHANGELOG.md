@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Measure ActiveRecord async queries and displays the non blocking time
+
 ## 1.8.1 (2024-10-17)
 
 * Hide widget does not inject anything in HTML response

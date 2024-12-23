@@ -3,7 +3,7 @@
 module RorVsWild
   class Section
     attr_reader :start_ms, :commands, :gc_start_ms
-    attr_accessor :kind, :file, :line, :calls, :children_ms, :total_ms, :gc_time_ms
+    attr_accessor :kind, :file, :line, :calls, :children_ms, :total_ms, :gc_time_ms, :async_ms
 
     def self.start(&block)
       section = Section.new
@@ -62,6 +62,7 @@ module RorVsWild
       @calls = 1
       @total_ms = 0
       @children_ms = 0
+      @async_ms = 0
       @kind = "code"
       location = RorVsWild.agent.locator.find_most_relevant_location(caller_locations)
       @file = RorVsWild.agent.locator.relative_path(location.path)
@@ -93,7 +94,7 @@ module RorVsWild
     end
 
     def as_json(options = nil)
-      {calls: calls, total_runtime: total_ms, children_runtime: children_ms, kind: kind, started_at: start_ms, file: file, line: line, command: command}
+      {calls: calls, total_runtime: total_ms, children_runtime: children_ms, async_runtime: async_ms, kind: kind, started_at: start_ms, file: file, line: line, command: command}
     end
 
     def to_json(options = {})
