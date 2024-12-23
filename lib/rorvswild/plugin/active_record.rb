@@ -35,6 +35,7 @@ module RorVsWild
         section.total_ms = event.payload[:lock_wait]
         section.gc_time_ms = event.gc_time
         section.commands << normalize_sql_query(event.payload[:sql])
+        section.async_ms = event.duration - event.payload[:lock_wait]
         section.kind = "sql"
         RorVsWild.agent.add_section(section)
       end
