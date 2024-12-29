@@ -3,6 +3,52 @@
 module RorVsWild
   module Plugin
     class Middleware
+      module RequestQueueTime
+        REQUEST_START_HEADER = 'HTTP_X_REQUEST_START'.freeze
+        QUEUE_START_HEADER = 'HTTP_X_QUEUE_START'.freeze
+        MIDDLEWARE_START_HEADER = 'HTTP_X_MIDDLEWARE_START'.freeze
+
+        ACCEPTABLE_HEADERS = [
+          REQUEST_START_HEADER,
+          QUEUE_START_HEADER,
+          MIDDLEWARE_START_HEADER
+        ].freeze
+
+        MINIMUM_TIMESTAMP = 1577836800.freeze # 2020/01/01 UTC
+        DIVISORS = [1_000_000, 1_000, 1].freeze
+
+        def parse_queue_time_header(env)
+          return unless env
+
+          earliest = nil
+
+          ACCEPTABLE_HEADERS.each do |header|
+            if (header_value = env[header])
+              timestamp = parse_timestamp(header_value.gsub("t=", ""))
+              if timestamp && (!earliest || timestamp < earliest)
+                earliest = timestamp
+              end
+            end
+          end
+
+          [earliest, Time.now.to_f].min if earliest
+        end
+
+        private
+
+        def parse_timestamp(timestamp)
+          DIVISORS.each do |divisor|
+            begin
+              t = (timestamp.to_f / divisor)
+              return t if t > MINIMUM_TIMESTAMP
+            rescue RangeError
+            end
+          end
+        end
+      end
+
+      include RequestQueueTime
+
       def self.setup
         return if @installed
         Rails.application.config.middleware.unshift(RorVsWild::Plugin::Middleware, nil) if defined?(Rails)
@@ -15,6 +61,7 @@ module RorVsWild
 
       def call(env)
         RorVsWild.agent.start_request
+        report_queue_time(env)
         RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
@@ -27,6 +74,25 @@ module RorVsWild
       end
 
       private
+
+      def report_queue_time(env)
+        if queue_time = calculate_queue_time(env)
+          section = Section.new
+          section.stop
+          section.total_ms = queue_time
+          section.gc_time_ms = 0
+          section.file = "request-queue"
+          section.line = 0
+          section.kind = "queue"
+          RorVsWild.agent.add_section(section)
+        end
+      end
+
+      def calculate_queue_time(env)
+        queue_time_from_header = parse_queue_time_header(env)
+
+        ((Time.now.to_f - queue_time_from_header) * 1000).round if queue_time_from_header
+      end
 
       def rails_engine_location
         @rails_engine_location = ::Rails::Engine.instance_method(:call).source_location
