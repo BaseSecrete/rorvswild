@@ -17,17 +17,17 @@ module RorVsWild
         MINIMUM_TIMESTAMP = 1577836800.freeze # 2020/01/01 UTC
         DIVISORS = [1_000_000, 1_000, 1].freeze
 
-        def parse_queue_time_header(headers)
-          return unless headers
+        def parse_queue_time_header(env)
+          return unless env
 
           earliest = nil
 
           ACCEPTABLE_HEADERS.each do |header|
-            next unless headers[header]
-
-            timestamp = parse_timestamp(headers[header].gsub("t=", ""))
-            if timestamp && (!earliest || timestamp < earliest)
-              earliest = timestamp
+            if (header_value = env[header])
+              timestamp = parse_timestamp(header_value.gsub("t=", ""))
+              if timestamp && (!earliest || timestamp < earliest)
+                earliest = timestamp
+              end
             end
           end
 
@@ -61,8 +61,8 @@ module RorVsWild
 
       def call(env)
         RorVsWild.agent.start_request
+        report_queue_time(env)
         RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
-        RorVsWild.agent.current_data[:queue_time] = calculate_queue_time(env)
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
         section.commands << "Rails::Engine#call"
@@ -75,8 +75,21 @@ module RorVsWild
 
       private
 
-      def calculate_queue_time(headers)
-        queue_time_from_header = parse_queue_time_header(headers)
+      def report_queue_time(env)
+        if queue_time = calculate_queue_time(env)
+          section = Section.new
+          section.stop
+          section.total_ms = queue_time
+          section.gc_time_ms = 0
+          section.file = "request-queue"
+          section.line = 0
+          section.kind = "queue"
+          RorVsWild.agent.add_section(section)
+        end
+      end
+
+      def calculate_queue_time(env)
+        queue_time_from_header = parse_queue_time_header(env)
 
         ((Time.now.to_f - queue_time_from_header) * 1000).round if queue_time_from_header
       end
