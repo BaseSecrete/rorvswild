@@ -179,10 +179,12 @@
 
     <div class="rorvswild-local-panel__details__section__code">
       <dl>
-        <div>
-          <dt title="Time spent as non blocking IO">Async runtime</dt>
-          <dd>{{asyncRuntime}}<small>ms</small></dd>
-        </div>
+        {{#isAsync}}
+          <div>
+            <dt title="Time spent as non blocking IO">Async runtime</dt>
+            <dd>{{asyncRuntime}}<small>ms</small></dd>
+          </div>
+        {{/isAsync}}
         <div>
           <dt title="self + children">Total runtime</dt>
           <dd title="{{selfRuntime}} + {{childrenRuntime}}">{{totalRuntime}}<small>ms</small></dd>
