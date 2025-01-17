@@ -37,6 +37,7 @@ module RorVsWild
         section.gc_time_ms = event.respond_to?(:gc_time) ? event.gc_time : 0 # gc_time since Rails 7.2.0
         section.commands << normalize_sql_query(event.payload[:sql])
         section.kind = "sql"
+        (parent = Section.current) && parent.children_ms += section.total_ms
         RorVsWild.agent.add_section(section)
       end
 
