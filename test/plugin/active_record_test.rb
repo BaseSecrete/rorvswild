@@ -53,6 +53,26 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert_equal("BEGIN\nINSERT INTO users\nCOMMIT", sections[0].command)
   end
 
+  def test_async_query
+    instrumenter = ActiveSupport::Notifications.instrumenter
+
+    agent.locator.stubs(current_path: File.dirname(__FILE__))
+    agent.measure_job("job") do
+      agent.measure_block("root") do
+        event = instrumenter.new_event("sql.active_record", {sql: "SELECT * FROM users", name: "User", async: true})
+        thread = Thread.new { event.record { sleep(0.003) } }
+        sleep(0.002)
+        start_of_waiting = RorVsWild.clock_milliseconds
+        thread.join
+        event.payload[:lock_wait] = RorVsWild.clock_milliseconds - start_of_waiting
+        ActiveSupport::Notifications.publish_event(event)
+      end
+    end
+
+    query, root = current_sections_without_gc
+    assert_equal(root.children_ms, query.total_ms)
+  end
+
   def test_normalize_sql_query
     plugin = RorVsWild::Plugin::ActiveRecord.new
     assert_equal("", plugin.normalize_sql_query(nil))
