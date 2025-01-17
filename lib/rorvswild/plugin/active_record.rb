@@ -33,9 +33,9 @@ module RorVsWild
       def publish_event(event)
         section = Section.new
         section.total_ms = event.payload[:lock_wait]
-        section.gc_time_ms = event.gc_time
-        section.commands << normalize_sql_query(event.payload[:sql])
         section.async_ms = event.duration - event.payload[:lock_wait]
+        section.gc_time_ms = event.respond_to?(:gc_time) ? event.gc_time : 0 # gc_time since Rails 7.2.0
+        section.commands << normalize_sql_query(event.payload[:sql])
         section.kind = "sql"
         RorVsWild.agent.add_section(section)
       end
