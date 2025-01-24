@@ -5,6 +5,11 @@ GC::Profiler.enable # Enable for Ruby < 3.1
 path = File.expand_path("#{File.dirname(__FILE__)}/../lib")
 $LOAD_PATH.unshift(path)
 
+require "simplecov"
+SimpleCov.start do
+  add_filter "test"
+end
+
 require "rorvswild"
 require "rorvswild/metrics"
 require "minitest/autorun"

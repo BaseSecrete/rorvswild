@@ -7,6 +7,7 @@ gem "rake"
 
 gem "mocha"
 gem "top_tests"
+gem "simplecov"
 
 gem "mongo"
 gem "redis"
