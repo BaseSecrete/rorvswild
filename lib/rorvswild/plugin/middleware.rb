@@ -14,16 +14,19 @@ module RorVsWild
       end
 
       def call(env)
-        RorVsWild.agent.start_request
-        RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
-        section = RorVsWild::Section.start
-        section.file, section.line = rails_engine_location
-        section.commands << "Rails::Engine#call"
-        code, headers, body = @app.call(env)
-        [code, headers, body]
+        section = nil
+        code = headers = body = nil
+        RorVsWild.agent.measure_request(env["ORIGINAL_FULLPATH"]) do
+          section = RorVsWild::Section.start
+          section.file, section.line = rails_engine_location
+          section.commands << "Rails::Engine#call"
+          code, headers, body = @app.call(env)
+          [code, headers, body]
+        end
       ensure
-        RorVsWild::Section.stop
-        inject_server_timing(RorVsWild.agent.stop_request, headers)
+        RorVsWild::Section.stop if section
+        # TODO: Restore server timing
+        #inject_server_timing(RorVsWild.agent.stop_request, headers)
       end
 
       private

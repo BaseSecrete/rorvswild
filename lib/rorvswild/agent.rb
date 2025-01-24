@@ -114,6 +114,15 @@ module RorVsWild
       end
     end
 
+    def measure_request(path, &block)
+      return block.call if !(root_request = current_data == nil)
+      start_request
+      current_data[:path] = path
+      block.call
+    ensure
+      stop_request if root_request
+    end
+
     def start_request
       current_data || initialize_data
     end

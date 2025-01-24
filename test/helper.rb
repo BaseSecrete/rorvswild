@@ -25,7 +25,7 @@ module RorVsWild::AgentHelper
     agent = RorVsWild.start({logger: "/dev/null", ignore_jobs: ["SecretJob"]}.merge(options))
     agent.locator.stubs(current_path: File.dirname(__FILE__))
     agent.stubs(:send_deployment)
-    agent.stubs(:queue_request)
+    #agent.stubs(:queue_request)
     agent.stubs(:queue_job)
     client = agent.client
     def client.transmit(request)
