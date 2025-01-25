@@ -24,6 +24,9 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
     middleware.call(request)
 
+    assert_predicate agent.current_data[:queued_at], :present?
+    assert agent.current_data[:queued_at] <= agent.current_data[:started_at]
+
     assert_equal(2, agent.current_data[:sections].size)
     queue_time_section = agent.current_data[:sections][0]
     assert_equal "request-queue", queue_time_section.file

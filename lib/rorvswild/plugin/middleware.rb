@@ -82,6 +82,7 @@ module RorVsWild
           section.line = 0
           section.kind = "queue"
           RorVsWild.agent.add_section(section)
+          RorVsWild.agent.current_data[:queued_at] = RorVsWild.agent.current_data[:started_at] - queue_time
         end
       end
 
