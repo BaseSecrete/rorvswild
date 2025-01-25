@@ -4,14 +4,11 @@ module RorVsWild
   module Plugin
     class Middleware
       module RequestQueueTime
-        REQUEST_START_HEADER = 'HTTP_X_REQUEST_START'.freeze
-        QUEUE_START_HEADER = 'HTTP_X_QUEUE_START'.freeze
-        MIDDLEWARE_START_HEADER = 'HTTP_X_MIDDLEWARE_START'.freeze
 
         ACCEPTABLE_HEADERS = [
-          REQUEST_START_HEADER,
-          QUEUE_START_HEADER,
-          MIDDLEWARE_START_HEADER
+          'HTTP_X_REQUEST_START',
+          'HTTP_X_QUEUE_START',
+          'HTTP_X_MIDDLEWARE_START'
         ].freeze
 
         MINIMUM_TIMESTAMP = 1577836800.freeze # 2020/01/01 UTC
@@ -24,7 +21,7 @@ module RorVsWild
 
           ACCEPTABLE_HEADERS.each do |header|
             if (header_value = env[header])
-              timestamp = parse_timestamp(header_value.gsub("t=", ""))
+              timestamp = parse_timestamp(header_value.delete_prefix("t="))
               if timestamp && (!earliest || timestamp < earliest)
                 earliest = timestamp
               end

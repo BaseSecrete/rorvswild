@@ -123,6 +123,7 @@ module RorVsWild
       gc = Section.stop_gc_timing(data[:gc_section])
       data[:sections] << gc if gc.calls > 0 && gc.total_ms > 0
       data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
+      data[:runtime] += data[:sections].sum(0) { |s| s.kind == "queue" ? s.self_ms : 0 }
       queue_request
     end
 
