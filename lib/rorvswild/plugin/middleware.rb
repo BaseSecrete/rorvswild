@@ -34,12 +34,12 @@ module RorVsWild
         private
 
         def parse_timestamp(timestamp)
+          timestamp = timestamp.to_f
+          return unless timestamp.finite?
+
           DIVISORS.each do |divisor|
-            begin
-              t = (timestamp.to_f / divisor)
-              return t if t > MINIMUM_TIMESTAMP
-            rescue RangeError
-            end
+            t = timestamp / divisor
+            return t if t > MINIMUM_TIMESTAMP
           end
         end
       end
@@ -57,9 +57,10 @@ module RorVsWild
       end
 
       def call(env)
-        RorVsWild.agent.start_request
-        report_queue_time(env)
+        queue_time_ms = calculate_queue_time(env)
+        RorVsWild.agent.start_request(queue_time_ms || 0)
         RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
+        add_queue_time_section(queue_time_ms)
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
         section.commands << "Rails::Engine#call"
@@ -72,18 +73,17 @@ module RorVsWild
 
       private
 
-      def report_queue_time(env)
-        if queue_time = calculate_queue_time(env)
-          section = Section.new
-          section.stop
-          section.total_ms = queue_time
-          section.gc_time_ms = 0
-          section.file = "request-queue"
-          section.line = 0
-          section.kind = "queue"
-          RorVsWild.agent.add_section(section)
-          RorVsWild.agent.current_data[:queued_at] = RorVsWild.agent.current_data[:started_at] - queue_time
-        end
+      def add_queue_time_section(queue_time_ms)
+        return unless queue_time_ms
+
+        section = Section.new
+        section.stop
+        section.total_ms = queue_time_ms
+        section.gc_time_ms = 0
+        section.file = "request-queue"
+        section.line = 0
+        section.kind = "queue"
+        RorVsWild.agent.add_section(section)
       end
 
       def calculate_queue_time(env)
