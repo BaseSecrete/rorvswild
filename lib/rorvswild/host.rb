@@ -8,7 +8,7 @@ module RorVsWild
 
     def self.os
       @os_description ||= `uname -sr`.strip
-    rescue Exception => ex
+    rescue Exception
       @os_description = RbConfig::CONFIG["host_os"]
     end
 

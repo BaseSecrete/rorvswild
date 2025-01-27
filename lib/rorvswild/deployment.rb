@@ -91,7 +91,7 @@ module RorVsWild
     end
 
     def self.shell(command)
-      stdout, stderr, process = Open3.capture3(command) rescue nil
+      stdout, _, process = Open3.capture3(command) rescue nil
       stdout if process && process.success?
     end
   end

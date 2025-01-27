@@ -60,7 +60,7 @@ class RorVsWild::AgentTest < Minitest::Test
   end
 
   def test_measure_class_method
-    file, line = Example.method(:foo).source_location
+    line = Example.method(:foo).source_location[1]
     agent.measure_method(Example.method(:foo))
     agent.measure_job("job") { assert_equal(1, Example.foo) }
     section = current_sections_without_gc.first
@@ -71,7 +71,7 @@ class RorVsWild::AgentTest < Minitest::Test
   end
 
   def test_measure_instance_method
-    file, line = Example.instance_method(:bar).source_location
+    line = Example.instance_method(:bar).source_location[1]
     agent.measure_method(Example.instance_method(:bar))
     agent.measure_job("job") { assert_equal(2, Example.new.bar) }
     section = current_sections_without_gc.first
