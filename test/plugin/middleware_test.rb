@@ -17,6 +17,7 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
   def test_subrequest_with_async_query
     agent # Load agent
+    agent.unstub(:queue_request)
     router = Router.new
     middleware = RorVsWild::Plugin::Middleware.new(router, nil)
     middleware.stubs(rails_engine_location: ["/rails/lib/engine.rb", 12])
