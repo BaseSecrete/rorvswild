@@ -114,8 +114,8 @@ module RorVsWild
       end
     end
 
-    def start_request
-      current_data || initialize_data
+    def start_request(queue_time_ms = 0)
+      current_data || initialize_data(queue_time_ms)
     end
 
     def stop_request
@@ -195,9 +195,9 @@ module RorVsWild
 
     private
 
-    def initialize_data
+    def initialize_data(queue_time_ms = 0)
       Thread.current[:rorvswild_data] = {
-        started_at: RorVsWild.clock_milliseconds,
+        started_at: RorVsWild.clock_milliseconds - queue_time_ms,
         gc_section: Section.start_gc_timing,
         environment: Host.to_h,
         section_stack: [],
