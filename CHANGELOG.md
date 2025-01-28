@@ -3,6 +3,12 @@
 ### Unreleased
 
 * Measure render collection
+* Requests now report the time they have been queued by the proxy before reaching the application.
+
+  A section with the kind `queue` reports the time between the timestamp set by the HTTP proxy
+  when the request was received and the time the application started processing the request.
+
+  This time is also included into the total runtime of the request.
 
 ## 1.8.1 (2024-10-17)
 
