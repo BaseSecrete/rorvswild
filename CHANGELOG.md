@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.9.0 (2025-01-20)
 
 * Measure ActiveRecord async queries and displays the non blocking time
 * Measure render collection
