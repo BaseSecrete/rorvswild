@@ -21,7 +21,7 @@ module RorVsWild
           section.kind = "view"
           section.commands << RorVsWild.agent.locator.relative_path(payload[:identifier])
           section.file = section.command
-          section.line = 1
+          section.line = 0
           section.calls = payload[:count] if payload[:count] # render collection
         end
       end

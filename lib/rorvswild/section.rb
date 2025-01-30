@@ -31,7 +31,7 @@ module RorVsWild
     def self.start_gc_timing
       section = Section.new
       section.calls = GC.count
-      section.file, section.line = "ruby/gc.c", 42
+      section.file, section.line = "ruby/gc.c", 0
       section.add_command("GC.start")
       section.kind = "gc"
       section
