@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix error from local profiler when keys are not symbolized
+
 ## 1.9.0 (2025-01-20)
 
 * Measure ActiveRecord async queries and displays the non blocking time

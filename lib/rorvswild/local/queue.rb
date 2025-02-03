@@ -45,7 +45,7 @@ module RorVsWild
       end
 
       def load_data(name)
-        JSON.load_file(File.join(directoy, "#{name}.json")) rescue []
+        JSON.load_file(File.join(directoy, "#{name}.json"), symbolize_names: true) rescue []
       end
 
       def directoy
