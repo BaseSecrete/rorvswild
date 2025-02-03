@@ -170,7 +170,9 @@
           <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{location}}</a>
         {{/locationUrl}}
         {{^locationUrl}}
-          <span class="rorvswild-local-panel__file__name">{{file}}<span>:{{line}}</span></span>
+          <span class="rorvswild-local-panel__file__name">{{file}}
+            {{#isLineRelevant}}<span>:{{line}}</span>{{/isLineRelevant}}
+          </span>
         {{/locationUrl}}
       </span>
       <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>

@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Hide line number from local profiler when it is not relevant (view, GC, ..)
 * Fix error from local profiler when keys are not symbolized
 
 ## 1.9.0 (2025-01-20)
