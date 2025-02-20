@@ -62,6 +62,23 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
     assert_equal(15, collection.calls)
   end
 
+  def test_render_empty_collection
+    ActiveSupport::Notifications
+    agent.measure_block("test") do
+      instrument("render_template.action_view", {identifier: "template.html.erb"}) do
+        instrument("render_template.action_view", {identifier: nil, layout: nil, count: 0}) { }
+      end
+    end
+
+    sections = current_sections_without_gc
+    assert_equal(1, sections.size)
+    template = sections.first
+
+    assert_equal("view", template.kind)
+    assert_equal("template.html.erb", template.command)
+    assert_equal(1, template.calls)
+  end
+
   private
 
   def instrument(*args, &block)

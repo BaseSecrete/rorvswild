@@ -13,10 +13,12 @@ module RorVsWild
       end
 
       def start(name, id, payload)
+        return if !payload[:identifier]
         RorVsWild::Section.start
       end
 
       def finish(name, id, payload)
+        return if !payload[:identifier]
         RorVsWild::Section.stop do |section|
           section.kind = "view"
           section.commands << RorVsWild.agent.locator.relative_path(payload[:identifier])

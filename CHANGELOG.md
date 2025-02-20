@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Fix instrumentation when rendering an empty collection
 * Hide line number from local profiler when it is not relevant (view, GC, ..)
 * Fix error from local profiler when keys are not symbolized
 
