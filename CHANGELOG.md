@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.9.1 (2025-02-20)
 
 * Fix instrumentation when rendering an empty collection
 * Hide line number from local profiler when it is not relevant (view, GC, ..)
