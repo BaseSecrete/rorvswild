@@ -65,10 +65,7 @@ module RorVsWild
     def self.read_from_git
       return unless @revision = normalize_string(shell("git rev-parse HEAD"))
       return @revision unless log_stdout = shell("git log -1 --pretty=%an%n%ae%n%B")
-      lines = log_stdout.lines
-      @author = normalize_string(lines[0])
-      @email = normalize_string(lines[1])
-      @description = lines[2..-1] && normalize_string(lines[2..-1].join)
+      parse_git_log(log_stdout.lines)
       @revision
     end
 
@@ -76,10 +73,7 @@ module RorVsWild
       return unless File.readable?("REVISION")
       return unless @revision = File.read("REVISION")
       return unless stdout = shell("git --git-dir ../../repo log --format=%an%n%ae%n%B -n 1 #{@revision}")
-      lines = stdout.lines
-      @author = normalize_string(lines[0])
-      @email = normalize_string(lines[1])
-      @description = lines[2..-1] && normalize_string(lines[2..-1].join)
+      parse_git_log(stdout.lines)
       @revision
     end
 
@@ -98,6 +92,12 @@ module RorVsWild
     def self.shell(command)
       stdout, _, process = Open3.capture3(command) rescue nil
       stdout if process && process.success?
+    end
+
+    def self.parse_git_log(lines)
+      @author = normalize_string(lines[0])
+      @email = normalize_string(lines[1])
+      @description = lines[2..-1] && normalize_string(lines[2..-1].join)
     end
   end
 end
