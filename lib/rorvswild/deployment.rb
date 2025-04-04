@@ -35,7 +35,7 @@ module RorVsWild
     end
 
     def self.rails
-      Rails.version if defined?(Rails)
+      Rails.version if defined?(Rails) && Rails.respond_to?(:version)
     end
 
     def self.rorvswild
@@ -47,7 +47,7 @@ module RorVsWild
     end
 
     def self.read
-      read_from_heroku || read_from_scalingo || read_from_git || read_from_capistrano
+      read_from_heroku || read_from_scalingo || read_from_kamal || read_from_git || read_from_capistrano
     end
 
     private
@@ -81,6 +81,11 @@ module RorVsWild
       @email = normalize_string(lines[1])
       @description = lines[2..-1] && normalize_string(lines[2..-1].join)
       @revision
+    end
+
+    def self.read_from_kamal
+      return unless ENV["KAMAL_VERSION"]
+      @revision = ENV["KAMAL_VERSION"]
     end
 
     def self.normalize_string(string)

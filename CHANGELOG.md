@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Read deployment's revision from $KAMAL_VERSION
+
 ## 1.9.1 (2025-02-20)
 
 * Fix instrumentation when rendering an empty collection
