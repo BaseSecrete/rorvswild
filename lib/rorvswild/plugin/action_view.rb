@@ -6,9 +6,9 @@ module RorVsWild
       def self.setup
         return if @installed
         return unless defined?(::ActiveSupport::Notifications.subscribe)
-        ActiveSupport::Notifications.subscribe("render_partial.action_view", plugin = new)
-        ActiveSupport::Notifications.subscribe("render_template.action_view", plugin)
-        ActiveSupport::Notifications.subscribe("render_collection.action_view", plugin)
+        ::ActiveSupport::Notifications.subscribe("render_partial.action_view", plugin = new)
+        ::ActiveSupport::Notifications.subscribe("render_template.action_view", plugin)
+        ::ActiveSupport::Notifications.subscribe("render_collection.action_view", plugin)
         @installed = true
       end
 

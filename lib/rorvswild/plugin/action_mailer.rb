@@ -4,7 +4,7 @@ module RorVsWild
       def self.setup
         return if @installed
         return unless defined?(::ActiveSupport::Notifications.subscribe)
-        ActiveSupport::Notifications.subscribe("deliver.action_mailer", new)
+        ::ActiveSupport::Notifications.subscribe("deliver.action_mailer", new)
         @installed = true
       end
 

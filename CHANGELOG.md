@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Instrument ActiveSupport cache
 * Read deployment's revision from $KAMAL_VERSION
 
 ## 1.9.1 (2025-02-20)
