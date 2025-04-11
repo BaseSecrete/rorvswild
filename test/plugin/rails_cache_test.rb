@@ -4,7 +4,7 @@ require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
 require "active_job"
 
-class RorVsWild::Plugin::ActiveSupportTest < Minitest::Test
+class RorVsWild::Plugin::RailsCacheTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_instrumentations_read_and_write

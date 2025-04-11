@@ -10,8 +10,8 @@ module RorVsWild
       end
 
       def self.setup_callback
-        return unless defined?(::ActiveSupport::Notifications.subscribe)
-        ::ActiveSupport::Notifications.subscribe("sql.active_record", new)
+        return unless defined?(ActiveSupport::Notifications.subscribe)
+        ActiveSupport::Notifications.subscribe("sql.active_record", new)
       end
 
       IGNORED_QUERIES = %w[EXPLAIN SCHEMA].freeze

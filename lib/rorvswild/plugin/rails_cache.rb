@@ -2,13 +2,13 @@
 
 module RorVsWild
   module Plugin
-    class ActiveSupport
+    class RailsCache
       def self.setup
         return if @installed
-        return unless defined?(::ActiveSupport::Notifications.subscribe)
+        return unless defined?(ActiveSupport::Notifications.subscribe)
         plugin = new
         for name in ["write", "read", "delete", "write_multi", "read_multi", "delete_multi", "increment", "decrement"]
-          ::ActiveSupport::Notifications.subscribe("cache_#{name}.active_support", plugin)
+          ActiveSupport::Notifications.subscribe("cache_#{name}.active_support", plugin)
         end
         @installed = true
       end
