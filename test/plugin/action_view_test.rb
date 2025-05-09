@@ -41,7 +41,6 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
   end
 
   def test_render_collection
-    ActiveSupport::Notifications
     agent.measure_block("test") do
       instrument("render_template.action_view", {identifier: "template.html.erb"}) do
         instrument("render_collection.action_view", {identifier: "_collection.html.erb", count: 10}) { }
@@ -63,20 +62,17 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
   end
 
   def test_render_empty_collection
-    ActiveSupport::Notifications
     agent.measure_block("test") do
-      instrument("render_template.action_view", {identifier: "template.html.erb"}) do
-        instrument("render_template.action_view", {identifier: nil, layout: nil, count: 0}) { }
-      end
+      instrument("render_template.action_view", {identifier: "_collection.html.erb", layout: nil, count: 0}) { }
     end
+    assert_empty(current_sections_without_gc)
+  end
 
-    sections = current_sections_without_gc
-    assert_equal(1, sections.size)
-    template = sections.first
-
-    assert_equal("view", template.kind)
-    assert_equal("template.html.erb", template.command)
-    assert_equal(1, template.calls)
+  def test_render_withtout_identifier
+    agent.measure_block("test") do
+      instrument("render_template.action_view", {identifier: nil}) { }
+    end
+    assert_empty(current_sections_without_gc)
   end
 
   private

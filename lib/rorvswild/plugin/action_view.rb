@@ -14,11 +14,13 @@ module RorVsWild
 
       def start(name, id, payload)
         return if !payload[:identifier]
+        return if payload[:count] == 0 # render empty collection
         RorVsWild::Section.start
       end
 
       def finish(name, id, payload)
         return if !payload[:identifier]
+        return if payload[:count] == 0 # render empty collection
         RorVsWild::Section.stop do |section|
           section.kind = "view"
           section.commands << RorVsWild.agent.locator.relative_path(payload[:identifier])
