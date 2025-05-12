@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## 1.9.2 (2025-05-12)
+
+* Skip measuring empty collection renderings
+
 ## 1.9.1 (2025-02-20)
 
 * Fix instrumentation when rendering an empty collection
