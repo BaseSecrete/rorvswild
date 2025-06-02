@@ -1,8 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::HostTest < Minitest::Test
+  include RorVsWild::AgentHelper
+
   def test_to_h
-    RorVsWild::Host.instance_variable_set(:@to_h, nil)
+    agent
     hash = RorVsWild::Host.to_h
     assert(hash[:os])
     assert(hash[:user])
