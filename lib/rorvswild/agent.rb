@@ -189,7 +189,8 @@ module RorVsWild
 
     def ignored_exception?(exception)
       return false unless config[:ignore_exceptions]
-      config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === exception.class.to_s }
+      class_name = exception.class.to_s
+      config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === class_name }
     end
 
     #######################
