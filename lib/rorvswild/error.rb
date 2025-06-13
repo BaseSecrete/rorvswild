@@ -57,17 +57,15 @@ module RorVsWild
 
     def self.extract_http_headers(headers)
       headers.reduce({}) do |hash, (name, value)|
-        if name.index("HTTP_") == 0 && name != "HTTP_COOKIE"
+        if name.start_with?("HTTP_") && name != "HTTP_COOKIE"
           hash[format_header_name(name)] = value
         end
         hash
       end
     end
 
-    HEADER_REGEX = /^HTTP_/.freeze
-
     def self.format_header_name(name)
-      name.sub(HEADER_REGEX, "").split("_").map(&:capitalize).join("-")
+      name.delete_prefix("HTTP_").split("_").each(&:capitalize!).join("-")
     end
   end
 end
