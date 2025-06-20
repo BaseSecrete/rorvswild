@@ -13,15 +13,15 @@ module RorVsWild
     end
 
     def self.stop(&block)
-      return unless stack && section = stack.pop
+      return if !(sections = stack) || !(section = sections.pop)
       block.call(section) if block_given?
       section.stop
       current.children_ms += section.total_ms if current
-      RorVsWild.agent.add_section(section)
+      execution = RorVsWild.agent.current_execution and execution.add_section(section)
     end
 
     def self.stack
-      (data = RorVsWild.agent.current_data) && data[:section_stack]
+      execution = RorVsWild.agent.current_execution and execution.section_stack
     end
 
     def self.current
@@ -94,7 +94,7 @@ module RorVsWild
     end
 
     def as_json(options = nil)
-      {calls: calls, total_runtime: total_ms, children_runtime: children_ms, async_runtime: async_ms, kind: kind, started_at: start_ms, file: file, line: line, command: command}
+      {calls: calls, total_runtime: total_ms, children_runtime: children_ms, async_runtime: async_ms, kind: kind, file: file, line: line, command: command}
     end
 
     def to_json(options = {})

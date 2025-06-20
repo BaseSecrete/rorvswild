@@ -68,7 +68,6 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
         ActiveSupport::Notifications.publish_event(event)
       end
     end
-
     query, root = current_sections_without_gc
     assert_equal(root.children_ms, query.total_ms)
   end

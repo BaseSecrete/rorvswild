@@ -6,24 +6,24 @@ class RorVsWildTest < Minitest::Test
   def test_measure_code
     agent.expects(:queue_job)
     assert_equal(2, RorVsWild.measure("sleep(0.001); 1 + 1"))
-    assert_equal("sleep(0.001); 1 + 1", agent.current_data[:name])
-    assert(agent.current_data[:runtime] >= 1)
+    assert_equal("sleep(0.001); 1 + 1", agent.current_execution.name)
+    assert(agent.current_execution.runtime >= 1)
   end
 
   def test_measure_code_when_raising
     agent.expects(:queue_job)
     assert_raises(RuntimeError) { RorVsWild.measure("raise 'error'") }
     #RorVsWild.measure("raise 'error'")
-    assert_equal(("raise 'error'"), agent.current_data[:name])
-    assert(agent.current_data[:runtime])
-    assert(agent.current_data[:error])
+    assert_equal(("raise 'error'"), agent.current_execution.name)
+    assert(agent.current_execution.runtime)
+    assert(agent.current_execution.error)
   end
 
   def test_mesure_block_when_exception_is_ignored
     agent = initialize_agent(ignore_exceptions: %w[ZeroDivisionError])
     agent.expects(:queue_job)
     assert_raises(ZeroDivisionError) { RorVsWild.measure("1/0") }
-    refute(agent.current_data[:error])
+    refute(agent.current_execution.error)
   end
 
   def test_measure_code_when_no_agent

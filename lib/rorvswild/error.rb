@@ -4,12 +4,12 @@ module RorVsWild
   class Error
     attr_reader :exception
 
+    attr_accessor :details
+
     def initialize(exception, context = nil)
       @exception = exception
-      @execution = RorVsWild.agent.current_execution
       @file, @line = locator.find_most_relevant_file_and_line_from_exception(exception)
       @context = extract_context(context)
-      @details = extract_details
     end
 
     def locator
@@ -25,47 +25,16 @@ module RorVsWild
         exception: exception.class.to_s,
         context: @context,
         environment: Host.to_h,
-      }.merge!(@details)
+      }
+      hash.merge!(details) if details
       hash
     end
 
     def extract_context(given_context)
       hash = defined?(ActiveSupport::ExecutionContext) ? ActiveSupport::ExecutionContext.to_h : {}
-      hash.merge!(RorVsWild.agent.error_context) if RorVsWild.agent.error_context
+      hash.merge!(RorVsWild.agent.current_execution.error_context || {}) if RorVsWild.agent.current_execution
       hash.merge!(@context) if @context
       hash
-    end
-
-    def extract_details
-      return {} unless data = RorVsWild.agent.current_data
-      if controller = data[:controller]
-        {
-          parameters: controller.request.filtered_parameters,
-          request: {
-            headers: self.class.extract_http_headers(controller.request.filtered_env),
-            name: "#{controller.class}##{controller.action_name}",
-            method: controller.request.method,
-            url: controller.request.url,
-          }
-        }
-      elsif job = data[:execution]
-        {parameters: job.parameters, job: {name: job.name}}
-      else
-        {}
-      end
-    end
-
-    def self.extract_http_headers(headers)
-      headers.reduce({}) do |hash, (name, value)|
-        if name.start_with?("HTTP_") && name != "HTTP_COOKIE"
-          hash[format_header_name(name)] = value
-        end
-        hash
-      end
-    end
-
-    def self.format_header_name(name)
-      name.delete_prefix("HTTP_").split("_").each(&:capitalize!).join("-")
     end
   end
 end

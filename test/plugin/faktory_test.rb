@@ -29,7 +29,7 @@ class RorVsWild::Plugin::FaktoryTest < Minitest::Test
     }
 
     Faktory.worker_middleware.invoke(job, payload) { job.perform(*payload["args"]) }
-    assert_equal("RorVsWild::Plugin::FaktoryTest::SampleFaktoryJob", agent.current_data[:name])
+    assert_equal("RorVsWild::Plugin::FaktoryTest::SampleFaktoryJob", agent.current_execution.name)
   end
 
   def test_callback_on_exception
@@ -50,7 +50,7 @@ class RorVsWild::Plugin::FaktoryTest < Minitest::Test
     Faktory.worker_middleware.invoke(job, payload) { job.perform(*payload["args"]) }
   rescue
   ensure
-    assert_equal([false], agent.current_data[:error].as_json[:parameters])
+    assert_equal([false], agent.current_execution.error.as_json[:parameters])
   end
 end
 
