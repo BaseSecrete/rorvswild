@@ -18,7 +18,7 @@ class RorVsWild::Plugin::ResqueTest < Minitest::Test
   def test_callback
     agent.expects(:queue_job)
     Resque.enqueue(SampleJob, true)
-    assert_equal("RorVsWild::Plugin::ResqueTest::SampleJob", agent.current_data[:name])
+    assert_equal("RorVsWild::Plugin::ResqueTest::SampleJob", agent.current_execution.name)
   end
 
   def test_callback_on_exception
@@ -26,7 +26,7 @@ class RorVsWild::Plugin::ResqueTest < Minitest::Test
     Resque.enqueue(SampleJob, false)
   rescue
   ensure
-    assert_equal([false], agent.current_data[:error].as_json[:parameters])
+    assert_equal([false], agent.current_execution.error.as_json[:parameters])
   end
 end
 

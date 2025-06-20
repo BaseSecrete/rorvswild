@@ -14,7 +14,7 @@ class RorVsWild::AgentTest < Minitest::Test
       end
     end
     assert_equal(42, result)
-    sections = agent.current_data[:sections]
+    sections = agent.current_execution.sections
     parent, child = sections[1], sections[0]
     assert_equal("child", child.command)
     assert_equal("parent", parent.command)

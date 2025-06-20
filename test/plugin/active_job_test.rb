@@ -29,7 +29,7 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
   def test_callback
     SampleJob.perform_now
     sections = current_sections_without_gc
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
     assert_equal(1, sections.size)
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", sections[0].command)
   end
@@ -37,27 +37,27 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
   def test_callback_on_exception
     assert_raises { SampleJob.perform_now("Error") }
     sections = current_sections_without_gc
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
     assert_equal(1, sections.size)
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob#perform", sections[0].command)
-    assert_equal(["Error"], agent.current_data[:error].as_json[:parameters])
+    assert_equal(["Error"], agent.current_execution.as_json.dig(:error, :parameters))
   end
 
   def test_rescued_error_is_ignored
     SampleJob.perform_now(RescuedError)
-    refute(agent.current_data[:error], "Rescued error should be ignored")
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
+    refute(agent.current_execution.error, "Rescued error should be ignored")
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
   end
 
   def test_discarded_error_is_ignored
     SampleJob.perform_now(DiscardedError)
-    refute(agent.current_data[:error], "Discarded error should be ignored")
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
+    refute(agent.current_execution.error, "Discarded error should be ignored")
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
   end
 
   def test_retried_error_ignored
     SampleJob.perform_now(RetriedError)
-    refute(agent.current_data[:error], "Retried error should be ignored")
-    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_data[:name])
+    refute(agent.current_execution.error, "Retried error should be ignored")
+    assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
   end
 end

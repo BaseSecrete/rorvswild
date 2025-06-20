@@ -26,9 +26,9 @@ module RorVsWild
               section.file = RorVsWild.agent.locator.relative_path(section.file)
               section.commands << "#{controller.class}##{method_name}"
             end
-            if current_data = RorVsWild.agent.current_data
-              current_data[:name] = controller_action
-              current_data[:controller] = controller
+            if execution = RorVsWild.agent.current_execution
+              execution.name = controller_action
+              execution.controller = controller
             end
           end
           block.call
@@ -38,7 +38,7 @@ module RorVsWild
       end
 
       def self.after_exception(exception, controller)
-        RorVsWild.agent.push_exception(exception)
+        execution = RorVsWild.agent.current_execution and execution.add_exception(exception)
         raise exception
       end
     end

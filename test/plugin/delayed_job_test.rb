@@ -27,7 +27,7 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
     backend = SampleBackend.new
     backend.payload_object = SampleJob.new(true)
     backend.invoke_job
-    assert_equal("RorVsWild::Plugin::DelayedJobTest::SampleJob", agent.current_data[:name])
+    assert_equal("RorVsWild::Plugin::DelayedJobTest::SampleJob", agent.current_execution.name)
   end
 
   def test_callback_on_exception
@@ -37,6 +37,6 @@ class RorVsWild::Plugin::DelayedJobTest < Minitest::Test
     backend.invoke_job
   rescue
   ensure
-    assert_equal(job, agent.current_data[:error].as_json[:parameters])
+    assert_equal(job, agent.current_execution.error.as_json[:parameters])
   end
 end

@@ -38,7 +38,7 @@ module RorVsWild
         section.commands << normalize_sql_query(event.payload[:sql])
         section.kind = "sql"
         (parent = Section.current) && parent.children_ms += section.total_ms
-        RorVsWild.agent.add_section(section)
+        execution = RorVsWild.agent.current_execution and execution.add_section(section)
       end
 
       SQL_STRING_REGEX = /'((?:''|\\'|[^'])*)'/

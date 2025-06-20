@@ -58,7 +58,7 @@ module RorVsWild
     end
 
     def measure_block(name = nil, kind = "code".freeze, &block)
-      current_data ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
+      current_execution ? measure_section(name, kind: kind, &block) : measure_job(name, &block)
     end
 
     def measure_method(method)
@@ -85,7 +85,7 @@ module RorVsWild
     end
 
     def measure_section(name, kind: "code", &block)
-      return block.call unless current_data
+      return block.call unless current_execution
       begin
         RorVsWild::Section.start do |section|
           section.commands << name
@@ -98,33 +98,30 @@ module RorVsWild
     end
 
     def measure_job(name, parameters: nil, &block)
-      return measure_section(name, &block) if current_data # For recursive jobs
+      return measure_section(name, &block) if current_execution # For recursive jobs
       return block.call if ignored_job?(name)
-      initialize_data[:name] = name
-      current_data[:execution] = Execution::Job.new(name, parameters)
+      start_execution(Execution::Job.new(name, parameters))
       begin
         block.call
       rescue Exception => ex
-        push_exception(ex)
+        current_execution.add_exception(ex)
         raise
       ensure
-        gc = Section.stop_gc_timing(current_data[:gc_section])
-        current_data[:sections] << gc if gc.calls > 0
-        current_data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
-        queue_job
+        stop_execution
       end
     end
 
-    def start_request(queue_time_ms = 0)
-      current_data || initialize_data(queue_time_ms)
+    def start_execution(execution)
+      Thread.current[:rorvswild_execution] ||= execution
     end
 
-    def stop_request
-      return unless data = current_data
-      gc = Section.stop_gc_timing(data[:gc_section])
-      data[:sections] << gc if gc.calls > 0 && gc.total_ms > 0
-      data[:runtime] = RorVsWild.clock_milliseconds - current_data[:started_at]
-      queue_request
+    def stop_execution
+      return unless execution = current_execution
+      execution.stop
+      case execution
+      when Execution::Job then queue_job
+      when Execution::Request then queue_request
+      end
     end
 
     def catch_error(context = nil, &block)
@@ -145,21 +142,8 @@ module RorVsWild
       end
     end
 
-    def push_exception(exception, options = nil)
-      return if ignored_exception?(exception) || !current_data
-      current_data[:error] = Error.new(exception)
-    end
-
     def merge_error_context(hash)
-      self.error_context = error_context ? error_context.merge(hash) : hash
-    end
-
-    def error_context
-      current_data[:error_context] if current_data
-    end
-
-    def error_context=(hash)
-      current_data[:error_context] = hash if current_data
+      current_execution && current_execution.merge_error_context(hash)
     end
 
     def current_data
@@ -167,16 +151,7 @@ module RorVsWild
     end
 
     def current_execution
-      current_data && current_data[:execution]
-    end
-
-    def add_section(section)
-      return unless current_data[:sections]
-      if sibling = current_data[:sections].find { |s| s.sibling?(section) }
-        sibling.merge(section)
-      else
-        current_data[:sections] << section
-      end
+      Thread.current[:rorvswild_execution]
     end
 
     def ignored_request?(name)
@@ -199,26 +174,15 @@ module RorVsWild
 
     private
 
-    def initialize_data(queue_time_ms = 0)
-      Thread.current[:rorvswild_data] = {
-        started_at: RorVsWild.clock_milliseconds - queue_time_ms,
-        gc_section: Section.start_gc_timing,
-        environment: Host.to_h,
-        section_stack: [],
-        sections: [],
-      }
-    end
-
     def cleanup_data
-      result = Thread.current[:rorvswild_data]
-      Thread.current[:rorvswild_data] = nil
+      result = Thread.current[:rorvswild_execution]
+      Thread.current[:rorvswild_execution] = nil
       result
     end
 
     def queue_request
-      if (data = cleanup_data) && data[:name]
-        data.delete(:controller)
-        queue.push_request(data.as_json)
+      if (execution = cleanup_data) && execution.name
+        queue.push_request(execution.as_json)
       end
     end
 

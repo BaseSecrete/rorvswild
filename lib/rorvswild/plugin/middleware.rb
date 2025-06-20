@@ -57,10 +57,9 @@ module RorVsWild
       end
 
       def call(env)
-        queue_time_ms = calculate_queue_time(env)
-        RorVsWild.agent.start_request(queue_time_ms || 0)
-        RorVsWild.agent.current_data[:path] = env["ORIGINAL_FULLPATH"]
-        add_queue_time_section(queue_time_ms)
+        execution = RorVsWild::Execution::Request.new(env["ORIGINAL_FULLPATH"])
+        execution.add_queue_time(calculate_queue_time(env))
+        RorVsWild.agent.start_execution(execution)
         section = RorVsWild::Section.start
         section.file, section.line = rails_engine_location
         section.commands << "Rails::Engine#call"
@@ -68,23 +67,10 @@ module RorVsWild
         [code, headers, body]
       ensure
         RorVsWild::Section.stop
-        RorVsWild.agent.stop_request
+        RorVsWild.agent.stop_execution
       end
 
       private
-
-      def add_queue_time_section(queue_time_ms)
-        return unless queue_time_ms
-
-        section = Section.new
-        section.stop
-        section.total_ms = queue_time_ms
-        section.gc_time_ms = 0
-        section.file = "request-queue"
-        section.line = 0
-        section.kind = "queue"
-        RorVsWild.agent.add_section(section)
-      end
 
       def calculate_queue_time(env)
         queue_time_from_header = parse_queue_time_header(env)

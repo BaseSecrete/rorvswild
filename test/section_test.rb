@@ -35,8 +35,8 @@ class RorVsWild::SectionTest < Minitest::Test
     agent.measure_job("job") do
       agent.measure_section("section") { GC.start; GC.start }
     end
-    gc = agent.current_data[:sections].find { |s| s.kind == "gc" }
-    section = agent.current_data[:sections].find { |s| s.kind != "gc" }
+    gc = agent.current_execution.sections.find { |s| s.kind == "gc" }
+    section = agent.current_execution.sections.find { |s| s.kind != "gc" }
     assert(section.self_ms < section.gc_time_ms, section.inspect)
     assert_equal(gc.total_ms, section.gc_time_ms)
     assert_equal("gc", gc.kind)
@@ -50,12 +50,30 @@ class RorVsWild::SectionTest < Minitest::Test
     agent.measure_job("job") do
       agent.measure_section("section") { }
     end
-    sections = agent.current_data[:sections]
+    sections = agent.current_execution.sections
     assert_equal(1, sections.size)
     assert_equal("code", sections[0].kind)
   ensure
     GC.enable
   end
+
+  def test_as_json
+    assert_equal(
+      {
+        calls: 1,
+        total_runtime: 1,
+        children_runtime: 1,
+        async_runtime: 0,
+        kind: "test",
+        file: "file",
+        line: 1,
+        command: "command1",
+      },
+      section1.as_json
+    )
+  end
+
+  private
 
   def section1
     unless @section1

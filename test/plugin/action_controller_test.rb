@@ -6,42 +6,41 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_around_action
-    agent.start_request
+    start_request
     controller = SampleController.new
     controller.action_name = "index"
     RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
 
-    assert_equal(1, agent.current_data[:sections].size)
-    assert(agent.current_data[:sections][0].total_ms >= 10)
-    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:sections][0].command)
-    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:name])
+    assert_equal(1, agent.current_execution.sections.size)
+    assert(agent.current_execution.sections[0].total_ms >= 10)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_execution.sections[0].command)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_execution.name)
   end
 
   def test_around_action_when_method_for_action_returns_nil
-    agent.start_request
+    start_request
     controller = SampleController.new
     controller.action_name = "index"
     controller.stubs(method_for_action: nil)
     RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
 
-    assert_equal(1, agent.current_data[:sections].size)
-    assert(agent.current_data[:sections][0].total_ms >= 10)
-    assert_equal("", agent.current_data[:sections][0].command)
-    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_data[:name])
+    assert_equal(1, agent.current_execution.sections.size)
+    assert(agent.current_execution.sections[0].total_ms >= 10)
+    assert_equal("", agent.current_execution.sections[0].command)
+    assert_equal("RorVsWild::Plugin::ActionControllerTest::SampleController#index", agent.current_execution.name)
   end
 
   def test_after_exception
-    agent.start_request
-    RorVsWild::Plugin::RailsError.stubs(installed?: false)
+    start_request
     RorVsWild.merge_error_context(user_id: 123)
     RorVsWild.merge_error_context(other_id: 456)
     controller = SampleController.new
     controller.action_name = "index"
     controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
-    RorVsWild.agent.current_data[:controller] = controller
+    RorVsWild.agent.current_execution.controller = controller
     assert_raises(ZeroDivisionError) { RorVsWild::Plugin::ActionController.after_exception(ZeroDivisionError.new, controller) }
 
-    data = agent.current_data[:error].as_json
+    data = agent.current_execution.error.as_json
     assert_equal("ZeroDivisionError", data[:exception])
     assert_equal({foo: "bar"}, data[:parameters])
     assert_equal({"Content-Type" => "HTML"}, data[:request][:headers])
@@ -54,19 +53,19 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
   end
 
   def test_around_action_for_api_controller
-    agent.start_request
+    start_request
     controller = ApiController.new
     controller.action_name = "index"
     RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
-    assert(agent.current_data[:name])
+    assert(agent.current_execution.name)
   end
 
   def test_callback_when_action_is_ignored
-    agent.start_request
+    start_request
     controller = SecretController.new
     controller.action_name = "index"
     RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
-    refute(agent.current_data[:name])
+    refute(agent.current_execution.name)
   end
 
   class SampleController < ActionController::Base

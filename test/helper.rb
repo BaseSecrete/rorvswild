@@ -42,6 +42,11 @@ module RorVsWild::AgentHelper
   end
 
   def current_sections_without_gc
-    agent.current_data[:sections].select { |s| s.kind != "gc" }
+    agent.current_execution.sections.select { |s| s.kind != "gc" }
+  end
+
+  def start_request(path = "/")
+    agent
+    RorVsWild.agent.start_execution(RorVsWild::Execution::Request.new(path))
   end
 end
