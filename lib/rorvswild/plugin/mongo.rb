@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RorVsWild
   module Plugin
     class Mongo
@@ -10,13 +12,10 @@ module RorVsWild
 
       attr_reader :commands
 
-      def initialize
-        @commands = {}
-      end
-
       def started(event)
-        RorVsWild::Section.start
-        commands[event.request_id] = event.command
+        section = RorVsWild::Section.start
+        section.kind = "mongo"
+        section.commands << {event.command_name => event.command[event.command_name]}.to_json
       end
 
       def failed(event)
@@ -28,10 +27,7 @@ module RorVsWild
       end
 
       def after_query(event)
-        RorVsWild::Section.stop do |section|
-          section.kind = "mongo".freeze
-          section.command = commands.delete(event.request_id).to_s
-        end
+        RorVsWild::Section.stop
       end
     end
   end

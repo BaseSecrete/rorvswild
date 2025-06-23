@@ -8,18 +8,32 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
   Mongo::Logger.logger.level = ::Logger::FATAL
 
   def test_callback
-    skip
     mountains = [
       {name: "Mont Blanc", altitude: 4807},
       {name: "Mont Cervin", altitude: 4478},
     ]
+    agent.locator.stubs(current_path: File.dirname(__FILE__))
+
     agent.measure_block("mongo") do
-      agent = Mongo::Client.new('mongodb://127.0.0.1:27017/test')
-      mountains.each { |m| agent[:mountains].insert_one(m) }
+      mongo = Mongo::Client.new("mongodb://127.0.0.1:27017/test")
+      mongo[:mountains].drop()
+      mountains.each { |m| mongo[:mountains].insert_one(m) }
+      mongo[:mountains].find(altitude: {"$gt": 4800}).each { |mountain| }
     end
-    assert_equal(1, agent.current_data[:sections].size)
-    assert_equal(2, agent.current_data[:sections][0].calls)
-    assert_equal("mongo", agent.current_data[:sections][0].kind)
-    assert_match('{"insert"=>"mountains", "ordered"=>true, "documents"=>', agent.current_data[:sections][0].command)
+
+    sections = agent.current_data[:sections]
+    assert_equal(3, sections.size)
+
+    assert_equal(1, sections[0].calls)
+    assert_equal("mongo", sections[0].kind)
+    assert_match({drop: "mountains"}.to_json, sections[0].command)
+
+    assert_equal(2, sections[1].calls)
+    assert_equal("mongo", sections[1].kind)
+    assert_match({insert: "mountains"}.to_json, sections[1].command)
+
+    assert_equal(1, sections[2].calls)
+    assert_equal("mongo", sections[2].kind)
+    assert_match({find: "mountains"}.to_json, sections[2].command)
   end
 end
