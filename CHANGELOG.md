@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Fix MongoDB monitoring
 * Skip measuring empty collection renderings
 * Instrument Rails.cache via ActiveSupport notifications
 * Read deployment's revision from $KAMAL_VERSION
