@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Normalize MongoDB by removing any variables
 * Fix MongoDB monitoring
 * Add root section to Sidekiq tn ensure not missing any timings
 * Save local requests, jobs and errors in NSJSON instead of JSON
