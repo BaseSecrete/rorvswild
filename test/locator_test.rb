@@ -31,6 +31,12 @@ class RorVsWild::LocatorTest < Minitest::Test
     assert_equal(["app/models/user.rb", 3], locator.find_most_relevant_file_and_line(callstack))
   end
 
+  def test_find_most_relevant_file_and_line_when_path_is_nil
+    locator = RorVsWild::Locator.new("/rails/root")
+    callstack = [stub(path: nil, lineno: 0), stub(path: "foo.rb", lineno: 1)]
+    assert_equal(["foo.rb", 1], locator.find_most_relevant_file_and_line(callstack))
+  end
+
   def test_find_most_relevant_file_and_line_from_array_of_strings
     locator = RorVsWild::Locator.new("/rails/root")
 

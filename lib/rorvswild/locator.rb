@@ -12,7 +12,9 @@ module RorVsWild
     end
 
     def find_most_relevant_location(locations)
-      locations.find { |l| relevant_path?(l.path) } || locations.find { |l| !l.path.start_with?(rorvswild_lib_path) } || locations.first
+      locations.find { |l| l.path && relevant_path?(l.path) } ||
+        locations.find { |l| l.path && !l.path.start_with?(rorvswild_lib_path) } ||
+        locations.first
     end
 
     def find_most_relevant_file_and_line_from_exception(exception)
