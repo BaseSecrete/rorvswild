@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Add root section to Sidekiq tn ensure not missing any timings
 * Save local requests, jobs and errors in NSJSON instead of JSON
 * Remove ASCII and Server-Timing header
 * Skip measuring empty collection renderings
