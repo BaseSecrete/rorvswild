@@ -23,6 +23,8 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
     agent.expects(:queue_job)
     Sidekiq::Testing.inline! { SampleJob.perform_async(1) }
     assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob", agent.current_data[:name])
+    assert_equal(1, agent.current_data[:sections].size)
+    assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob#perform", agent.current_data[:sections][0].command)
   end
 
   def test_callback_on_exception
