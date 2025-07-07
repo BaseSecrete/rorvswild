@@ -7,11 +7,8 @@ module RorVsWild
         return if @installed
         return unless defined?(::ActionController::Base)
         ::ActionController::Base.around_action(&method(:around_action))
-        ::ActionController::Base.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
-
         if defined?(::ActionController::API) && ::ActionController::API.respond_to?(:around_action)
           ::ActionController::API.around_action(&method(:around_action))
-          ::ActionController::API.rescue_from(StandardError) { |ex| RorVsWild::Plugin::ActionController.after_exception(ex, self) }
         end
         @installed = true
       end
@@ -32,14 +29,12 @@ module RorVsWild
             end
           end
           block.call
+        rescue => exception
+          RorVsWild.agent.current_execution&.add_exception(exception)
+          raise
         ensure
           RorVsWild::Section.stop
         end
-      end
-
-      def self.after_exception(exception, controller)
-        execution = RorVsWild.agent.current_execution and execution.add_exception(exception)
-        raise exception
       end
     end
   end

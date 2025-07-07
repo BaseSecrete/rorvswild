@@ -36,9 +36,19 @@ class RorVsWild::Plugin::ActionControllerTest < Minitest::Test
     RorVsWild.merge_error_context(other_id: 456)
     controller = SampleController.new
     controller.action_name = "index"
-    controller.stubs(request: stub(filtered_parameters: {foo: "bar"}, filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"}, method: "GET", url: "http://localhost:3000/test"))
-    RorVsWild.agent.current_execution.controller = controller
-    assert_raises(ZeroDivisionError) { RorVsWild::Plugin::ActionController.after_exception(ZeroDivisionError.new, controller) }
+    controller.stubs(:index).raises(ZeroDivisionError)
+    controller.stubs(
+      request: stub(
+        method: "GET",
+        url: "http://localhost:3000/test",
+        filtered_parameters: {foo: "bar"},
+        filtered_env: {"HTTP_CONTENT_TYPE" => "HTML"},
+      )
+    )
+
+    assert_raises(StandardError) do
+      RorVsWild::Plugin::ActionController.around_action(controller, controller.method(:index))
+    end
 
     data = agent.current_execution.error.as_json
     assert_equal("ZeroDivisionError", data[:exception])
