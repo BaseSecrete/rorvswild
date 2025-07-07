@@ -22,6 +22,10 @@ jobs:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
 
+      - uses: ankane/setup-elasticsearch@v1
+        with:
+          elasticsearch-version: 9
+
       # - name: Install Elasticsearch
       #   run: |
       #     wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
