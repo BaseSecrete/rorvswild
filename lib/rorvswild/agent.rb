@@ -134,11 +134,8 @@ module RorVsWild
     end
 
     def record_error(exception, context = nil)
-      if !ignored_exception?(exception)
-        current_error = current_data && current_data[:error]
-        if !current_error || current_error.exception != exception
-          queue_error(Error.new(exception, context).as_json)
-        end
+      if !ignored_exception?(exception) && current_execution&.error&.exception != exception
+        queue_error(Error.new(exception, context).as_json)
       end
     end
 

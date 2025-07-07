@@ -134,4 +134,23 @@ class RorVsWild::AgentTest < Minitest::Test
     ENV["DYNO"] = old_dyno
     ENV["GAE_INSTANCE"] = old_gae
   end
+
+  def test_record_error
+    agent.queue.expects(:push_error)
+    agent.measure_job("test") { agent.record_error(StandardError.new) }
+  end
+
+  def test_record_error_when_ignored
+    agent.queue.expects(:push_error).never
+    agent.config[:ignore_exceptions] = ["StandardError"]
+    agent.measure_job("test") { agent.record_error(StandardError.new) }
+  end
+
+  def test_record_error_when_already_caught
+    agent.queue.expects(:push_error).never
+    agent.measure_job("test") do
+      agent.current_execution.add_exception(exception = StandardError.new)
+      agent.record_error(exception)
+    end
+  end
 end

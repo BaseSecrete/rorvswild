@@ -45,10 +45,6 @@ module RorVsWild
       @runtime = RorVsWild.clock_milliseconds - @started_at
     end
 
-    def add_exception(exception)
-      @error ||= Error.new(exception) if !RorVsWild.agent.ignored_exception?(exception)
-    end
-
     def as_json(options = nil)
       {
         name: name,
