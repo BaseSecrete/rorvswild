@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Remove ASCII and Server-Timing header
 * Skip measuring empty collection renderings
 * Instrument Rails.cache via ActiveSupport notifications
 * Read deployment's revision from $KAMAL_VERSION

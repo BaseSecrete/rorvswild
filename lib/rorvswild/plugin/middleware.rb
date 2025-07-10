@@ -68,7 +68,7 @@ module RorVsWild
         [code, headers, body]
       ensure
         RorVsWild::Section.stop
-        inject_server_timing(RorVsWild.agent.stop_request, headers)
+        RorVsWild.agent.stop_request
       end
 
       private
@@ -94,49 +94,6 @@ module RorVsWild
 
       def rails_engine_location
         @rails_engine_location = ::Rails::Engine.instance_method(:call).source_location
-      end
-
-      def format_server_timing_header(sections)
-        sections.map do |section|
-          if section.kind == "view"
-            "#{section.kind};dur=#{section.self_ms.round};desc=\"#{section.file}\""
-          else
-            "#{section.kind};dur=#{section.self_ms.round};desc=\"#{section.file}:#{section.line}\""
-          end
-        end.join(", ")
-      end
-
-      def format_server_timing_ascii(sections, total_width = 80)
-        max_time = sections.map(&:self_ms).max
-        chart_width = (total_width * 0.25).to_i
-        rows = sections.map { |section|
-          [
-            section.kind == "view" ? section.file : "#{section.file}:#{section.line}",
-            "█" * (section.self_ms * (chart_width-1) / max_time),
-            "%.1fms" % section.self_ms,
-          ]
-        }
-        time_width = rows.map { |cols| cols[2].size }.max + 1
-        label_width = total_width - chart_width - time_width
-        rows.each { |cols| cols[0] = truncate_backwards(cols[0], label_width) }
-        template = "%-#{label_width}s%#{chart_width}s%#{time_width}s"
-        rows.map { |cols| format(template, *cols) }.join("\n")
-      end
-
-      def truncate_backwards(string, width)
-        string.size > width ? "…" + string[-(width - 1)..-1] : string
-      end
-
-      def inject_server_timing(data, headers)
-        return if !data || !data[:send_server_timing] || !(sections = data[:sections])
-        sections = sections.sort_by(&:self_ms).reverse[0,10]
-        headers["Server-Timing"] = format_server_timing_header(sections)
-        if data[:name] && RorVsWild.logger.level <= Logger::Severity::DEBUG
-          RorVsWild.logger.debug(["┤ #{data[:name]} ├".center(80, "─"),
-            format_server_timing_ascii(sections),
-            "─" * 80, nil].join("\n")
-          )
-        end
       end
     end
   end

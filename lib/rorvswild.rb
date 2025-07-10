@@ -61,7 +61,7 @@ module RorVsWild
   end
 
   def self.send_server_timing=(boolean)
-    agent.send_server_timing = boolean if agent
+    warn "[DEPRECATION] `RorVsWild.send_server_timing=` is deprecated and is no longer supported."
   end
 
   def self.initialize_logger(destination = nil)
