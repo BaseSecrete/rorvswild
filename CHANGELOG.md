@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Save local requests, jobs and errors in NSJSON instead of JSON
 * Remove ASCII and Server-Timing header
 * Skip measuring empty collection renderings
 * Instrument Rails.cache via ActiveSupport notifications

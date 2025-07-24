@@ -34,18 +34,11 @@ module RorVsWild
       def push_to(data, name)
         data[:queued_at] = Time.now
         data[:uuid] = SecureRandom.uuid
-        array = load_data(name)
-        array.unshift(data)
-        array.pop if array.size > 100
-        save_data(array, name)
-      end
-
-      def save_data(data, name)
-        File.open(File.join(directoy, "#{name}.json"), "w") { |file| JSON.dump(data, file) }
+        File.open(File.join(directoy, "#{name}.ndjson"), "a") { |file| file.write(JSON.dump(data) + "\n") }
       end
 
       def load_data(name)
-        JSON.load_file(File.join(directoy, "#{name}.json"), symbolize_names: true) rescue []
+        File.foreach(File.join(directoy, "#{name}.ndjson")).map { |line| JSON.parse(line, symbolize_names: true) }.reverse rescue []
       end
 
       def directoy
