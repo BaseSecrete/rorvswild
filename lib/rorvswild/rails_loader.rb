@@ -15,6 +15,10 @@ module RorVsWild
       elsif Rails.env.development?
         require "rorvswild/local"
         RorVsWild::Local.start(config || {})
+      elsif Rails.env.test?
+        require "rorvswild/local"
+        path = "tests/#{DateTime.now.iso8601}"
+        RorVsWild::Local.start({widget: "hidden", queue: {prefix: path}}.merge(config || {}))
       end
     end
 
