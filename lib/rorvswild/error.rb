@@ -32,8 +32,8 @@ module RorVsWild
 
     def extract_context(given_context)
       hash = defined?(ActiveSupport::ExecutionContext) ? ActiveSupport::ExecutionContext.to_h : {}
-      hash.merge!(RorVsWild.agent.current_execution.error_context || {}) if RorVsWild.agent.current_execution
-      hash.merge!(@context) if @context
+      hash.merge!(RorVsWild.agent&.current_execution&.error_context || {})
+      hash.merge!(given_context) if given_context.is_a?(Hash)
       hash
     end
   end
