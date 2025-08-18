@@ -24,8 +24,9 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
     middleware.call(request)
 
-    assert_equal(2, agent.current_execution.sections.size)
-    queue_time_section = agent.current_execution.sections[0]
+    sections = current_sections_without_gc
+    assert_equal(2, sections.size)
+    queue_time_section = sections[0]
     assert_equal "queue", queue_time_section.file
     assert_equal "queue", queue_time_section.kind
     assert_equal 0, queue_time_section.line
