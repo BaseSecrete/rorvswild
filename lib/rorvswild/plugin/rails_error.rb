@@ -11,7 +11,7 @@ module RorVsWild
         @installed = true
       end
 
-      def report(error, handled:, severity:, context:, source:)
+      def report(error, handled: nil, severity: nil, context: nil, source: nil)
         RorVsWild.record_error(error, context)
       end
     end
