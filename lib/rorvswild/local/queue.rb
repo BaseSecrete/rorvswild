@@ -45,7 +45,24 @@ module RorVsWild
       end
 
       def load_data(name)
-        File.foreach(File.join(@directoy, "#{name}.ndjson")).map { |line| JSON.parse(line, symbolize_names: true) }.reverse rescue []
+        path = File.join(@directoy, "#{name}.ndjson")
+        read_last_lines(path, 1000).map { |line| JSON.parse(line, symbolize_names: true) }.reverse! rescue []
+      end
+
+      def read_last_lines(path, desired_lines, max_read_size = 4096 * desired_lines)
+        read_lines, buffer = 0, String.new
+        File.open(path, "rb") do |file|
+          file.seek(0, IO::SEEK_END)
+          pos = file.pos
+          while pos > 0 && read_lines <= desired_lines
+            read_size = max_read_size < pos ? max_read_size : pos
+            file.seek(pos -= read_size, IO::SEEK_SET)
+            str = file.read(read_size)
+            read_lines += str.count("\n")
+            buffer.concat(str)
+          end
+        end
+        buffer.lines[-desired_lines..-1]
       end
     end
   end
