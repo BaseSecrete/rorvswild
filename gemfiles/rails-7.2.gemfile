@@ -1,7 +1,4 @@
-source 'https://rubygems.org'
-
-# Specify your gem's dependencies in rorvswild.gemspec
-gemspec
+source "https://rubygems.org"
 
 gem "rake"
 
@@ -13,8 +10,8 @@ gem "mongo"
 gem "redis"
 gem "elasticsearch"
 
-gem "actionpack"
-gem "activejob"
+gem "actionpack", "~> 7.2"
+gem "activejob", "~> 7.2"
 
 gem "delayed_job"
 gem "sidekiq"

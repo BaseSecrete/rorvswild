@@ -1,0 +1,28 @@
+source "https://rubygems.org"
+
+gem "rake"
+
+gem "mocha"
+gem "top_tests"
+gem "simplecov"
+
+gem "mongo"
+gem "redis"
+gem "elasticsearch"
+
+gem "multi_json", "~> 1.14.1"
+gem "faraday", "~> 2.8.0"
+gem "nokogiri", "~> 1.15.0"
+gem "securerandom", "~> 0.3.2"
+
+gem "actionpack", "~> 7.0"
+gem "activejob", "~> 7.0"
+
+gem "delayed_job"
+gem "sidekiq", "~> 7.3.9"
+gem "resque"
+gem "faktory_worker_ruby"
+
+gem "minitest-stub-const"
+
+gem "mutex_m"
