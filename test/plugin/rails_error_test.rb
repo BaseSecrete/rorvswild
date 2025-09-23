@@ -6,6 +6,7 @@ class RorVsWild::Plugin::RailsErrorTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_report
+    return unless defined?(ActiveSupport::ErrorReporter)
     RorVsWild::Plugin::RailsError.instance_variable_set(:@installed, false)
     rails = stub(error: ActiveSupport::ErrorReporter.new)
     RorVsWild::Plugin::RailsError.stub_const(:Rails, rails) do
@@ -16,6 +17,7 @@ class RorVsWild::Plugin::RailsErrorTest < Minitest::Test
   end
 
   def test_report_with_given_context
+    return unless defined?(ActiveSupport::ErrorReporter)
     rails = stub(error: ActiveSupport::ErrorReporter.new)
     RorVsWild::Plugin::RailsError.instance_variable_set(:@installed, false)
     RorVsWild::Plugin::RailsError.stub_const(:Rails, rails) do

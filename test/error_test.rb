@@ -8,6 +8,7 @@ class RorVsWild::ErrorTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_extract_context_with_rails_context
+    return unless defined?(ActiveSupport::ErrorReporter)
     agent
     ActiveSupport::ExecutionContext.set(foo: "bar")
     begin

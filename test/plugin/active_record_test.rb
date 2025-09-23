@@ -55,6 +55,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
 
   def test_async_query
     instrumenter = ActiveSupport::Notifications.instrumenter
+    return unless instrumenter.respond_to?(:new_event)
 
     agent.locator.stubs(current_path: File.dirname(__FILE__))
     agent.measure_job("job") do

@@ -24,7 +24,7 @@ module RorVsWild::AgentHelper
   end
 
   def setup
-    ActiveSupport::ExecutionContext.clear
+    ActiveSupport::ExecutionContext.clear if defined?(ActiveSupport::ExecutionContext)
   end
 
   def initialize_agent(options = {})
