@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     class Mongo
+      @installed = false
+
       def self.setup
         return if @installed
         return if !defined?(::Mongo::Monitoring::Global)

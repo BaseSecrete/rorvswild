@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     class ActionController
+      @installed = false
+
       def self.setup
         return if @installed
         return unless defined?(::ActionController::Base)

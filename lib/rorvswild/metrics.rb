@@ -3,6 +3,7 @@ module RorVsWild
     attr_reader :cpu, :memory, :storage, :updated_at
 
     def initialize
+      @updated_at = nil
       @cpu = RorVsWild::Metrics::Cpu.new
       @memory = RorVsWild::Metrics::Memory.new
       @storage = RorVsWild::Metrics::Storage.new

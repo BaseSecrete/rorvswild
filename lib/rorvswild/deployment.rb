@@ -4,6 +4,8 @@ require "open3"
 
 module RorVsWild
   module Deployment
+    @revision = @description = @author = @email = nil
+
     def self.load_config(config)
       read
       if hash = config[:deployment]

@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     module DelayedJob
+      @installed = false
+
       def self.setup
         return if @installed
         return unless defined?(Delayed::Plugin)

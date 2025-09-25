@@ -1,6 +1,8 @@
 module RorVsWild
   module Plugin
     class ActiveJob
+      @installed = false
+
       def self.setup
         return if @installed
         return unless defined?(::ActiveJob::Base)

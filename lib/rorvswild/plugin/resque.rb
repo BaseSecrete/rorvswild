@@ -1,6 +1,8 @@
 module RorVsWild
   module Plugin
     module Resque
+      @installed = false
+
       def self.setup
         return if @installed
         ::Resque::Job.send(:extend, Resque) if defined?(::Resque::Job)

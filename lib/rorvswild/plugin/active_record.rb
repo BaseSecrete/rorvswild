@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     class ActiveRecord
+      @installed = false
+
       def self.setup
         return if @installed
         setup_callback

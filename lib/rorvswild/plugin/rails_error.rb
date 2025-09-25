@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     class RailsError
+      @installed = false
+
       def self.setup
         return if @installed
         return if !defined?(Rails.error)

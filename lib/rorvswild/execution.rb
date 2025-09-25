@@ -2,7 +2,7 @@
 
 module RorVsWild
   class Execution
-    attr_reader :name, :parameters, :sections, :section_stack, :error_context, :runtime
+    attr_reader :parameters, :sections, :section_stack, :error_context, :runtime
 
     attr_accessor :error, :name
 
@@ -11,6 +11,7 @@ module RorVsWild
       @parameters = parameters
       @runtime = nil
       @error = nil
+      @error_context = nil
 
       @started_at = RorVsWild.clock_milliseconds
       @gc_section = Section.start_gc_timing

@@ -1,6 +1,8 @@
 module RorVsWild
   module Plugin
     class ActionMailer
+      @installed = false
+
       def self.setup
         return if @installed
         return unless defined?(ActiveSupport::Notifications.subscribe)

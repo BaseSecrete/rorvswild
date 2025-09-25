@@ -46,6 +46,8 @@ module RorVsWild
 
       include RequestQueueTime
 
+      @installed = false
+
       def self.setup
         return if @installed
         Rails.application.config.middleware.unshift(RorVsWild::Plugin::Middleware, nil) if defined?(Rails)
