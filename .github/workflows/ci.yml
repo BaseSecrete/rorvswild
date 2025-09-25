@@ -6,9 +6,31 @@ permissions:
   contents: read
 
 jobs:
-  rails-8_1:
-    name: Rails 8.1
+  test:
+    name: Test Rails ${{matrix.rails}} & Ruby ${{matrix.ruby}}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # Test all active versions combinations
+          # and inactive Rails versions with minimum Ruby version.
+          - {rails: "8.1", ruby: "3.4"}
+          - {rails: "8.1", ruby: "3.3"}
+          - {rails: "8.1", ruby: "3.2"}
+
+          - {rails: "8.0", ruby: "3.4"}
+          - {rails: "8.0", ruby: "3.3"}
+          - {rails: "8.0", ruby: "3.2"}
+
+          - {rails: "7.2", ruby: "3.4"}
+          - {rails: "7.2", ruby: "3.3"}
+          - {rails: "7.2", ruby: "3.2"}
+          - {rails: "7.2", ruby: "3.1"}
+
+          - {rails: "7.1", ruby: "2.7"}
+          - {rails: "7.0", ruby: "2.7"}
+          - {rails: "6.1", ruby: "2.5"}
+          - {rails: "6.0", ruby: "2.5"}
     steps:
       - uses: actions/checkout@v4
 
@@ -21,125 +43,10 @@ jobs:
       - name: Setup Ruby ${{matrix.ruby}}
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.2
+          ruby-version: ${{matrix.ruby}}
           bundler-cache: true
 
       - name: rake test
         run: bundle install && bundle exec rake
         env:
-          BUNDLE_GEMFILE: gemfiles/rails-8.1.gemfile
-
-  rails-8_0:
-    name: Rails 8.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-
-      - name: Setup Ruby ${{matrix.ruby}}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.2
-          bundler-cache: true
-
-      - name: rake test
-        run: bundle install && bundle exec rake
-        env:
-          BUNDLE_GEMFILE: gemfiles/rails-8.0.gemfile
-
-  rails-7_1:
-    name: Rails 7.1
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-
-      - name: Setup Ruby ${{matrix.ruby}}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 3.1
-          bundler-cache: true
-
-      - name: rake test
-        run: bundle install && bundle exec rake
-        env:
-          BUNDLE_GEMFILE: gemfiles/rails-7.1.gemfile
-
-  rails-7_0:
-    name: Rails 7.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-
-      - name: Setup Ruby ${{matrix.ruby}}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7
-          bundler-cache: true
-
-      - name: rake test
-        run: bundle install && bundle exec rake
-        env:
-          BUNDLE_GEMFILE: gemfiles/rails-7.0.gemfile
-
-  rails-6_1:
-    name: Rails 6.1
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-
-      - name: Setup Ruby ${{matrix.ruby}}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
-          bundler-cache: true
-
-      - name: rake test
-        run: bundle install && bundle exec rake
-        env:
-          BUNDLE_GEMFILE: gemfiles/rails-6.1.gemfile
-
-  rails-6_0:
-    name: Rails 6.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-
-      - name: Start MongoDB
-        uses: supercharge/mongodb-github-action@1.12.0
-
-      - name: Setup Ruby ${{matrix.ruby}}
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.5
-          bundler-cache: true
-
-      - name: rake test
-        run: bundle install && bundle exec rake
-        env:
-          BUNDLE_GEMFILE: gemfiles/rails-6.0.gemfile
+          BUNDLE_GEMFILE: gemfiles/rails-${{matrix.rails}}.gemfile
