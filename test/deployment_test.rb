@@ -68,7 +68,7 @@ class RorVsWild::DeploymentTest < Minitest::Test
   private
 
   def stub_env(new_hash, &block)
-    old_hash = ENV.filter { |name, value| new_hash.keys.include?(name) }
+    old_hash = ENV.select { |name, value| new_hash.keys.include?(name) }
     new_hash.each { |name, value| ENV[name] = value }
     block.call
   ensure

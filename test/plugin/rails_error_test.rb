@@ -23,8 +23,12 @@ class RorVsWild::Plugin::RailsErrorTest < Minitest::Test
     RorVsWild::Plugin::RailsError.stub_const(:Rails, rails) do
       RorVsWild::Plugin::RailsError.setup
       queue = agent.queue
-      def queue.push_error(error) = @error = error
-      def queue.error = @error
+      def queue.push_error(error)
+        @error = error
+      end
+      def queue.error
+        @error
+      end
       rails.error.report(Exception.new("Test"), context: {foo: "bar"})
       assert_equal({foo: "bar"}, queue.error[:context])
     end
