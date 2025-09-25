@@ -58,9 +58,9 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
     middleware.call(request)
 
-    assert_equal(2, agent.current_execution.sections.size)
-    queue_time_section = agent.current_execution.sections[0]
-    assert_in_delta(234, queue_time_section.total_ms, 10)
+    sections = current_sections_without_gc
+    assert_equal(2, sections.size)
+    assert_in_delta(234, sections[0].total_ms, 10)
   end
 
   def test_queue_time_micros
@@ -72,9 +72,10 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
     middleware.stubs(rails_engine_location: ["/rails/lib/engine.rb", 12])
     middleware.call(request)
 
-    assert_equal(2, agent.current_execution.sections.size)
-    queue_time_section = agent.current_execution.sections[0]
-    assert_in_delta(345, queue_time_section.total_ms, 10)
+    sections = current_sections_without_gc
+    assert_equal(2, sections.size)
+    queue_time_section = sections[0]
+    assert_in_delta(345, sections[0].total_ms, 10)
   end
 
   private
