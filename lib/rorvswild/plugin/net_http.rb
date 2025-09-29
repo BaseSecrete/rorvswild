@@ -3,7 +3,7 @@ module RorVsWild
     class NetHttp
       HTTP = "http".freeze
 
-      def self.setup
+      def self.setup(agent)
         return if !defined?(Net::HTTP)
         return if Net::HTTP.method_defined?(:request_without_rorvswild)
 

@@ -5,7 +5,7 @@ module RorVsWild
     class ActionController
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return unless defined?(::ActionController::Base)
         ::ActionController::Base.around_action(&method(:around_action))

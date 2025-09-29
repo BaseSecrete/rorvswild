@@ -3,7 +3,7 @@
 module RorVsWild
   module Plugin
     class Redis
-      def self.setup
+      def self.setup(agent)
         return if !defined?(::Redis)
         if ::Redis::Client.method_defined?(:process)
           ::Redis::Client.prepend(V4)

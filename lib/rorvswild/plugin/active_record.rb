@@ -5,7 +5,7 @@ module RorVsWild
     class ActiveRecord
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         setup_callback
         @installed = true

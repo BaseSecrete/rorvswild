@@ -3,7 +3,7 @@ module RorVsWild
     module Resque
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         ::Resque::Job.send(:extend, Resque) if defined?(::Resque::Job)
         @installed = true

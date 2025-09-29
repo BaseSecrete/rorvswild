@@ -5,7 +5,7 @@ module RorVsWild
     class ActionView
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return unless defined?(ActiveSupport::Notifications.subscribe)
         ActiveSupport::Notifications.subscribe("render_partial.action_view", plugin = new)

@@ -48,7 +48,7 @@ module RorVsWild
         next if config[:ignore_plugins] && config[:ignore_plugins].include?(name.to_s)
         if (plugin = RorVsWild::Plugin.const_get(name)).respond_to?(:setup)
           RorVsWild.logger.debug("Setup RorVsWild::Plugin::#{name}")
-          plugin.setup
+          plugin.setup(self)
         end
       end
     end

@@ -48,7 +48,7 @@ module RorVsWild
 
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         Rails.application.config.middleware.unshift(RorVsWild::Plugin::Middleware, nil) if defined?(Rails)
         @installed = true

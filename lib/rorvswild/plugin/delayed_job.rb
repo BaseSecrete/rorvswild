@@ -5,7 +5,7 @@ module RorVsWild
     module DelayedJob
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return unless defined?(Delayed::Plugin)
         Delayed::Worker.plugins << Class.new(Delayed::Plugin) do

@@ -1,7 +1,7 @@
 module RorVsWild
   module Plugin
     class Faktory
-      def self.setup
+      def self.setup(agent)
         if defined?(::Faktory)
           ::Faktory.configure_worker do |config|
             config.worker_middleware { |chain| chain.add(Faktory) }

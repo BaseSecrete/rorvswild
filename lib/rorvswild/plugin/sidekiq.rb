@@ -1,11 +1,17 @@
+# frozen_string_literal: true
+
 module RorVsWild
   module Plugin
     class Sidekiq
-      def self.setup
+      INTERNAL_EXCEPTIONS = ["Sidekiq::JobRetry::Handled", "Sidekiq::JobRetry::Skip"]
+
+      def self.setup(agent)
         if defined?(::Sidekiq)
           ::Sidekiq.configure_server do |config|
             config.server_middleware { |chain| chain.add(Sidekiq) }
           end
+          # Prevent RailsError plugin from sending internal Sidekiq exceptions captured by ActiveSupport::ErrorReporter.
+          agent.config[:ignore_exceptions].concat(INTERNAL_EXCEPTIONS)
         end
       end
 

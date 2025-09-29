@@ -5,7 +5,7 @@ module RorVsWild
     class RailsError
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return if !defined?(Rails.error)
         return if !defined?(ActiveSupport::ErrorReporter)

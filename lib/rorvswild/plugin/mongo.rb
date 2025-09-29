@@ -5,7 +5,7 @@ module RorVsWild
     class Mongo
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return if !defined?(::Mongo::Monitoring::Global)
         ::Mongo::Monitoring::Global.subscribe(::Mongo::Monitoring::COMMAND, Mongo.new)

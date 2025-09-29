@@ -1,7 +1,7 @@
 module RorVsWild
   module Plugin
     class Elasticsearch
-      def self.setup
+      def self.setup(agent)
         return if !defined?(::Elasticsearch::Transport)
         return if ::Elasticsearch::Transport::Client.method_defined?(:perform_request_without_rorvswild)
 

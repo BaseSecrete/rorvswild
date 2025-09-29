@@ -3,7 +3,7 @@ module RorVsWild
     class ActiveJob
       @installed = false
 
-      def self.setup
+      def self.setup(agent)
         return if @installed
         return unless defined?(::ActiveJob::Base)
         ::ActiveJob::Base.around_perform(&method(:around_perform))
