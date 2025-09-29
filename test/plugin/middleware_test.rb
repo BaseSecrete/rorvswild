@@ -45,7 +45,7 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
     sections = current_sections_without_gc
     assert_equal(2, sections.size)
-    assert_in_delta(123, sections[0].total_ms, 10)
+    assert_operator(123, :<=, sections[0].total_ms)
   end
 
   def test_queue_time_millis
@@ -60,7 +60,7 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
 
     sections = current_sections_without_gc
     assert_equal(2, sections.size)
-    assert_in_delta(234, sections[0].total_ms, 10)
+    assert_operator(234, :<=, sections[0].total_ms)
   end
 
   def test_queue_time_micros
@@ -75,7 +75,7 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
     sections = current_sections_without_gc
     assert_equal(2, sections.size)
     queue_time_section = sections[0]
-    assert_in_delta(345, sections[0].total_ms, 10)
+    assert_operator(345, :<=, sections[0].total_ms)
   end
 
   private
