@@ -62,7 +62,7 @@ module RorVsWild
             read_lines += buffer.last.count("\n")
           end
         end
-        buffer.reverse.join.lines[0..desired_lines]
+        buffer.reverse.join.lines[1..desired_lines]
       end
     end
   end
