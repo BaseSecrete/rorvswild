@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.10.0 (2025-10-10)
 
 * Add plugin RailsError to subscribre to ActiveSupport::ErrorReporter
 
@@ -10,8 +10,8 @@
 
 * Normalize MongoDB by removing any variables
 * Fix MongoDB monitoring
-* Add root section to Sidekiq tn ensure not missing any timings
-* Save local requests, jobs and errors in NSJSON instead of JSON
+* Add root section to Sidekiq to ensure not missing any timings
+* Save local requests, jobs and errors in NDJSON instead of JSON
 * Remove ASCII and Server-Timing header
 * Skip measuring empty collection renderings
 * Instrument Rails.cache via ActiveSupport notifications
