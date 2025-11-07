@@ -52,7 +52,7 @@ production:
   # logger: log/rorvswild.log # By default it uses Rails.logger or Logger.new(STDOUT)
   #
   # # Deployment tracking is working without any actions from your part if the Rails app
-  # # is inside a Git repositoriy, is deployed via Capistrano.
+  # # is inside a Git repository, is deployed via Capistrano.
   # # In the other cases, you can provide the following details.
   # deployment:
   #   revision: <%= "Anything that will return the deployment version" %> # Mandatory
