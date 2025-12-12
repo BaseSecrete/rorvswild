@@ -14,21 +14,30 @@ jobs:
         include:
           # Test all active versions combinations
           # and inactive Rails versions with minimum Ruby version.
+          - {rails: "8.1", ruby: "head"}
+          - {rails: "8.1", ruby: "4.0"}
+          - {rails: "8.1", ruby: "3.5"}
           - {rails: "8.1", ruby: "3.4"}
           - {rails: "8.1", ruby: "3.3"}
           - {rails: "8.1", ruby: "3.2"}
 
+          - {rails: "8.0", ruby: "3.5"}
           - {rails: "8.0", ruby: "3.4"}
           - {rails: "8.0", ruby: "3.3"}
           - {rails: "8.0", ruby: "3.2"}
 
+          - {rails: "7.2", ruby: "3.5"}
           - {rails: "7.2", ruby: "3.4"}
           - {rails: "7.2", ruby: "3.3"}
           - {rails: "7.2", ruby: "3.2"}
           - {rails: "7.2", ruby: "3.1"}
 
+          - {rails: "7.1", ruby: "3.3"}
           - {rails: "7.1", ruby: "2.7"}
+
+          - {rails: "7.0", ruby: "3.3"}
           - {rails: "7.0", ruby: "2.7"}
+
           - {rails: "6.1", ruby: "2.5"}
           - {rails: "6.0", ruby: "2.5"}
     steps:
