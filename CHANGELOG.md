@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix read_last_lines for local widget
+
 ## 1.10.0 (2025-10-10)
 
 * Add plugin RailsError to subscribre to ActiveSupport::ErrorReporter
