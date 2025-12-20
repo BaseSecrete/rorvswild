@@ -32,7 +32,7 @@ class RorVsWild::AgentTest < Minitest::Test
         end
       end
     end
-    assert_equal(2, current_sections_without_gc.size)
+    assert_equal(2, current_user_sections.size)
   end
 
   def test_measure_job_when_ignored
@@ -45,7 +45,7 @@ class RorVsWild::AgentTest < Minitest::Test
     agent.measure_job("parent") do
       agent.measure_job("child") { }
     end
-    assert_equal(1, (sections = current_sections_without_gc).size)
+    assert_equal(1, (sections = current_user_sections).size)
     assert_equal("child", sections[0].command)
   end
 
@@ -63,7 +63,7 @@ class RorVsWild::AgentTest < Minitest::Test
     line = Example.method(:foo).source_location[1]
     agent.measure_method(Example.method(:foo))
     agent.measure_job("job") { assert_equal(1, Example.foo) }
-    section = current_sections_without_gc.first
+    section = current_user_sections.first
     assert_equal("code", section.kind)
     assert_equal("/agent_test.rb", section.file)
     assert_equal(line, section.line)
@@ -74,7 +74,7 @@ class RorVsWild::AgentTest < Minitest::Test
     line = Example.instance_method(:bar).source_location[1]
     agent.measure_method(Example.instance_method(:bar))
     agent.measure_job("job") { assert_equal(2, Example.new.bar) }
-    section = current_sections_without_gc.first
+    section = current_user_sections.first
     assert_equal("code", section.kind)
     assert_equal("/agent_test.rb", section.file)
     assert_equal(line, section.line)

@@ -113,10 +113,12 @@ module RorVsWild
 
     def start_execution(execution)
       Thread.current[:rorvswild_execution] ||= execution
+      RorVsWild::Section.start
     end
 
     def stop_execution
       return unless execution = current_execution
+      RorVsWild::Section.stop
       execution.stop
       case execution
       when Execution::Job then queue_job

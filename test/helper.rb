@@ -41,8 +41,9 @@ module RorVsWild::AgentHelper
     agent
   end
 
-  def current_sections_without_gc
-    agent.current_execution.sections.select { |s| s.kind != "gc" }
+  # Returns all section except the GC and the root one which is the last
+  def current_user_sections
+    agent.current_execution.sections.select { |s| s.kind != "gc" }[0..-2]
   end
 
   def start_request(path = "/")

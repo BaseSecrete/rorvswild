@@ -21,7 +21,7 @@ class RorVsWild::Plugin::RailsCacheTest < Minitest::Test
       end
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     cache1, cache2 = sections[0], sections[1]
     assert_equal(2, sections.size)
 

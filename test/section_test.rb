@@ -50,9 +50,7 @@ class RorVsWild::SectionTest < Minitest::Test
     agent.measure_job("job") do
       agent.measure_section("section") { }
     end
-    sections = agent.current_execution.sections
-    assert_equal(1, sections.size)
-    assert_equal("code", sections[0].kind)
+    refute(agent.current_execution.sections.find { |s| s.kind == "gc" })
   ensure
     GC.enable
   end

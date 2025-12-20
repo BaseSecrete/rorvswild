@@ -7,7 +7,7 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
 
   def test_callback
     agent.measure_code("::Redis.new.get('foo')")
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(1, sections.size)
     assert_equal("redis",sections[0].kind)
     assert_equal("get",sections[0].command.to_s)
@@ -20,7 +20,7 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
         pipeline.set("foo", "bar")
       end
     end
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(1, sections.size)
     assert_equal("redis", sections[0].kind)
     if Redis::VERSION >= "5"
@@ -37,7 +37,7 @@ class RorVsWild::Plugin::RedisTest < Minitest::Test
         transaction.set("foo", "bar")
       end
     end
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(1, sections.size)
     assert_equal("redis", sections[0].kind)
     if Redis::VERSION >= "5"

@@ -21,7 +21,7 @@ class RorVsWild::Plugin::MongoTest < Minitest::Test
       mongo[:mountains].find(altitude: {"$gt": 4800}).each { |mountain| }
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(3, sections.size)
 
     assert_equal(1, sections[0].calls)

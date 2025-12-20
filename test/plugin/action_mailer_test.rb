@@ -13,7 +13,7 @@ class RorVsWild::Plugin::ActiveMailerTest < Minitest::Test
       end
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(1, sections.size)
     assert_equal("Mailer", sections[0].command)
     assert_equal(line, sections[0].line.to_i)

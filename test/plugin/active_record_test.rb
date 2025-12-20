@@ -21,7 +21,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
       end
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     sql1, sql2 = sections[0], sections[1]
     assert_equal(2, sections.size)
 
@@ -47,7 +47,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
         instrument_sql("COMMIT")
       end
     end
-    sections = current_sections_without_gc
+    sections = current_user_sections
     assert_equal(1, sections.size)
     assert_equal(9, sections[0].calls)
     assert_equal("BEGIN\nINSERT INTO users\nCOMMIT", sections[0].command)
@@ -69,7 +69,7 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
         ActiveSupport::Notifications.publish_event(event)
       end
     end
-    query, root = current_sections_without_gc
+    query, root = current_user_sections
     assert_equal(root.children_ms, query.total_ms)
   end
 

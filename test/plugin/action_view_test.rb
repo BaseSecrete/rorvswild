@@ -18,7 +18,7 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
       end
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     sub_partial, partial, template = sections[0], sections[1], sections[2]
     assert_equal(3, sections.size)
 
@@ -48,7 +48,7 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
       end
     end
 
-    sections = current_sections_without_gc
+    sections = current_user_sections
     collection, template = sections[0], sections[1]
     assert_equal(2, sections.size)
 
@@ -65,14 +65,14 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
     agent.measure_block("test") do
       instrument("render_template.action_view", {identifier: "_collection.html.erb", layout: nil, count: 0}) { }
     end
-    assert_empty(current_sections_without_gc)
+    assert_empty(current_user_sections)
   end
 
   def test_render_withtout_identifier
     agent.measure_block("test") do
       instrument("render_template.action_view", {identifier: nil}) { }
     end
-    assert_empty(current_sections_without_gc)
+    assert_empty(current_user_sections)
   end
 
   private
