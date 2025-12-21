@@ -19,5 +19,7 @@ class RorVsWild::HostTest < Minitest::Test
     refute_equal("test_initialize_config", RorVsWild::Host.name)
     RorVsWild::Host.load_config(server: {name: "test_initialize_config"})
     assert_equal("test_initialize_config", RorVsWild::Host.name)
+  ensure
+    RorVsWild::Host.instance_variable_set(:@name, nil)
   end
 end
