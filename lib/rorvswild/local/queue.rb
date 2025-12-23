@@ -62,7 +62,7 @@ module RorVsWild
             read_lines += buffer.last.count("\n")
           end
         end
-        lines = buffer.join.lines
+        lines = buffer.reverse.join.lines
         offset = [lines.size - 1, desired_lines].min
         lines[-offset..-1]
       end
