@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.10.1 (2025-12-24)
 
 * Fix read_last_lines for local widget
 
