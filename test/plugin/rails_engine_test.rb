@@ -1,10 +1,10 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
-class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
+class RorVsWild::Plugin::RailsEngineTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_callback
-    middleware.call("ORIGINAL_FULLPATH" => "/foo/bar")
+    middleware.call("REQUEST_URI" => "/foo/bar")
     assert_equal("/foo/bar", agent.current_execution.path)
     assert_equal(1, (sections = current_user_sections).size)
     assert_equal("Rails::Engine#call", sections[0].command)
@@ -52,11 +52,15 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
     Time.now.to_f
   end
 
+  class App
+    def call(env)
+    end
+
+    prepend(RorVsWild::Plugin::RailsEngine)
+  end
+
   def middleware
     agent # Load agent
-    app = mock(call: nil)
-    middleware = RorVsWild::Plugin::Middleware.new(app, nil)
-    middleware.stubs(rails_engine_location: ["/rails/lib/engine.rb", 12])
-    middleware
+    App.new
   end
 end

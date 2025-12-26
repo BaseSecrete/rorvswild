@@ -4,6 +4,7 @@
 ## Unreleased
 
 * Compress data before sending
+* Start measuring requests from Rails::Engine#call
 * [local profiler] Integrate Rails' new ActiveSupport::Editor feature
 * [local profiler] Toggle low impact sections visibility
 * [local profiler] Fix Safari's incompatible date format bug
