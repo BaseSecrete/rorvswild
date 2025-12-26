@@ -55,7 +55,7 @@ module RorVsWild
       end
 
       def call(env)
-        execution = RorVsWild::Execution::Request.new(env["ORIGINAL_FULLPATH"])
+        execution = RorVsWild::Execution::Request.new(env["REQUEST_URI"])
         execution.add_queue_time(calculate_queue_time(env))
         RorVsWild.agent.start_execution(execution)
         section = RorVsWild::Section.start
