@@ -2,7 +2,7 @@
 
 module RorVsWild
   module Plugin
-    module Middleware
+    module RailsEngine
       module RequestQueueTime
 
         ACCEPTABLE_HEADERS = [

@@ -1,6 +1,6 @@
 require File.expand_path("#{File.dirname(__FILE__)}/../helper")
 
-class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
+class RorVsWild::Plugin::RailsEngineTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def test_callback
@@ -56,7 +56,7 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
     def call(env)
     end
 
-    prepend(RorVsWild::Plugin::Middleware)
+    prepend(RorVsWild::Plugin::RailsEngine)
   end
 
   def middleware
