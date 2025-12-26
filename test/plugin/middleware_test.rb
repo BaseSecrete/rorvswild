@@ -52,11 +52,15 @@ class RorVsWild::Plugin::MiddlewareTest < Minitest::Test
     Time.now.to_f
   end
 
+  class App
+    def call(env)
+    end
+
+    prepend(RorVsWild::Plugin::Middleware)
+  end
+
   def middleware
     agent # Load agent
-    app = mock(call: nil)
-    middleware = RorVsWild::Plugin::Middleware.new(app, nil)
-    middleware.stubs(rails_engine_location: ["/rails/lib/engine.rb", 12])
-    middleware
+    App.new
   end
 end
