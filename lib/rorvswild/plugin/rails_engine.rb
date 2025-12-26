@@ -2,7 +2,7 @@
 
 module RorVsWild
   module Plugin
-    class Middleware
+    module RailsEngine
       module RequestQueueTime
 
         ACCEPTABLE_HEADERS = [
@@ -49,24 +49,19 @@ module RorVsWild
       @installed = false
 
       def self.setup(agent)
-        return if @installed
-        Rails.application.config.middleware.unshift(RorVsWild::Plugin::Middleware, nil) if defined?(Rails)
+        return if @installed || !defined?(Rails::Engine)
+        Rails::Engine.prepend(self)
         @installed = true
       end
 
-      def initialize(app, config)
-        @app, @config = app, config
-      end
-
       def call(env)
-        execution = RorVsWild::Execution::Request.new(env["ORIGINAL_FULLPATH"])
+        execution = RorVsWild::Execution::Request.new(env["REQUEST_URI"])
         execution.add_queue_time(calculate_queue_time(env))
         RorVsWild.agent.start_execution(execution)
         section = RorVsWild::Section.start
-        section.file, section.line = rails_engine_location
+        section.file, section.line = method(:call).super_method.source_location
         section.commands << "Rails::Engine#call"
-        code, headers, body = @app.call(env)
-        [code, headers, body]
+        super
       ensure
         RorVsWild::Section.stop
         RorVsWild.agent.stop_execution
