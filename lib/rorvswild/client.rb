@@ -2,6 +2,7 @@
 
 require "set"
 require "uri"
+require "zlib"
 require "json/ext"
 require "net/http"
 
@@ -24,6 +25,7 @@ module RorVsWild
       @mutex = Mutex.new
       @config = config
       @headers = {
+        "Content-Encoding" => "deflate",
         "Content-Type" => "application/json",
         "X-RorVsWild-Version" => RorVsWild::VERSION,
         "X-Ruby-Version" => RUBY_VERSION,
@@ -36,7 +38,7 @@ module RorVsWild
       uri = URI(api_url + path)
       post = Net::HTTP::Post.new(uri.path, @headers)
       post.basic_auth(nil, api_key)
-      post.body = JSON.generate(data)
+      post.body = Zlib.deflate(JSON.generate(data), Zlib::BEST_SPEED)
       transmit(post)
     end
 
