@@ -39,7 +39,7 @@ module RorVsWild
       private
 
       def push_to(data, name)
-        data[:queued_at] = Time.now
+        data[:queued_at] = Time.now.iso8601(3)
         data[:uuid] = SecureRandom.uuid
         File.open(File.join(@directoy, "#{name}.ndjson"), "a") { |file| file.write(JSON.dump(data) + "\n") }
       end
