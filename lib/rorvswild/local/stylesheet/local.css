@@ -433,30 +433,31 @@ a.rorvswild-local-panel__file__name:hover::after { opacity: 1; }
 .rorvswild-local-panel__details__section__code dl {
   display: flex;
   align-items: baseline;
-  justify-content: flex-end;
   flex-wrap: wrap;
   margin: 0;
   padding: 0;
-  text-align: right;
+  text-align: center;
   gap: 12px 24px;
+}
+
+.rorvswild-local-panel__details__section__code dl > * {
+  flex: 1;
 }
 
 .rorvswild-local-panel__details__section__code dt {
   white-space: nowrap;
-  margin: 0;
+  margin: 4px 0 0;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 9px !important;
+  line-height: 12px;
+  font-weight: 400;
 }
 
 .rorvswild-local-panel__details__section__code dd {
   margin: 0;
-  color: rgb(182 202 255) !important;
-  font-weight: 700;
-}
-
-.rorvswild-local-panel__details__section__code dd.dd--calls {
   color: rgb(199 203 214) !important;
+  font-weight: 700;
 }
 
 .rorvswild-local-panel__details__section__code dl + pre[class*="language-"] {
