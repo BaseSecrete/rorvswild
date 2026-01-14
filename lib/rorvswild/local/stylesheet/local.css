@@ -126,6 +126,7 @@
   color: rgb(146 149 159) !important;
   cursor: pointer !important;
   line-height: 48px !important;
+  margin: 0 !important;
 }
 
 .rorvswild-local-panel__header nav li:hover {
