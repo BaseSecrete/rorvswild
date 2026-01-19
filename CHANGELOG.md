@@ -5,6 +5,8 @@
 
 * Compress data before sending
 * Start measuring requests from Rails::Engine#call
+* Start measuring request from Rails::Engine#call
+* Measure all Rack middlewares
 * Fix Safari's incompatible date format bug in local profiler
 
 ## 1.10.1 (2025-12-24)
