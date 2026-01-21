@@ -4,6 +4,7 @@
 ## Unreleased
 
 * Compress data before sending
+* Toggle low impact sections visibility
 * Fix Safari's incompatible date format bug in local profiler
 
 ## 1.10.1 (2025-12-24)
