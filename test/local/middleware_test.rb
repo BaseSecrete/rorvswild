@@ -45,6 +45,23 @@ class RorVsWild::Local::MiddlewareTest < Minitest::Test
     end
   end
 
+  def test_editor_url_with_cursor_float_format
+    middleware = build_middleware(editor_url: nil)
+
+    # Cursor uses %f format which produces "999999.000000"
+    mock_editor = Object.new
+    def mock_editor.url_for(path, line)
+      "cursor://file/#{path}:#{line}.000000"
+    end
+
+    Object.stub_const(:ActiveSupport, Module.new) do
+      ActiveSupport.const_set(:Editor, Class.new)
+      ActiveSupport::Editor.stubs(:current).returns(mock_editor)
+
+      assert_equal("cursor://file/${path}:${line}", middleware.send(:editor_url))
+    end
+  end
+
   def test_editor_url_without_rails_editor
     middleware = build_middleware(editor_url: nil)
 

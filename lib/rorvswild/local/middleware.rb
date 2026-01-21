@@ -90,9 +90,14 @@ module RorVsWild
         return unless editor = ActiveSupport::Editor.current
 
         # Convert Rails sprintf pattern to rorvswild template format
-        # Rails uses: "vscode://file/%s:%d"
+        # Rails uses: "vscode://file/%s:%d" or "cursor://file/%s:%f"
         # We need:   "vscode://file/${path}:${line}"
-        editor.url_for("${path}", "${line}")
+        
+        sample_url = editor.url_for("RORVSWILD_PATH_PLACEHOLDER", 999999)
+        sample_url
+          .gsub("RORVSWILD_PATH_PLACEHOLDER", "${path}")
+          .gsub("999999.000000", "${line}") # Handle %f format first (e.g., cursor)
+          .gsub("999999", "${line}")         # Then handle %d format (e.g., vscode)
       rescue => e
         RorVsWild.logger.debug("Could not get Rails editor URL: #{e.message}")
         nil
