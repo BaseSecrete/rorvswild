@@ -148,6 +148,11 @@
     {{#sections}}
       {{> RorVsWild.Local.Section}}
     {{/sections}}
+    {{#hasLowImpactSections}}
+      <div class="rorvswild-local-panel__toggle-low-impact">
+        <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">↓ view low impact sections</button>
+      </div>
+    {{/hasLowImpactSections}}
   </div>
 </script>
 
@@ -162,7 +167,7 @@
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__details__section" id="section-{{id}}">
+  <div class="rorvswild-local-panel__details__section {{#isLowImpact}}is-low-impact is-hidden{{/isLowImpact}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
         <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
@@ -335,5 +340,5 @@
   {{/currentError}}
 </script>
 
-<link rel="stylesheet" media="all" href="/rorvswild.css"/>
+<link rel="stylesheet" media="all" href="/rorvswild.css">
 <script src="/rorvswild.js"></script>
