@@ -19,14 +19,15 @@ module RorVsWild
       <<YAML
 development:
   # Widget position
-  # widget: top-left, top-right, bottom-left, bottom-right or hidden 
+  # widget: top-left, top-right, bottom-left, bottom-right or hidden
 
   # Open files in your text editor by clicking from the local widget.
   # Leave commented to auto-detect from RAILS_EDITOR or EDITOR env vars (Rails 8.1+).
   # Or set explicitly:
-  # for VSCode: vscode://file${path}:${line}
-  # for Sublime: subl://${path}:${line}
   # editor_url: <%= ENV.fetch("RORVSWILD_EDITOR_URL", "vscode://file${path}:${line}") %>
+  # for VSCode: "vscode://file${path}:${line}"
+  # for Sublime: "subl://${path}:${line}"
+  
 
 production:
   api_key: #{api_key}
