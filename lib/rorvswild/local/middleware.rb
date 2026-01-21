@@ -79,7 +79,23 @@ module RorVsWild
       end
 
       def editor_url
-        RorVsWild.agent.config[:editor_url]
+        config_url = RorVsWild.agent.config[:editor_url]
+        return config_url if config_url && !config_url.empty?
+
+        rails_editor_url
+      end
+
+      def rails_editor_url
+        return unless defined?(ActiveSupport::Editor)
+        return unless editor = ActiveSupport::Editor.current
+
+        # Convert Rails sprintf pattern to rorvswild template format
+        # Rails uses: "vscode://file/%s:%d"
+        # We need:   "vscode://file/${path}:${line}"
+        editor.url_for("${path}", "${line}")
+      rescue => e
+        RorVsWild.logger.debug("Could not get Rails editor URL: #{e.message}")
+        nil
       end
 
       def inject_into(html)
