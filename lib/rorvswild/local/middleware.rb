@@ -79,7 +79,13 @@ module RorVsWild
       end
 
       def editor_url
-        RorVsWild.agent.config[:editor_url]
+        config[:editor_url] || rails_editor_url
+      end
+
+      def rails_editor_url
+        if editor = defined?(ActiveSupport::Editor) && ActiveSupport::Editor.current
+          editor.url_for("${path}", 999999.999999).gsub("999999.999999", "${line}").gsub("999999", "${line}")
+        end
       end
 
       def inject_into(html)
