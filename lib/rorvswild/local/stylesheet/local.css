@@ -610,6 +610,7 @@ span.rorvswild-local-panel__details__section__kind {
   box-shadow: none !important;
   padding: 0px 8px !important;
   font-size: 10px !important;
+  line-height: 24px !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
   cursor: pointer !important;
