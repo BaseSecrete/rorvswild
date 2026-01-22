@@ -1,6 +1,8 @@
 require File.expand_path("#{File.dirname(__FILE__)}/helper")
 
 class RorVsWild::DeploymentTest < Minitest::Test
+  include RorVsWild::AgentHelper
+
   def setup
     for name in [:@description, :@revision, :@author, :@email, :@to_h]
       if RorVsWild::Deployment.instance_variable_defined?(name)
@@ -64,14 +66,4 @@ class RorVsWild::DeploymentTest < Minitest::Test
     Lorem ipsum dolor sit amet, consectetur adipiscing elit,
     sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
   EOS
-
-  private
-
-  def stub_env(new_hash, &block)
-    old_hash = ENV.select { |name, value| new_hash.keys.include?(name) }
-    new_hash.each { |name, value| ENV[name] = value }
-    block.call
-  ensure
-    new_hash.each { |name, value| ENV[name] = old_hash[name] } if old_hash
-  end
 end

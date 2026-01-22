@@ -50,4 +50,12 @@ module RorVsWild::AgentHelper
     agent
     RorVsWild.agent.start_execution(RorVsWild::Execution::Request.new(path))
   end
+
+  def stub_env(new_hash, &block)
+    old_hash = ENV.select { |name, value| new_hash.keys.include?(name) }
+    new_hash.each { |name, value| ENV[name] = value }
+    block.call
+  ensure
+    new_hash.each { |name, value| ENV[name] = old_hash[name] } if old_hash
+  end
 end

@@ -79,28 +79,13 @@ module RorVsWild
       end
 
       def editor_url
-        config_url = RorVsWild.agent.config[:editor_url]
-        return config_url if config_url && !config_url.empty?
-
-        rails_editor_url
+        config[:editor_url] || rails_editor_url
       end
 
       def rails_editor_url
-        return unless defined?(ActiveSupport::Editor)
-        return unless editor = ActiveSupport::Editor.current
-
-        # Convert Rails sprintf pattern to rorvswild template format
-        # Rails uses: "vscode://file/%s:%d" or "cursor://file/%s:%f"
-        # We need:   "vscode://file/${path}:${line}"
-        
-        sample_url = editor.url_for("RORVSWILD_PATH_PLACEHOLDER", 999999)
-        sample_url
-          .gsub("RORVSWILD_PATH_PLACEHOLDER", "${path}")
-          .gsub("999999.000000", "${line}") # Handle %f format first (e.g., cursor)
-          .gsub("999999", "${line}")         # Then handle %d format (e.g., vscode)
-      rescue => e
-        RorVsWild.logger.debug("Could not get Rails editor URL: #{e.message}")
-        nil
+        if editor = defined?(ActiveSupport::Editor) && ActiveSupport::Editor.current
+          editor.url_for("${path}", 999999.999999).gsub("999999.999999", "${line}").gsub("999999", "${line}")
+        end
       end
 
       def inject_into(html)

@@ -6,7 +6,7 @@ module RorVsWild
     def self.start(config = {})
       queue = RorVsWild::Local::Queue.new(config[:queue] || {})
       RorVsWild.start(config.merge(queue: queue))
-      Rails.application.config.middleware.unshift(RorVsWild::Local::Middleware, nil)
+      Rails.application.config.middleware.unshift(RorVsWild::Local::Middleware, config)
     end
   end
 end
