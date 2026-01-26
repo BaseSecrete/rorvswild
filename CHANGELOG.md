@@ -4,8 +4,9 @@
 ## Unreleased
 
 * Compress data before sending
-* Integrate Rails' new ActiveSupport::Editor feature in local profiler
-* Fix Safari's incompatible date format bug in local profiler
+* [local profiler] Integrate Rails' new ActiveSupport::Editor feature
+* [local profiler] Toggle low impact sections visibility
+* [local profiler] Fix Safari's incompatible date format bug
 
 ## 1.10.1 (2025-12-24)
 

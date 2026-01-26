@@ -351,6 +351,10 @@ h2.rorvswild-local-panel__title {
   display: block !important;
 }
 
+.rorvswild-local-panel__details__section.is-hidden {
+  display: none !important;
+}
+
 .rorvswild-local-panel__details__section:hover {
   background: rgb(26 29 36) !important;
   transition: all .3s !important;
@@ -593,6 +597,31 @@ span.rorvswild-local-panel__details__section__kind {
 .rorvswild-local-panel__card dd {
   word-break: break-all !important;
   overflow-wrap: break-word !important;
+}
+
+.rorvswild-local-panel__toggle-low-impact {
+  padding: 12px !important;
+}
+
+.rorvswild-local-panel__toggle-low-impact__button {
+  background: transparent !important;
+  color: rgb(199 203 214) !important;
+  border: 1px solid rgb(72 75 80) !important;
+  box-shadow: none !important;
+  padding: 0px 8px !important;
+  font-size: 10px !important;
+  line-height: 24px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+  transition: all 0.2s !important;
+}
+
+.rorvswild-local-panel__toggle-low-impact__button:hover {
+  background: transparent !important;
+  color: rgb(223 228 242) !important;
+  border-color: rgb(147 149 156) !important;
 }
 
 /* Panel Footer */
