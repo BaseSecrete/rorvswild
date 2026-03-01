@@ -1,7 +1,7 @@
 # Changelog of RorVsWild
 
 
-## 1.11.0 (2025-03-01)
+## 1.11.0 (2026-03-01)
 
 * Compress data before sending
 * Start measuring requests from Rails::Engine#call
