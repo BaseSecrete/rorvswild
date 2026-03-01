@@ -74,10 +74,6 @@ module RorVsWild
 
         ((Time.now.to_f - queue_time_from_header) * 1000).round if queue_time_from_header
       end
-
-      def rails_engine_location
-        @rails_engine_location = ::Rails::Engine.instance_method(:call).source_location
-      end
     end
   end
 end
