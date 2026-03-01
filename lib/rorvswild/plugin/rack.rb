@@ -3,6 +3,8 @@
 module RorVsWild
   module Plugin
     class Rack
+      @installed = false
+
       def self.setup(agent)
         return if @installed
         return if !defined?(ActiveSupport::Notifications.subscribe)
@@ -19,6 +21,7 @@ module RorVsWild
           section.commands << payload[:middleware]
         else
           section.file = payload[:middleware]
+          section.line = 0
         end
       end
 
