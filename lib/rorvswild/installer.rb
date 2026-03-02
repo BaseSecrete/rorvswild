@@ -27,41 +27,54 @@ development:
   # editor_url: <%= ENV.fetch("RORVSWILD_EDITOR_URL", "vscode://file${path}:${line}") %>
   # for VSCode: "vscode://file${path}:${line}"
   # for Sublime: "subl://${path}:${line}"
-  
 
 production:
-  api_key: #{api_key}
-  # ignore_requests: # Do not monitor the following actions
-  #   - SecretController#index
-  # ignore_jobs: # Do not monitor the following jobs
-  #   - SecretJob
-  # ignore_exceptions: # Do not record the following exceptions
-  #   - ActionController::RoutingError  # By default to ignore 404
-  # ignore_plugins:
-  #   - ActionController
-  #   - ActionMailer
-  #   - ActionView
-  #   - ActiveJob
-  #   - ActiveRecord
-  #   - DelayedJob
-  #   - Elasticsearch
-  #   - Mongo
-  #   - NetHttp
-  #   - Redis
-  #   - Resque
-  #   - Sidekiq
-  #
+  api_key: <%= ENV["RORVSWILD_API_KEY"] || "#{api_key}" %>
+
+  # Do not monitor the following actions.
+  ignore_requests:
+   - SecretController#index
+
+  # Do not monitor the following jobs.
+  ignore_jobs:
+    - SecretJob
+
+  # Do not monitor the following exceptions.
+  ignore_exceptions:
+    # Noisy exceptions such as ActionNotFound, UnknownHttpMethod, etc are ignored by default.
+    - <%= ActionDispatch::ExceptionWrapper.rescue_responses.keys.join("\\n    - ") %>
+    - AnotherNoisyError
+
+  # In case you want less details.
+  ignore_plugins:
+    # - ActionController
+    # - ActionMailer
+    # - ActionView
+    # - ActiveJob
+    # - ActiveRecord
+    # - DelayedJob
+    # - Elasticsearch
+    # - Faktory
+    # - Mongo
+    # - NetHttp
+    # - Rack
+    # - RailsCache
+    # - RailsError
+    # - Redis
+    # - Resque
+    # - Sidekiq
+
   # logger: log/rorvswild.log # By default it uses Rails.logger or Logger.new(STDOUT)
-  #
-  # # Deployment tracking is working without any actions from your part if the Rails app
-  # # is inside a Git repository, is deployed via Capistrano.
-  # # In the other cases, you can provide the following details.
+
+  # Deployment tracking is working without any actions from your part if the Rails app
+  # is inside a Git repository, or deployed with Capistrano, Kamal, Heroku or Scalingo.
+  # In the other cases, you can provide the following details.
   # deployment:
   #   revision: <%= "Anything that will return the deployment version" %> # Mandatory
   #   description: <%= "Eventually if you have a description such as a Git message" %>
   #   author: <%= "Author's name of the deployment" %>
   #   email: <%= "emailOf@theAuthor.example" %>
-  #
+
   # Sampling allows to send a fraction of jobs and requests.
   # If your app is sending hundred of millions of requests per month,
   # you will probably get the same precision if you send only a fraction of it.
