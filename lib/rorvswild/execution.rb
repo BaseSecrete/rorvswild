@@ -14,7 +14,7 @@ module RorVsWild
       @error_context = nil
 
       @started_at = RorVsWild.clock_milliseconds
-      @gc_section = Section.start_gc_timing
+      @gc_section = Section::GarbageCollection.new
       @environment = Host.to_h
       @section_stack = []
       @sections = []
@@ -41,7 +41,7 @@ module RorVsWild
     end
 
     def stop
-      Section.stop_gc_timing(@gc_section)
+      @gc_section.stop
       @sections << @gc_section if @gc_section.calls > 0 && @gc_section.total_ms > 0
       @runtime = RorVsWild.clock_milliseconds - @started_at
     end
@@ -65,25 +65,6 @@ module RorVsWild
     end
 
     private
-
-    def start_gc_timing
-      section = Section.new
-      section.calls = GC.count
-      section.file, section.line = "ruby/gc.c", 0
-      section.add_command("GC.start")
-      section.kind = "gc"
-      section
-    end
-
-    if GC.respond_to?(:total_time)
-      def gc_total_ms
-        GC.total_time / 1_000_000.0 # nanosecond -> millisecond
-      end
-    else
-      def gc_total_ms
-        GC::Profiler.total_time * 1000 # second -> millisecond
-      end
-    end
 
     class Job < Execution
       def add_exception(exception)

@@ -28,21 +28,6 @@ module RorVsWild
       (sections = stack) && sections.last
     end
 
-    def self.start_gc_timing
-      section = Section.new
-      section.calls = GC.count
-      section.file, section.line = "ruby/gc.c", 0
-      section.add_command("GC.start")
-      section.kind = "gc"
-      section
-    end
-
-    def self.stop_gc_timing(section)
-      section.total_ms = gc_total_ms - section.gc_start_ms
-      section.calls = GC.count - section.calls
-      section
-    end
-
     if GC.respond_to?(:total_time)
       def self.gc_total_ms
         GC.total_time / 1_000_000.0 # nanosecond -> millisecond
@@ -110,6 +95,24 @@ module RorVsWild
     def command
       string = @commands.to_a.join("\n")
       string.size > COMMAND_MAX_SIZE ? string[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : string
+    end
+
+    class GarbageCollection < Section
+      def initialize
+        @gc_count = GC.count
+        super
+        @calls = 0
+        @kind = "gc"
+        @file, @line = "ruby/gc.c", 0
+        add_command("GC.start")
+      end
+
+      def stop
+        super
+        @total_ms = @gc_time_ms
+        @calls = GC.count - @gc_count
+        @calls = 1 if @gc_time_ms > 0 && @calls == 0
+      end
     end
   end
 end
