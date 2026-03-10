@@ -58,12 +58,11 @@ module RorVsWild
         execution = RorVsWild::Execution::Request.new(env["REQUEST_URI"])
         execution.add_queue_time(calculate_queue_time(env))
         RorVsWild.agent.start_execution(execution)
-        section = RorVsWild::Section.start
+        section = execution.root_section
         section.file, section.line = method(:call).super_method.source_location
         section.commands << "Rails::Engine#call"
         super
       ensure
-        RorVsWild::Section.stop
         RorVsWild.agent.stop_execution
       end
 

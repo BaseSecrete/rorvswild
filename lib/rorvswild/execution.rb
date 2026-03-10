@@ -2,21 +2,21 @@
 
 module RorVsWild
   class Execution
-    attr_reader :parameters, :sections, :section_stack, :error_context, :runtime
+    attr_reader :parameters, :sections, :section_stack, :error_context, :runtime, :root_section, :queue_section
 
     attr_accessor :error, :name
 
     def initialize(name, parameters)
+      @root_section = Section::Root.new
+
       @name = name
       @parameters = parameters
       @runtime = nil
       @error = nil
       @error_context = nil
 
-      @started_at = RorVsWild.clock_milliseconds
-      @gc_section = Section::GarbageCollection.new
       @environment = Host.to_h
-      @section_stack = []
+      @section_stack = [@root_section]
       @sections = []
     end
 
@@ -30,20 +30,18 @@ module RorVsWild
 
     def add_queue_time(queue_time_ms)
       return unless queue_time_ms
-      @started_at -= queue_time_ms
-      section = Section.new
-      section.total_ms = queue_time_ms
-      section.gc_time_ms = 0
-      section.file = "queue"
-      section.line = 0
-      section.kind = "queue"
-      add_section(section)
+      @queue_section = Section::Queue.new(queue_time_ms)
+      add_section(@queue_section)
+      @queue_section
     end
 
     def stop
-      @gc_section.stop
-      @sections << @gc_section if @gc_section.calls > 0 && @gc_section.total_ms > 0
-      @runtime = RorVsWild.clock_milliseconds - @started_at
+      Section.stop # root section
+      if @root_section.gc_time_ms > 0
+        add_section(Section::GarbageCollection.new(@root_section.gc_time_ms, @root_section.gc_calls))
+      end
+      @runtime = @root_section.total_ms + @root_section.gc_time_ms
+      @runtime += @queue_section.total_ms if @queue_section
     end
 
     def as_json(options = nil)

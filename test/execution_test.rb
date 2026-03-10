@@ -13,8 +13,8 @@ class RorVsWild::ExecutionTest < Minitest::Test
   def test_add_queue_time
     agent
     execution = RorVsWild::Execution.new("name", nil)
-    old_started_at = execution.instance_variable_get(:@started_at)
     execution.add_queue_time(1)
+    execution.stop
     assert(section = execution.sections[0])
     assert_equal("queue", section.kind)
     assert_equal("queue", section.file)
@@ -24,7 +24,7 @@ class RorVsWild::ExecutionTest < Minitest::Test
     assert_equal(0, section.children_ms)
     assert_equal(0, section.gc_time_ms)
     assert_equal(0, section.async_ms)
-    assert_equal(old_started_at - 1, execution.instance_variable_get(:@started_at))
+    assert_equal(execution.root_section.total_ms + execution.queue_section.total_ms, execution.runtime)
   end
 
   def test_as_json
