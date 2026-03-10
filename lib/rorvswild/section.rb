@@ -97,21 +97,44 @@ module RorVsWild
       string.size > COMMAND_MAX_SIZE ? string[0, COMMAND_MAX_SIZE] + " [TRUNCATED]" : string
     end
 
-    class GarbageCollection < Section
+    class Root < Section
+      attr_reader :gc_calls
+
       def initialize
-        @gc_count = GC.count
         super
-        @calls = 0
-        @kind = "gc"
-        @file, @line = "ruby/gc.c", 0
-        add_command("GC.start")
+        @gc_count = GC.count
       end
 
       def stop
         super
-        @total_ms = @gc_time_ms
-        @calls = GC.count - @gc_count
-        @calls = 1 if @gc_time_ms > 0 && @calls == 0
+        @gc_calls = GC.count - @gc_count
+      end
+    end
+
+    class GarbageCollection < Section
+      def initialize(total_ms, calls)
+        @total_ms = total_ms
+        @calls = calls > 0 ? calls : 1
+        @kind = "gc"
+        @file, @line = "ruby/gc.c", 0
+        @commands = Set.new
+        @children_ms = 0
+        @async_ms = 0
+        add_command("GC.start")
+      end
+    end
+
+    class Queue < Section
+      def initialize(total_ms)
+        @total_ms = total_ms
+        @gc_time_ms = 0
+        @file = "queue"
+        @line = 0
+        @kind = "queue"
+        @calls = 1
+        @children_ms = 0
+        @gc_time_ms = 0
+        @async_ms = 0
       end
     end
   end

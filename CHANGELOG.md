@@ -1,5 +1,8 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Improve accurancy by using the same timer for execution and its sections
 
 ## 1.11.0 (2026-03-01)
 
