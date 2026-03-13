@@ -3,6 +3,7 @@
 ## Unreleased
 
 * Improve accurancy by using the same timer for execution and its sections
+* Rescue when regex timeout for SQL normalization
 
 ## 1.11.0 (2026-03-01)
 

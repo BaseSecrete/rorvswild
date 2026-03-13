@@ -50,6 +50,9 @@ module RorVsWild
       SQL_ONE_LINE_COMMENT_REGEX =/--.*$/
       SQL_MULTI_LINE_COMMENT_REGEX = /\/\*.*?\*\//m
 
+      # Catch Regexp::TimeoutError without breaking before Ruby 3.2
+      REGEXP_TIMEOUT_ERROR = defined?(Regexp::TimeoutError) ? Regexp::TimeoutError : RegexpError
+
       def normalize_sql_query(sql)
         sql = sql.to_s.gsub(SQL_STRING_REGEX, "?")
         sql.gsub!(SQL_PARAMETER_REGEX, "?")
@@ -59,6 +62,8 @@ module RorVsWild
         sql.gsub!(SQL_MULTI_LINE_COMMENT_REGEX, "")
         sql.strip!
         sql
+      rescue REGEXP_TIMEOUT_ERROR
+        nil
       end
     end
   end

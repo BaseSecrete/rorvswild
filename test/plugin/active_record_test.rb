@@ -90,6 +90,13 @@ class RorVsWild::Plugin::ActiveRecordTest < Minitest::Test
     assert_equal("SELECT ? FROM table col = ?", plugin.normalize_sql_query("SELECT 'Test'/* 'Comment' 1 */ FROM table /* Comment 2 */col = /* Comment 3 */1"))
   end
 
+  def test_normalize_sql_query_when_timeout
+    sql = String.new("SELECT * FROM table")
+    sql.stubs(:gsub).raises(RorVsWild::Plugin::ActiveRecord::REGEXP_TIMEOUT_ERROR)
+    plugin = RorVsWild::Plugin::ActiveRecord.new
+    assert_nil(plugin.normalize_sql_query(sql))
+  end
+
   private
 
   def instrument_sql(query)
