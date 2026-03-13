@@ -59,6 +59,8 @@ module RorVsWild
         sql.gsub!(SQL_MULTI_LINE_COMMENT_REGEX, "")
         sql.strip!
         sql
+      rescue RegexpError # Catch Regexp::TimeoutError without breaking before Ruby 3.2
+        "Sorry, normalization failed."
       end
     end
   end
