@@ -33,7 +33,7 @@ module RorVsWild
         status, headers, body = app.call(env)
         status = status.to_i
         if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
-          if headers["Content-Encoding"]
+          if headers["Content-Encoding"] || headers["Transfer-Encoding"]
             log_incompatible_middleware_warning
           elsif body.respond_to?(:each) && widget_position != "hidden"
             content_length = 0
