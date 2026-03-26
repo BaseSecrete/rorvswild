@@ -36,13 +36,13 @@ module RorVsWild
           if headers["Content-Encoding"]
             log_incompatible_middleware_warning
           elsif body.respond_to?(:each) && widget_position != "hidden"
-            content_length = 0
-            @current_request =  RorVsWild.agent.queue.requests.first
-            body.each do |string|
-              inject_into(string)
-              content_length += string.size
+            @current_request = RorVsWild.agent.queue.requests.first
+            new_body = Enumerator.new do |e|
+              body.each do |string|
+                e.yield inject_into(string)
+              end
             end
-            headers["Content-Length"] = content_length.to_s if headers["Content-Length"]
+            return [status, headers, new_body]
           end
         end
         [status, headers, body]
@@ -93,12 +93,12 @@ module RorVsWild
           markup = File.read(File.join(LOCAL_FOLDER, "local.html.erb"))
           markup = ERB.new(markup).result(binding)
           markup = markup.html_safe if markup.respond_to?(:html_safe)
-          html.insert(index, markup)
+          return html.dup.insert(index, markup)
         end
         html
       rescue Encoding::UndefinedConversionError => ex
         log_incompatible_encoding_warning(ex)
-        nil
+        html
       end
 
       LOCAL_FOLDER = File.expand_path(File.dirname(__FILE__))
