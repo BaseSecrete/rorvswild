@@ -31,19 +31,14 @@ module RorVsWild
 
       def serve_embed_profiler(env)
         status, headers, body = app.call(env)
-        status = status.to_i
-        if status >= 200 && status < 300 && headers["Content-Type"] && headers["Content-Type"].include?("text/html")
-          if headers["Content-Encoding"] || headers["Transfer-Encoding"]
-            log_incompatible_middleware_warning
-          elsif body.respond_to?(:each) && widget_position != "hidden"
-            content_length = 0
-            @current_request =  RorVsWild.agent.queue.requests.first
-            body.each do |string|
-              inject_into(string)
-              content_length += string.size
-            end
-            headers["Content-Length"] = content_length.to_s if headers["Content-Length"]
+        if widget_position != "hidden" && compatible_response_with_widget?(status.to_i, headers, body)
+          content_length = 0
+          @current_request =  RorVsWild.agent.queue.requests.first
+          body.each do |string|
+            inject_into(string)
+            content_length += string.size
           end
+          headers["Content-Length"] = content_length.to_s if headers["Content-Length"]
         end
         [status, headers, body]
       end
@@ -73,6 +68,13 @@ module RorVsWild
       end
 
       private
+
+      def compatible_response_with_widget?(status, headers, body)
+        headers["Content-Type"].respond_to?(:include?) && headers["Content-Type"].include?("text/html") &&
+          !headers["Content-Encoding"] && !headers["Transfer-Encoding"] &&
+          status >= 200 && status < 300 &&
+          body.respond_to?(:each)
+      end
 
       def widget_position
         (config = RorVsWild.agent.config) && config[:widget]
@@ -123,12 +125,6 @@ module RorVsWild
 
       def empty_html_page
         "<!DOCTYPE html>\n<html><head></head><body></body></html>".dup
-      end
-
-      def log_incompatible_middleware_warning
-        RorVsWild.logger.warn("RorVsWild::Local cannot be embeded into your HTML page because of compression." +
-          " Try to disable Rack::Deflater in development only." +
-          " In the meantime just visit the /rorvswild page to see the profiler.")
       end
 
       def log_incompatible_encoding_warning(exception)
