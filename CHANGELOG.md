@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Local Profile:
+* Local profiler:
   * Filter by section kind in sections breakdown
 
 ## 1.11.1 (2026-03-16)
