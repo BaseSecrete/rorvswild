@@ -159,15 +159,15 @@
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
-      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%">
-        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}%</span>
+      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterByKind" data-kind="{{kind}}">
+        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small></span>
       </li>
     {{/sectionsImpactPerKind}}
   </ul>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__details__section {{#isLowImpact}}is-hidden{{/isLowImpact}}" {{#isLowImpact}}data-low-impact{{/isLowImpact}} id="section-{{id}}">
+  <div class="rorvswild-local-panel__details__section {{#isLowImpact}}is-hidden{{/isLowImpact}}" {{#isLowImpact}}data-low-impact{{/isLowImpact}} data-kind="{{kind}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
         <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
@@ -175,9 +175,7 @@
           <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{location}}</a>
         {{/locationUrl}}
         {{^locationUrl}}
-          <span class="rorvswild-local-panel__file__name">{{file}}
-            {{#isLineRelevant}}<span>:{{line}}</span>{{/isLineRelevant}}
-          </span>
+          <span class="rorvswild-local-panel__file__name">{{file}}{{#isLineRelevant}}<span>:{{line}}</span>{{/isLineRelevant}}</span>
         {{/locationUrl}}
       </span>
       <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>
@@ -228,7 +226,7 @@
     <div data-events="click->goToErrorDetail" data-uuid="{{uuid}}" class="rorvswild-local-panel__row rorvswild-local-panel__error">
       <div class="rorvswild-local-panel__name">
         <span>{{exception}}</span> {{shortMessage}}
-        <div class="rorvswild-local-panel__path">{{file}}:{{line}}</div>
+        <div class="rorvswild-local-panel__path"><span class="rorvswild-local-panel__file__name">{{file}}<span>:{{line}}</span></span></div>
       </div>
       <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
     </div>
@@ -241,14 +239,14 @@
       <div class="rorvswild-local-panel__details__header">
         <span class="rorvswild-local-panel__name">
           <h2 class="rorvswild-local-panel__title">{{exception}}</h2>
-          <span class="rorvswild-local-panel__path">
+          <div class="rorvswild-local-panel__path">
             {{#locationUrl}}
-              <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{file}}:{{line}}</a>
+              <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{file}}<span>:{{line}}</span></a>
             {{/locationUrl}}
             {{^locationUrl}}
-              {{file}}:{{line}}
+              <span class="rorvswild-local-panel__file__name">{{file}}<span>:{{line}}</span></span>
             {{/locationUrl}}
-          </span>
+          </div>
         </span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>

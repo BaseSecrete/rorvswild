@@ -320,6 +320,7 @@ h2.rorvswild-local-panel__title {
 }
 
 .rorvswild-local-panel__breakdown li {
+  color: rgb(146 149 159) !important;
   display: inline-block !important;
   margin: 0 !important;
   padding: 0 8px !important;
@@ -329,6 +330,18 @@ h2.rorvswild-local-panel__title {
   font-size: 0.694em !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
+  cursor: pointer !important;
+  transition: box-shadow 0.15s !important;
+}
+
+.rorvswild-local-panel__breakdown li:hover {
+  box-shadow: 0 0 0 1px rgb(72 75 80) inset !important;
+  color: rgb(199 203 214) !important;
+}
+
+.rorvswild-local-panel__breakdown li.is-active {
+  box-shadow: 0 0 0 1px rgb(199 203 214) inset !important;
+  color: rgb(199 203 214) !important;
 }
 
 .rorvswild-local-panel__breakdown li:first-of-type { background-color:rgba(199, 203, 214, .08) !important; }
@@ -400,7 +413,9 @@ a.rorvswild-local-panel__file__name::after {
 a.rorvswild-local-panel__file__name:hover::after { opacity: 1; }
 
 .rorvswild-local-panel__file__name span {
-  background: rgb(38 41 49);
+  box-shadow: 0 0 0 1px rgb(38 41 49) inset !important;
+  font-weight: 700 !important;
+  padding: 0 2px !important;
   text-decoration: none;
   display: inline-block;
 }
@@ -616,6 +631,7 @@ span.rorvswild-local-panel__details__section__kind {
   cursor: pointer !important;
   font-weight: 700 !important;
   min-height: 24px !important;
+  height: 24px !important;
   transition: all 0.2s !important;
 }
 
