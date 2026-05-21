@@ -14,7 +14,7 @@ http://prismjs.com/download.html?themes=prism-twilight&languages=markup+css+clik
   text-shadow: 0 0 0 !important;
   word-spacing: normal !important;
 
-  font-size: 14px !important;
+  font-size: inherit !important;
   line-height: 24px !important;
   font-weight: 300 !important;
 
