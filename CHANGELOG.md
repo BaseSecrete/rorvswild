@@ -1,5 +1,10 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Local profiler:
+  * Filter by section kind in sections breakdown
+
 ## 1.11.1 (2026-03-16)
 
 * Improve accurancy by using the same timer for execution and its sections

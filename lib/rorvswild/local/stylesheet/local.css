@@ -19,7 +19,7 @@
 .rorvswild-local-toggler small {
   color: rgb(146 149 159) !important;
   font-weight: 400 !important;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   margin-left: 4px !important;
   display: inline-block !important;
 }
@@ -50,7 +50,7 @@
   background: rgb(17 20 27) !important;
   color: rgb(199 203 214) !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
-  font-size: 15px !important;
+  font-size: 13px !important;
   line-height: 24px !important;
   position: fixed !important;
   top: 0 !important;
@@ -88,7 +88,7 @@
 
 .rorvswild-local-panel small {
   color: rgb(146 149 159) !important;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   font-weight: 400 !important;
   margin-left: 2px !important;
 }
@@ -108,7 +108,7 @@
 
 .rorvswild-local-panel__header nav {
   text-transform: uppercase !important;
-  font-size: 12px !important;
+  font-size: 0.833em !important;
   font-weight: 700 !important;
   letter-spacing: 1px !important;
   flex: 1 !important;
@@ -193,7 +193,7 @@
 .rorvswild-local-panel--blank {
   text-align: center !important;
   margin: 0 auto !important;
-  font-size: 31px !important;
+  font-size: 2.074em !important;
   line-height: calc(100dvh - 120px) !important;
   color: rgb(26 29 36) !important;
 }
@@ -302,7 +302,7 @@
 h2.rorvswild-local-panel__title {
   margin:-18px 0 0 !important;
   padding:0 !important;
-  font-size: 31px !important;
+  font-size: 2.074em !important;
   line-height: 48px !important;
   font-weight: 700 !important;
   font-family: SF Mono, Menlo, Consolas, DejaVu Sans Mono, monospace !important;
@@ -320,15 +320,28 @@ h2.rorvswild-local-panel__title {
 }
 
 .rorvswild-local-panel__breakdown li {
+  color: rgb(146 149 159) !important;
   display: inline-block !important;
   margin: 0 !important;
   padding: 0 8px !important;
   white-space: nowrap !important;
   overflow: hidden !important;
   border: 1px solid rgb(26 29 36) !important;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
+  cursor: pointer !important;
+  transition: box-shadow 0.15s !important;
+}
+
+.rorvswild-local-panel__breakdown li:hover {
+  box-shadow: 0 0 0 1px rgb(72 75 80) inset !important;
+  color: rgb(199 203 214) !important;
+}
+
+.rorvswild-local-panel__breakdown li.is-active {
+  box-shadow: 0 0 0 1px rgb(199 203 214) inset !important;
+  color: rgb(199 203 214) !important;
 }
 
 .rorvswild-local-panel__breakdown li:first-of-type { background-color:rgba(199, 203, 214, .08) !important; }
@@ -400,7 +413,9 @@ a.rorvswild-local-panel__file__name::after {
 a.rorvswild-local-panel__file__name:hover::after { opacity: 1; }
 
 .rorvswild-local-panel__file__name span {
-  background: rgb(38 41 49);
+  box-shadow: 0 0 0 1px rgb(38 41 49) inset !important;
+  font-weight: 700 !important;
+  padding: 0 2px !important;
   text-decoration: none;
   display: inline-block;
 }
@@ -454,7 +469,7 @@ a.rorvswild-local-panel__file__name:hover::after { opacity: 1; }
   margin: 4px 0 0;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 9px !important;
+  font-size: 0.579em !important;
   line-height: 12px;
   font-weight: 400;
 }
@@ -471,7 +486,7 @@ a.rorvswild-local-panel__file__name:hover::after { opacity: 1; }
 
 .rorvswild-local-panel__details__section__kind {
   background: rgb(38 41 49);
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   text-transform: uppercase !important;
   text-align: center !important;
   letter-spacing: 1px !important;
@@ -552,7 +567,7 @@ span.rorvswild-local-panel__details__section__kind {
   color: rgb(146 149 159) !important;
   text-align: center;
   text-transform: uppercase;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   letter-spacing: 1px;
   margin: 0 !important;
   padding: 0 0 12px !important;
@@ -590,7 +605,7 @@ span.rorvswild-local-panel__details__section__kind {
 .rorvswild-local-panel__card dt {
   color: rgb(146 149 159) !important;
   text-transform: uppercase;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   letter-spacing: 1px;
 }
 
@@ -609,12 +624,14 @@ span.rorvswild-local-panel__details__section__kind {
   border: 1px solid rgb(72 75 80) !important;
   box-shadow: none !important;
   padding: 0px 8px !important;
-  font-size: 10px !important;
+  font-size: 0.694em !important;
   line-height: 24px !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
   cursor: pointer !important;
   font-weight: 700 !important;
+  min-height: 24px !important;
+  height: 24px !important;
   transition: all 0.2s !important;
 }
 
@@ -640,6 +657,7 @@ a.rorvswild-local-panel__footer__link {
 }
 
 @media screen and (min-width: 720px) {
+  .rorvswild-local-panel { font-size: 15px !important; }
   .rorvswild-local-panel__details__section__main { flex-wrap: nowrap !important; }
 
   .rorvswild-local-panel__name,
