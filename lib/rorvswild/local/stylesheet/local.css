@@ -358,6 +358,64 @@ h2.rorvswild-local-panel__title {
 
 .rorvswild-local-panel__breakdown__value { font-weight: 700; }
 
+.rorvswild-local-panel__section-filter {
+  width: calc(100% - 24px) !important;
+  margin: 0 12px 12px !important;
+}
+
+.rorvswild-local-panel__section-filter__input {
+  width: 100% !important;
+  max-width: 160px !important;
+  transition: all 0.2s !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 8px !important;
+  border: 1px solid rgb(38 41 49) !important;
+  min-height: 24px !important;
+  height: 24px !important;
+  line-height: 24px !important;
+  border-radius: 4px !important;
+  background: rgb(26 29 36) !important;
+  color: rgb(199 203 214) !important;
+  font-family: inherit !important;
+  font-size: 0.833em !important;
+}
+
+.rorvswild-local-panel__section-filter__input:focus {
+  transition: all 0.2s !important;
+  max-width: 240px !important;
+  outline: none !important;
+  border-color: rgb(72 75 80) !important;
+  background-color: rgb(13 15 21) !important;
+  box-shadow: 0 0 0 1px rgb(52 70 128) inset !important;
+}
+
+.rorvswild-local-panel__section-filter__input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2375777d' d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 16px;
+  height: 16px;
+  background-color: rgb(24 26 32);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rorvswild-local-panel__section-filter__input::placeholder {
+  color: rgb(72 74 81) !important;
+}
+
+.rorvswild-local-panel__section-filter-highlight {
+  background: rgb(55 38 0) !important;
+  box-shadow: 0 0 0 1px rgb(96 70 0) inset !important;
+  padding: 0 !important;
+  border-radius: 2px !important;
+}
+
 .rorvswild-local-panel__details__section {
   padding: 12px 12px 11px !important;
   border-bottom: 1px solid rgb(26 29 36) !important;
