@@ -119,7 +119,11 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-      {{> RorVsWild.Local.Sections}}
+  {{/currentRequest}}
+  <div data-rorvswild-local-sections-container>
+    {{> RorVsWild.Local.Sections}}
+  </div>
+  {{#currentRequest}}
     </div>
   {{/currentRequest}}
 </script>
@@ -137,7 +141,11 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-      {{> RorVsWild.Local.Sections}}
+  {{/currentJob}}
+  <div data-rorvswild-local-sections-container>
+    {{> RorVsWild.Local.Sections}}
+  </div>
+  {{#currentJob}}
     </div>
   {{/currentJob}}
 </script>
@@ -148,39 +156,39 @@
     {{#sections}}
       {{> RorVsWild.Local.Section}}
     {{/sections}}
-    {{#hasLowImpactSections}}
+    {{#showLowImpactToggle}}
       <div class="rorvswild-local-panel__toggle-low-impact">
-        <button data-events="click->toggleLowImpactSections" data-rorvswild-local-toggle-low-impact class="rorvswild-local-panel__toggle-low-impact__button">↓ view low impact sections</button>
+        <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
       </div>
-    {{/hasLowImpactSections}}
+    {{/showLowImpactToggle}}
   </div>
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
-      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}" data-rorvswild-local-breakdown-item>
+      <li class="{{#isActive}}is-active{{/isActive}}" style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}">
         <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small></span>
       </li>
     {{/sectionsImpactPerKind}}
   </ul>
   <div class="rorvswild-local-panel__section-filter">
-    <input type="search" placeholder="Filter by name" data-events="input->filterSections" data-rorvswild-local-section-filter class="rorvswild-local-panel__section-filter__input">
+    <input type="search" placeholder="Filter by name" value="{{sectionQueryFilter}}" data-events="input->filterSectionsByText" class="rorvswild-local-panel__section-filter__input">
   </div>
 </script>
 
 
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__details__section {{#isLowImpact}}is-hidden{{/isLowImpact}}" {{#isLowImpact}}data-rorvswild-local-low-impact{{/isLowImpact}} data-kind="{{kind}}" data-rorvswild-local-section id="section-{{id}}">
+  <div class="rorvswild-local-panel__details__section" data-kind="{{kind}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
         <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
         {{#locationUrl}}
-          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" data-rorvswild-local-filter-text title="Open in your editor">{{location}}</a>
+          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{#locationHtml}}{{{locationHtml}}}{{/locationHtml}}{{^locationHtml}}{{location}}{{/locationHtml}}</a>
         {{/locationUrl}}
         {{^locationUrl}}
-          <span class="rorvswild-local-panel__file__name" data-rorvswild-local-filter-text>{{file}}{{#isLineRelevant}}<span>:{{line}}</span>{{/isLineRelevant}}</span>
+          <span class="rorvswild-local-panel__file__name">{{#locationHtml}}{{{locationHtml}}}{{/locationHtml}}{{^locationHtml}}{{location}}{{/locationHtml}}</span>
         {{/locationUrl}}
       </span>
       <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>
