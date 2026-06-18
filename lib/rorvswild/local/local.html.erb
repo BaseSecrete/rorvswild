@@ -159,7 +159,7 @@
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
-      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterByKind" data-kind="{{kind}}" data-rorvswild-local-breakdown-item>
+      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}" data-rorvswild-local-breakdown-item>
         <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small></span>
       </li>
     {{/sectionsImpactPerKind}}
