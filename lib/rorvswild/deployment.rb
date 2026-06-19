@@ -56,8 +56,8 @@ module RorVsWild
 
     def self.read_from_heroku
       return unless ENV["HEROKU_SLUG_COMMIT"]
-      @revision = ENV["HEROKU_SLUG_COMMIT"]
       @description = ENV["HEROKU_SLUG_DESCRIPTION"]
+      @revision = ENV["HEROKU_SLUG_COMMIT"]
     end
 
     def self.read_from_scalingo
@@ -80,8 +80,7 @@ module RorVsWild
     end
 
     def self.read_from_kamal
-      return unless ENV["KAMAL_VERSION"]
-      @revision = ENV["KAMAL_VERSION"]
+      @revision = ENV["KAMAL_VERSION"] if ENV["KAMAL_VERSION"]
     end
 
     def self.normalize_string(string)
