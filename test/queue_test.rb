@@ -36,6 +36,7 @@ class RorVsWild::QueueTest < Minitest::Test
 
   def test_flush_when_jobs_are_present
     queue.stubs(:pull_server_metrics)
+    queue.stubs(:wakeup_thread)
     queue.client.expects(:post)
     queue.push_job(1)
     queue.flush
@@ -43,6 +44,7 @@ class RorVsWild::QueueTest < Minitest::Test
 
   def test_flush_when_requests_are_present
     queue.stubs(:pull_server_metrics)
+    queue.stubs(:wakeup_thread)
     queue.client.expects(:post)
     queue.push_request(1)
     queue.flush
