@@ -119,11 +119,9 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-  {{/currentRequest}}
-  <div data-rorvswild-local-sections-container>
-    {{> RorVsWild.Local.Sections}}
-  </div>
-  {{#currentRequest}}
+      <div data-rorvswild-local-sections-container>
+        {{> RorVsWild.Local.Sections}}
+      </div>
     </div>
   {{/currentRequest}}
 </script>
@@ -141,11 +139,9 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-  {{/currentJob}}
-  <div data-rorvswild-local-sections-container>
-    {{> RorVsWild.Local.Sections}}
-  </div>
-  {{#currentJob}}
+      <div data-rorvswild-local-sections-container>
+        {{> RorVsWild.Local.Sections}}
+      </div>
     </div>
   {{/currentJob}}
 </script>
