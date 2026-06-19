@@ -45,7 +45,7 @@ module RorVsWild
     end
 
     def self.to_h
-      @to_h ||= {revision: revision, description: description, author: author, email: email, ruby: ruby, rails: rails, rorvswild: rorvswild}.compact
+      {revision: revision, description: description, author: author, email: email, ruby: ruby, rails: rails, rorvswild: rorvswild}.compact
     end
 
     def self.read
