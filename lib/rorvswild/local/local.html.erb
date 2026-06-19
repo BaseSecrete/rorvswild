@@ -169,11 +169,9 @@
     {{/sectionsImpactPerKind}}
   </ul>
   <div class="rorvswild-local-panel__section-filter">
-    <input type="search" placeholder="Filter by name" value="{{sectionQueryFilter}}" data-events="input->filterSectionsByText" class="rorvswild-local-panel__section-filter__input">
+    <input type="search" placeholder="Filter" value="{{sectionQueryFilter}}" data-events="input->filterSectionsByText" class="rorvswild-local-panel__section-filter__input">
   </div>
 </script>
-
-
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
   <div class="rorvswild-local-panel__details__section{{#isOpen}} is-open{{/isOpen}}" data-kind="{{kind}}" id="section-{{id}}">

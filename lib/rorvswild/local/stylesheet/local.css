@@ -422,10 +422,6 @@ h2.rorvswild-local-panel__title {
   display: block !important;
 }
 
-.rorvswild-local-panel__details__section.is-hidden {
-  display: none !important;
-}
-
 .rorvswild-local-panel__details__section:hover {
   background: rgb(26 29 36) !important;
   transition: all .3s !important;
