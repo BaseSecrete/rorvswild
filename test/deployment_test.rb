@@ -4,7 +4,7 @@ class RorVsWild::DeploymentTest < Minitest::Test
   include RorVsWild::AgentHelper
 
   def setup
-    for name in [:@description, :@revision, :@author, :@email, :@to_h]
+    for name in [:@description, :@revision, :@author, :@email]
       if RorVsWild::Deployment.instance_variable_defined?(name)
         RorVsWild::Deployment.remove_instance_variable(name)
       end
