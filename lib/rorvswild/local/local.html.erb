@@ -131,7 +131,8 @@
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
       <li class="{{#isActive}}is-active{{/isActive}}" style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}">
-        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small></span>
+        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span>
+        <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small>
       </li>
     {{/sectionsImpactPerKind}}
   </ul>
@@ -155,7 +156,7 @@
   <div class="rorvswild-local-panel__details__section{{#isOpen}} is-open{{/isOpen}}" data-kind="{{kind}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
-        <button data-events="click->toggleSection" data-section-id="{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
+        <button data-events="click->toggleSection" data-section-id="{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</span></button>
         {{#locationUrl}}
           <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{{locationHtml}}}</a>
         {{/locationUrl}}
