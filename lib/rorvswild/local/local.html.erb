@@ -162,9 +162,9 @@
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections.List">
-  {{#visibleSections}}
+  {{#filteredSections}}
     {{> RorVsWild.Local.Section}}
-  {{/visibleSections}}
+  {{/filteredSections}}
   {{#showLowImpactToggle}}
     <div class="rorvswild-local-panel__toggle-low-impact">
       <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
