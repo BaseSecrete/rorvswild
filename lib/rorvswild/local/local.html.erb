@@ -119,7 +119,10 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-      <div data-rorvswild-local-sections-container></div>
+      <div class="rorvswild-local-panel__details__sections">
+        <div data-rorvswild-local-sections-header></div>
+        <div data-rorvswild-local-sections-list></div>
+      </div>
     </div>
   {{/currentRequest}}
 </script>
@@ -137,26 +140,15 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-      <div data-rorvswild-local-sections-container></div>
+      <div class="rorvswild-local-panel__details__sections">
+        <div data-rorvswild-local-sections-header></div>
+        <div data-rorvswild-local-sections-list></div>
+      </div>
     </div>
   {{/currentJob}}
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections">
-  <div class="rorvswild-local-panel__details__sections">
-    {{> RorVsWild.Local.SectionImpactPerKind}}
-    {{#visibleSections}}
-      {{> RorVsWild.Local.Section}}
-    {{/visibleSections}}
-    {{#showLowImpactToggle}}
-      <div class="rorvswild-local-panel__toggle-low-impact">
-        <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
-      </div>
-    {{/showLowImpactToggle}}
-  </div>
-</script>
-
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections.Header">
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
       <li class="{{#isActive}}is-active{{/isActive}}" style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}">
@@ -167,6 +159,17 @@
   <div class="rorvswild-local-panel__section-filter">
     <input type="search" placeholder="Filter" value="{{sectionQueryFilter}}" data-events="input->filterSectionsByText" class="rorvswild-local-panel__section-filter__input">
   </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections.List">
+  {{#visibleSections}}
+    {{> RorVsWild.Local.Section}}
+  {{/visibleSections}}
+  {{#showLowImpactToggle}}
+    <div class="rorvswild-local-panel__toggle-low-impact">
+      <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
+    </div>
+  {{/showLowImpactToggle}}
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">

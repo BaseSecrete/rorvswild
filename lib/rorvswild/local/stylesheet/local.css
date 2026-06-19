@@ -365,7 +365,7 @@ h2.rorvswild-local-panel__title {
 
 .rorvswild-local-panel__section-filter__input {
   width: 100% !important;
-  max-width: 160px !important;
+  max-width: 240px !important;
   transition: all 0.2s !important;
   box-sizing: border-box !important;
   margin: 0 !important;
@@ -383,7 +383,6 @@ h2.rorvswild-local-panel__title {
 
 .rorvswild-local-panel__section-filter__input:focus {
   transition: all 0.2s !important;
-  max-width: 240px !important;
   outline: none !important;
   border-color: rgb(72 75 80) !important;
   background-color: rgb(13 15 21) !important;
