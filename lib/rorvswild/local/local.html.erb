@@ -153,9 +153,9 @@
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections">
   <div class="rorvswild-local-panel__details__sections">
     {{> RorVsWild.Local.SectionImpactPerKind}}
-    {{#sections}}
+    {{#visibleSections}}
       {{> RorVsWild.Local.Section}}
-    {{/sections}}
+    {{/visibleSections}}
     {{#showLowImpactToggle}}
       <div class="rorvswild-local-panel__toggle-low-impact">
         <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
@@ -180,10 +180,10 @@
 
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__details__section" data-kind="{{kind}}" id="section-{{id}}">
+  <div class="rorvswild-local-panel__details__section{{#isOpen}} is-open{{/isOpen}}" data-kind="{{kind}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
-        <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
+        <button data-events="click->toggleCommand" data-section-id="{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
         {{#locationUrl}}
           <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{#locationHtml}}{{{locationHtml}}}{{/locationHtml}}{{^locationHtml}}{{location}}{{/locationHtml}}</a>
         {{/locationUrl}}
