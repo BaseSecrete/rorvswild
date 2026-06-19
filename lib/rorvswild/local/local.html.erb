@@ -185,10 +185,10 @@
       <span class="rorvswild-local-panel__details__section__file">
         <button data-events="click->toggleSection" data-section-id="{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
         {{#locationUrl}}
-          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{#locationHtml}}{{{locationHtml}}}{{/locationHtml}}{{^locationHtml}}{{location}}{{/locationHtml}}</a>
+          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{{locationHtml}}}</a>
         {{/locationUrl}}
         {{^locationUrl}}
-          <span class="rorvswild-local-panel__file__name">{{#locationHtml}}{{{locationHtml}}}{{/locationHtml}}{{^locationHtml}}{{location}}{{/locationHtml}}</span>
+          <span class="rorvswild-local-panel__file__name">{{{locationHtml}}}</span>
         {{/locationUrl}}
       </span>
       <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>
