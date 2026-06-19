@@ -4,7 +4,7 @@
 
 * Local profiler:
   * Filter sections by kind in sections breakdown
-  * Filter sections by name
+  * Filter sections by file name
 
 ## 1.11.1 (2026-03-16)
 
