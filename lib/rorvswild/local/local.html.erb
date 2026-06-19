@@ -106,28 +106,7 @@
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestDetail">
-  {{#currentExecution}}
-    <div class="rorvswild-local-panel__details">
-      <div class="rorvswild-local-panel__details__header">
-        <span class="rorvswild-local-panel__name">
-          <h2 class="rorvswild-local-panel__title">{{name}}</h2>
-          <span class="rorvswild-local-panel__path">
-            {{path}}
-          </span>
-        </span>
-        <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
-        <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
-      </div>
-      <div class="rorvswild-local-panel__details__sections">
-        <div id="rorvswild-local-sections-header"></div>
-        <div id="rorvswild-local-sections-list"></div>
-      </div>
-    </div>
-  {{/currentExecution}}
-</script>
-
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.JobDetail">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Execution">
   {{#currentExecution}}
     <div class="rorvswild-local-panel__details">
       <div class="rorvswild-local-panel__details__header">
