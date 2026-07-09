@@ -13,6 +13,7 @@ gem "elasticsearch"
 
 gem "actionpack", "~> 8.0"
 gem "activejob", "~> 8.0"
+gem "view_component"
 
 gem "delayed_job"
 gem "sidekiq"

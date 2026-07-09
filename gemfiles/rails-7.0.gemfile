@@ -18,6 +18,7 @@ gem "securerandom", "~> 0.3.2"
 
 gem "actionpack", "~> 7.0"
 gem "activejob", "~> 7.0"
+gem "view_component", "< 4.0" # 4.0 requires Ruby >= 3.2
 
 gem "delayed_job"
 gem "sidekiq", "~> 7.3.9"

@@ -71,6 +71,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    method_source (1.1.0)
     mini_portile2 (2.8.9)
     minitest (5.27.0)
     minitest-stub-const (0.6)
@@ -161,6 +162,10 @@ GEM
       concurrent-ruby (~> 1.0)
     uri (1.0.3)
     useragent (0.16.11)
+    view_component (3.25.0)
+      activesupport (>= 5.2.0, < 8.2)
+      concurrent-ruby (~> 1)
+      method_source (~> 1.0)
 
 PLATFORMS
   aarch64-linux-gnu
@@ -187,6 +192,7 @@ DEPENDENCIES
   sidekiq
   simplecov
   top_tests
+  view_component (< 4.0)
 
 BUNDLED WITH
    2.6.9

@@ -13,6 +13,7 @@ gem "elasticsearch"
 
 gem "actionpack", "~> 7.1"
 gem "activejob", "~> 7.1"
+gem "view_component", "< 4.0" # 4.0 requires Ruby >= 3.2
 
 gem "delayed_job"
 gem "sidekiq"

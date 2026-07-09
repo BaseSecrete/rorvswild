@@ -72,6 +72,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    method_source (1.1.0)
     minitest (5.15.0)
     minitest-stub-const (0.6)
     mocha (2.7.1)
@@ -118,6 +119,10 @@ GEM
     top_tests (0.1.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    view_component (2.83.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     zeitwerk (2.6.18)
 
 PLATFORMS
@@ -138,6 +143,7 @@ DEPENDENCIES
   sidekiq
   simplecov
   top_tests
+  view_component (< 4.0)
 
 BUNDLED WITH
    2.3.27
