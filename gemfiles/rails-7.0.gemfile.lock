@@ -158,7 +158,6 @@ DEPENDENCIES
   mocha
   mongo
   multi_json (~> 1.14.1)
-  mutex_m
   nokogiri (~> 1.15.0)
   rake
   redis

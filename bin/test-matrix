@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+matrix=(
+  "8.1 4.0.0"
+  "8.1 3.4.10"
+  "8.1 3.3.11"
+  "8.1 3.2.11"
+
+  "8.0 4.0.0"
+  "8.0 3.4.10"
+  "8.0 3.3.11"
+  "8.0 3.2.11"
+
+  "7.2 4.0.0"
+  "7.2 3.4.10"
+  "7.2 3.3.11"
+  "7.2 3.2.11"
+  "7.2 3.1.7"
+
+  "7.1 3.3.11"
+  "7.1 2.7.8"
+
+  "7.0 3.3.11"
+  "7.0 2.7.8"
+
+  "6.1 2.5.9"
+  "6.0 2.5.9"
+)
+
+for entry in "${matrix[@]}"; do
+  IFS=' ' read -r RAILS_VERSION RUBY_VERSION <<< "$entry"
+  echo -e "\n---> RAILS_VERSION=$RAILS_VERSION RUBY_VERSION=$RUBY_VERSION\n"
+  export RBENV_VERSION=$RUBY_VERSION
+  export RAILS_VERSION
+  export RUBY_VERSION
+  "$(dirname "$0")/test"
+done

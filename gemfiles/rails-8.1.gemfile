@@ -10,8 +10,8 @@ gem "mongo"
 gem "redis"
 gem "elasticsearch"
 
-gem "actionpack", "~> 8.1.beta1"
-gem "activejob", "~> 8.1.beta1"
+gem "actionpack", "~> 8.1"
+gem "activejob", "~> 8.1"
 
 gem "delayed_job"
 gem "sidekiq"
@@ -20,4 +20,4 @@ gem "faktory_worker_ruby"
 
 gem "minitest-stub-const"
 
-gem "mutex_m"
+gem "benchmark"

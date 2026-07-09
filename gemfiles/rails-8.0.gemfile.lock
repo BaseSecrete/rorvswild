@@ -71,7 +71,10 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    minitest (5.25.5)
+    mini_portile2 (2.8.9)
+    minitest (6.0.6)
+      drb (~> 2.0)
+      prism (~> 1.5)
     minitest-stub-const (0.6)
     mocha (2.7.1)
       ruby2_keywords (>= 0.0.5)
@@ -82,9 +85,11 @@ GEM
     multi_json (1.17.0)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
-    mutex_m (0.3.0)
     net-http (0.6.0)
       uri
+    nokogiri (1.18.10)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-musl)
@@ -101,6 +106,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.10-x86_64-linux-musl)
       racc (~> 1.4)
+    prism (1.9.0)
     racc (1.8.1)
     rack (3.2.1)
     rack-protection (4.1.1)
@@ -178,7 +184,6 @@ DEPENDENCIES
   minitest-stub-const
   mocha
   mongo
-  mutex_m
   rake
   redis
   resque

@@ -71,7 +71,8 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
-    minitest (5.25.5)
+    mini_portile2 (2.8.9)
+    minitest (5.27.0)
     minitest-stub-const (0.6)
     mocha (2.7.1)
       ruby2_keywords (>= 0.0.5)
@@ -82,9 +83,11 @@ GEM
     multi_json (1.17.0)
     mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
-    mutex_m (0.3.0)
     net-http (0.6.0)
       uri
+    nokogiri (1.18.10)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.18.10-aarch64-linux-musl)
@@ -133,12 +136,12 @@ GEM
       sinatra (>= 0.9.2)
     ruby2_keywords (0.0.5)
     securerandom (0.4.1)
-    sidekiq (8.0.7)
-      connection_pool (>= 2.5.0)
-      json (>= 2.9.0)
-      logger (>= 1.6.2)
-      rack (>= 3.1.0)
-      redis-client (>= 0.23.2)
+    sidekiq (7.3.10)
+      base64
+      connection_pool (>= 2.3.0, < 3)
+      logger
+      rack (>= 2.2.4, < 3.3)
+      redis-client (>= 0.23.0, < 1)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -178,7 +181,6 @@ DEPENDENCIES
   minitest-stub-const
   mocha
   mongo
-  mutex_m
   rake
   redis
   resque

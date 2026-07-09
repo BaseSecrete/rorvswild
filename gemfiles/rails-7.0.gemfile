@@ -24,5 +24,3 @@ gem "resque"
 gem "faktory_worker_ruby"
 
 gem "minitest-stub-const"
-
-gem "mutex_m"

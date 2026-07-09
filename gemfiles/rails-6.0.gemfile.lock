@@ -82,7 +82,6 @@ GEM
     mono_logger (1.1.2)
     multi_json (1.15.0)
     multipart-post (2.4.1)
-    mutex_m (0.3.0)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     racc (1.8.1)
@@ -135,7 +134,6 @@ DEPENDENCIES
   minitest-stub-const
   mocha
   mongo
-  mutex_m
   rake
   redis
   resque
