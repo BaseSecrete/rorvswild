@@ -13,8 +13,6 @@ gem "elasticsearch"
 gem "actionpack", "~> 6.1"
 gem "activejob", "~> 6.1"
 
-gem "bigdecimal"
-
 gem "delayed_job"
 gem "sidekiq"
 gem "resque"
