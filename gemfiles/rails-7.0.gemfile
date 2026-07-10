@@ -5,6 +5,7 @@ gem "rake"
 gem "mocha"
 gem "top_tests"
 gem "simplecov"
+gem "minitest-stub-const"
 
 gem "mongo"
 gem "redis"
@@ -22,5 +23,3 @@ gem "delayed_job"
 gem "sidekiq", "~> 7.3.9"
 gem "resque"
 gem "faktory_worker_ruby"
-
-gem "minitest-stub-const"
