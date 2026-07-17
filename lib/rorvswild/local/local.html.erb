@@ -82,7 +82,7 @@
     <h2 class="rorvswild-local-panel--blank">No jobs</h2>
   {{/jobs}}
   {{#jobs}}
-    <div data-events="click->goToJobDetail" data-uuid="{{uuid}}"" class="rorvswild-local-panel__row">
+    <div data-events="click->goToJobDetail" data-uuid="{{uuid}}" class="rorvswild-local-panel__row">
       <div class="rorvswild-local-panel__name">
         <span>{{name}}</span>
         <div class="rorvswild-local-panel__path">{{path}}</div>
@@ -106,8 +106,8 @@
   </div>
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.RequestDetail">
-  {{#currentRequest}}
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Execution">
+  {{#currentExecution}}
     <div class="rorvswild-local-panel__details">
       <div class="rorvswild-local-panel__details__header">
         <span class="rorvswild-local-panel__name">
@@ -119,63 +119,49 @@
         <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
         <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
       </div>
-      {{> RorVsWild.Local.Sections}}
-    </div>
-  {{/currentRequest}}
-</script>
-
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.JobDetail">
-  {{#currentJob}}
-    <div class="rorvswild-local-panel__details">
-      <div class="rorvswild-local-panel__details__header">
-        <span class="rorvswild-local-panel__name">
-          <h2 class="rorvswild-local-panel__title">{{name}}</h2>
-          <span class="rorvswild-local-panel__path">
-            {{path}}
-          </span>
-        </span>
-        <span class="rorvswild-local-panel__runtime">{{runtime}}<small>ms</small></span>
-        <span class="rorvswild-local-panel__started-at">{{queuedAt}}</span>
+      <div class="rorvswild-local-panel__details__sections">
+        <div id="rorvswild-local-sections-header"></div>
+        <div id="rorvswild-local-sections-list"></div>
       </div>
-      {{> RorVsWild.Local.Sections}}
     </div>
-  {{/currentJob}}
+  {{/currentExecution}}
 </script>
 
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections">
-  <div class="rorvswild-local-panel__details__sections">
-    {{> RorVsWild.Local.SectionImpactPerKind}}
-    {{#sections}}
-      {{> RorVsWild.Local.Section}}
-    {{/sections}}
-    {{#hasLowImpactSections}}
-      <div class="rorvswild-local-panel__toggle-low-impact">
-        <button data-events="click->toggleLowImpactSections" data-rorvswild-local-toggle-low-impact class="rorvswild-local-panel__toggle-low-impact__button">↓ view low impact sections</button>
-      </div>
-    {{/hasLowImpactSections}}
-  </div>
-</script>
-
-<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.SectionImpactPerKind">
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections.Header">
   <ul class="rorvswild-local-panel__breakdown">
     {{#sectionsImpactPerKind}}
-      <li style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterByKind" data-kind="{{kind}}" data-rorvswild-local-breakdown-item>
-        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span> <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small></span>
+      <li class="{{#isActive}}is-active{{/isActive}}" style="width: {{impact}}%" title="{{kind}} {{impact}}%" data-events="click->filterSectionsByKind" data-kind="{{kind}}">
+        <span class="rorvswild-local-panel__breakdown__label">{{kind}}</span>
+        <span class="rorvswild-local-panel__breakdown__value">{{impact}}</span><small>%</small>
       </li>
     {{/sectionsImpactPerKind}}
   </ul>
+  <div class="rorvswild-local-panel__section-filter">
+    <input type="search" placeholder="Filter" value="{{sectionQueryFilter}}" data-events="input->filterSectionsByText" class="rorvswild-local-panel__section-filter__input">
+  </div>
+</script>
+
+<script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Sections.List">
+  {{#filteredSections}}
+    {{> RorVsWild.Local.Section}}
+  {{/filteredSections}}
+  {{#showLowImpactToggle}}
+    <div class="rorvswild-local-panel__toggle-low-impact">
+      <button data-events="click->toggleLowImpactSections" class="rorvswild-local-panel__toggle-low-impact__button">{{lowImpactToggleLabel}}</button>
+    </div>
+  {{/showLowImpactToggle}}
 </script>
 
 <script type="x-tmpl-mustache" data-partial="RorVsWild.Local.Section">
-  <div class="rorvswild-local-panel__details__section {{#isLowImpact}}is-hidden{{/isLowImpact}}" {{#isLowImpact}}data-rorvswild-local-low-impact{{/isLowImpact}} data-kind="{{kind}}" data-rorvswild-local-section id="section-{{id}}">
+  <div class="rorvswild-local-panel__details__section{{#isOpen}} is-open{{/isOpen}}" data-kind="{{kind}}" id="section-{{id}}">
     <div class="rorvswild-local-panel__details__section__main">
       <span class="rorvswild-local-panel__details__section__file">
-        <button data-events="click->toggleCommand" data-target="#section-{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</button>
+        <button data-events="click->toggleSection" data-section-id="{{id}}" class="rorvswild-local-panel__details__section__kind"><span>{{kind}}</span></button>
         {{#locationUrl}}
-          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{location}}</a>
+          <a href="{{locationUrl}}" class="rorvswild-local-panel__file__name" title="Open in your editor">{{{locationHtml}}}</a>
         {{/locationUrl}}
         {{^locationUrl}}
-          <span class="rorvswild-local-panel__file__name">{{file}}{{#isLineRelevant}}<span>:{{line}}</span>{{/isLineRelevant}}</span>
+          <span class="rorvswild-local-panel__file__name">{{{locationHtml}}}</span>
         {{/locationUrl}}
       </span>
       <span class="rorvswild-local-panel__details__section__average" title="Self runtime">{{selfRuntime}}<small>ms</small></span>

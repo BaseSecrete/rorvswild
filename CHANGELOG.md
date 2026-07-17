@@ -4,7 +4,8 @@
 
 * Measure ViewComponent, it must be enabled with: `config.view_component.instrumentation_enabled = true`
 * Local profiler:
-  * Filter by section kind in sections breakdown
+  * Filter sections by kind in sections breakdown
+  * Filter sections by file location
 
 ## 1.11.1 (2026-03-16)
 
