@@ -62,4 +62,8 @@ module RorVsWild::AgentHelper
   ensure
     new_hash.each { |name, value| ENV[name] = old_hash[name] } if old_hash
   end
+
+  def instrument(*args, &block)
+    ActiveSupport::Notifications.instrument(*args, &block)
+  end
 end

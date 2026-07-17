@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Measure ViewComponent, it must be enabled with: `config.view_component.instrumentation_enabled = true`
 * Local profiler:
   * Filter sections by kind in sections breakdown
   * Filter sections by file name

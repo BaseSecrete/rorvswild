@@ -5,6 +5,7 @@ gem "rake"
 gem "mocha"
 gem "top_tests"
 gem "simplecov"
+gem "minitest-stub-const"
 
 gem "mongo"
 gem "redis"
@@ -12,14 +13,9 @@ gem "elasticsearch"
 
 gem "actionpack", "~> 6.1"
 gem "activejob", "~> 6.1"
-
-gem "bigdecimal"
+gem "view_component", "< 4.0" # 4.0 requires Ruby >= 3.2
 
 gem "delayed_job"
 gem "sidekiq"
 gem "resque"
 gem "faktory_worker_ruby"
-
-gem "minitest-stub-const"
-
-gem "mutex_m"

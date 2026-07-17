@@ -5,6 +5,7 @@ gem "rake"
 gem "mocha"
 gem "top_tests"
 gem "simplecov"
+gem "minitest-stub-const"
 
 gem "mongo"
 gem "redis"
@@ -17,12 +18,9 @@ gem "securerandom", "~> 0.3.2"
 
 gem "actionpack", "~> 7.0"
 gem "activejob", "~> 7.0"
+gem "view_component", "< 4.0" # 4.0 requires Ruby >= 3.2
 
 gem "delayed_job"
 gem "sidekiq", "~> 7.3.9"
 gem "resque"
 gem "faktory_worker_ruby"
-
-gem "minitest-stub-const"
-
-gem "mutex_m"

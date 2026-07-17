@@ -74,10 +74,4 @@ class RorVsWild::Plugin::ActionViewTest < Minitest::Test
     end
     assert_empty(current_user_sections)
   end
-
-  private
-
-  def instrument(*args, &block)
-    ActiveSupport::Notifications.instrument(*args, &block)
-  end
 end

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+RAILS_VERSION=${RAILS_VERSION:-8.1}
+export BUNDLE_GEMFILE="gemfiles/rails-$RAILS_VERSION.gemfile"
+bundle install && bundle exec rake

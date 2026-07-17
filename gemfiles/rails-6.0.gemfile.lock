@@ -23,7 +23,6 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    bigdecimal (3.2.3)
     bson (4.15.0)
     builder (3.3.0)
     concurrent-ruby (1.3.5)
@@ -73,6 +72,7 @@ GEM
     loofah (2.24.1)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
+    method_source (1.1.0)
     minitest (5.15.0)
     minitest-stub-const (0.6)
     mocha (2.7.1)
@@ -82,7 +82,6 @@ GEM
     mono_logger (1.1.2)
     multi_json (1.15.0)
     multipart-post (2.4.1)
-    mutex_m (0.3.0)
     nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     racc (1.8.1)
@@ -120,6 +119,10 @@ GEM
     top_tests (0.1.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    view_component (2.83.0)
+      activesupport (>= 5.2.0, < 8.0)
+      concurrent-ruby (~> 1.0)
+      method_source (~> 1.0)
     zeitwerk (2.6.18)
 
 PLATFORMS
@@ -128,20 +131,19 @@ PLATFORMS
 DEPENDENCIES
   actionpack (~> 6.0)
   activejob (~> 6.0)
-  bigdecimal
   delayed_job
   elasticsearch
   faktory_worker_ruby
   minitest-stub-const
   mocha
   mongo
-  mutex_m
   rake
   redis
   resque
   sidekiq
   simplecov
   top_tests
+  view_component (< 4.0)
 
 BUNDLED WITH
    2.3.27
