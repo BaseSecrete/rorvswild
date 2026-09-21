@@ -57,6 +57,10 @@ class RorVsWild::AgentTest < Minitest::Test
     def bar
       2
     end
+
+    def boom
+      raise
+    end
   end
 
   def test_measure_class_method
@@ -79,6 +83,15 @@ class RorVsWild::AgentTest < Minitest::Test
     assert_equal("/agent_test.rb", section.file)
     assert_equal(line, section.line)
     assert_equal("RorVsWild::AgentTest::Example#bar", section.commands.to_a.join)
+  end
+
+  def test_measure_method_on_exception
+    agent.measure_method(Example.instance_method(:boom))
+    assert_raises(RuntimeError) { agent.measure_job("job") { Example.new.boom } }
+    sections = current_user_sections
+    assert_equal(1, sections.size)
+    assert_equal("RorVsWild::AgentTest::Example#boom", sections[0].command)
+    assert(agent.current_execution.runtime > 0)
   end
 
   def test_ignored_request?
