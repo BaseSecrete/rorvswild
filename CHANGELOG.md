@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.12.1 (2026-09-21)
 
 * Fix Sidekiq and measure_method total time when exception has been raised
 
