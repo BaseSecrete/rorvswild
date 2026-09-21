@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Fix Sidekiq total time when exception has been raised
+* Fix Sidekiq and measure_method total time when exception has been raised
 
 ## 1.12.0 (2026-07-23)
 

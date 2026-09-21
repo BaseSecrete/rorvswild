@@ -74,13 +74,12 @@ module RorVsWild
       method_file, method_line = method.source_location
       method_file = locator.relative_path(File.expand_path(method_file))
       method.owner.define_method(method.name) do |*args|
-        section = Section.start
-        section.file = method_file
-        section.line = method_line
-        section.commands << method_full_name
-        result = send(method_alias, *args)
-        Section.stop
-        result
+        Section.measure do |section|
+          section.file = method_file
+          section.line = method_line
+          section.commands << method_full_name
+          send(method_alias, *args)
+        end
       end
     end
 
