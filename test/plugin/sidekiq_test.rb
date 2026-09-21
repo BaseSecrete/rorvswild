@@ -33,6 +33,10 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
   rescue
   ensure
     assert_equal([false], agent.current_execution.error.as_json[:parameters])
+    sections = current_user_sections
+    assert_equal(1, sections.size)
+    assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob#perform", sections[0].command)
+    assert(agent.current_execution.runtime > 0)
   end
 end
 

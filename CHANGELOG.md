@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix Sidekiq total time when exception has been raised
+
 ## 1.12.0 (2026-07-23)
 
 * Measure ViewComponent, it must be enabled with: `config.view_component.instrumentation_enabled = true`

@@ -71,6 +71,31 @@ class RorVsWild::SectionTest < Minitest::Test
     )
   end
 
+  def test_measure
+    start_request
+    result = RorVsWild::Section.measure do |section|
+      section.commands << "measured"
+      :return
+    end
+    assert_equal(:return, result)
+    section = current_user_sections.last
+    assert_equal("measured", section.command)
+    assert(section.total_ms >= 0)
+  end
+
+  def test_measure_when_exception_is_raised
+    start_request
+    assert_raises(RuntimeError) do
+      RorVsWild::Section.measure do |section|
+        section.commands << "measured"
+        raise
+      end
+    end
+    section = current_user_sections.last
+    assert_equal("measured", section.command)
+    assert(section.total_ms >= 0)
+  end
+
   private
 
   def section1

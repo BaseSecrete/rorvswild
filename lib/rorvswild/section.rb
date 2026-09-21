@@ -12,6 +12,15 @@ module RorVsWild
       section
     end
 
+    def self.measure(&block)
+      section = start
+      begin
+        block.call(section)
+      ensure
+        stop
+      end
+    end
+
     def self.stop(&block)
       return if !(sections = stack) || !(section = sections.pop)
       block.call(section) if block_given?
