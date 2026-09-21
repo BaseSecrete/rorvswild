@@ -13,7 +13,7 @@ module RorVsWild
     end
 
     def self.user
-      Etc.getlogin
+      Etc.getlogin || Etc.getpwuid.name rescue ENV["USER"]
     end
 
     def self.ruby
