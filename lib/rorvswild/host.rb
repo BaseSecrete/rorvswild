@@ -25,8 +25,12 @@ module RorVsWild
     end
 
     def self.name
-      @name ||= if gae_instance = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
-        gae_instance
+      @name ||= if kamal_name = ENV["KAMAL_HOST"]
+        kamal_name
+      elsif scalingo_name = ENV["CONTAINER"]
+        scalingo_name
+      elsif gae_name = ENV["GAE_INSTANCE"] || ENV["CLOUD_RUN_EXECUTION"]
+        gae_name
       elsif dyno = ENV["DYNO"] # Heroku
         dyno.start_with?("run.") ? "run.*" :
           dyno.start_with?("release.") ? "release.*" : dyno

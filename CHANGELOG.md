@@ -1,5 +1,9 @@
 # Changelog of RorVsWild
 
+## Unreleased
+
+* Fix server names for Kamal and Scalingo
+
 ## 1.12.1 (2026-09-21)
 
 * Fix Sidekiq and measure_method total time when exception has been raised
