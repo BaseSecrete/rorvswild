@@ -1,6 +1,6 @@
 # Changelog of RorVsWild
 
-## Unreleased
+## 1.12.2 (2026-10-02)
 
 * Fix server names for Kamal and Scalingo
 
