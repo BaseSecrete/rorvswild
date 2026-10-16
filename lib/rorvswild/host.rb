@@ -7,9 +7,7 @@ module RorVsWild
     end
 
     def self.os
-      @os_description ||= `uname -sr`.strip
-    rescue Exception
-      @os_description = RbConfig::CONFIG["host_os"]
+      @os_description ||= "#{(uname = Etc.uname)[:sysname]} #{uname[:release]}"
     end
 
     def self.user
