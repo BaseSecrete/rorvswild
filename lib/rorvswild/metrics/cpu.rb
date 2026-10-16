@@ -22,7 +22,7 @@ module RorVsWild
           end
         end
         @load_average = File.read("/proc/loadavg").to_f if File.readable?("/proc/loadavg")
-        @count = `nproc`.to_i rescue nil
+        @count = Etc.nprocessors
       end
 
       class Stat
