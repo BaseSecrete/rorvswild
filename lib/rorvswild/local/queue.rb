@@ -36,6 +36,9 @@ module RorVsWild
         load_data("errors")
       end
 
+      def after_fork
+      end
+
       private
 
       def push_to(data, name)

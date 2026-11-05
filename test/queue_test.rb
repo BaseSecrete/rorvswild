@@ -61,6 +61,25 @@ class RorVsWild::QueueTest < Minitest::Test
     queue.flush
   end
 
+  def test_after_fork_resets_mutex_and_restarts_thread
+    queue.start_thread
+    old_thread = queue.thread
+    old_mutex = queue.mutex
+
+    RorVsWild.after_fork
+
+    refute_same(old_mutex, queue.mutex)
+    refute_equal(old_thread, queue.thread)
+    assert(queue.thread.alive?)
+  end
+
+  def test_after_fork_does_not_start_thread_when_idle
+    queue
+    RorVsWild.after_fork
+
+    assert_nil(queue.thread)
+  end
+
   def queue
     @queue ||= agent.instance_variable_get(:@queue)
   end

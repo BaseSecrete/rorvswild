@@ -54,7 +54,11 @@ module RorVsWild
     end
 
     def self.to_h
-      @to_h ||= {os: os, user: user, host: name, ruby: ruby, rails: rails, pid: pid, cwd: cwd, revision: revision}.compact
+      if @to_h && @to_h[:pid] == pid # Refork saftey
+        @to_h
+      else
+        @to_h = {os: os, user: user, host: name, ruby: ruby, rails: rails, pid: pid, cwd: cwd, revision: revision}.compact
+      end
     end
   end
 end
