@@ -18,7 +18,8 @@ module RorVsWild
               else
                 job_name, job_args = job.name, job.payload_object
               end
-              RorVsWild.agent.measure_job(job_name, parameters: job_args) { block.call(job) }
+              attempt = job.respond_to?(:attempts) ? job.attempts.to_i + 1 : nil
+              RorVsWild.agent.measure_job(job_name, parameters: job_args, attempt: attempt) { block.call(job) }
             end
           end
         end

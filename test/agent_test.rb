@@ -114,6 +114,32 @@ class RorVsWild::AgentTest < Minitest::Test
     refute(agent.ignored_job?("ApplicationJob"))
   end
 
+  def test_job_attempt_below_threshold?
+    agent = initialize_agent(job_attempt_threshold: {"FooJob" => 4, /BarJob/ => 2, BazJob: 3})
+    assert(agent.job_attempt_below_threshold?("FooJob", 3))
+    refute(agent.job_attempt_below_threshold?("FooJob", 4))
+    assert(agent.job_attempt_below_threshold?("AnotherBarJob", 1))
+    refute(agent.job_attempt_below_threshold?("AnotherBarJob", 2))
+    assert(agent.job_attempt_below_threshold?("BazJob", 2))
+    refute(agent.job_attempt_below_threshold?("BazJob", 3))
+    refute(agent.job_attempt_below_threshold?("OtherJob", 1))
+    refute(agent.job_attempt_below_threshold?("FooJob", nil))
+    refute(initialize_agent.job_attempt_below_threshold?("FooJob", 1))
+  end
+
+  def test_measure_job_below_attempt_threshold
+    agent = initialize_agent(job_attempt_threshold: {"FooJob" => 2})
+    assert_raises(RuntimeError) { agent.measure_job("FooJob", attempt: 1) { raise "boom" } }
+    refute(agent.current_execution.error, "Error before the attempt threshold should not be sent")
+    assert_equal("FooJob", agent.current_execution.name)
+  end
+
+  def test_measure_job_at_attempt_threshold
+    agent = initialize_agent(job_attempt_threshold: {"FooJob" => 2})
+    assert_raises(RuntimeError) { agent.measure_job("FooJob", attempt: 2) { raise "boom" } }
+    assert_equal("boom", agent.current_execution.error.as_json[:message])
+  end
+
   def test_ignored_exception?
     agent = initialize_agent(ignore_exceptions: ["ZeroDivisionError"])
     assert(agent.ignored_exception?(ZeroDivisionError.new))
