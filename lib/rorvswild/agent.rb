@@ -96,14 +96,14 @@ module RorVsWild
       end
     end
 
-    def measure_job(name, parameters: nil, &block)
+    def measure_job(name, parameters: nil, attempt: nil, &block)
       return measure_section(name, &block) if current_execution # For recursive jobs
       return block.call if ignored_job?(name)
       start_execution(Execution::Job.new(name, parameters))
       begin
         block.call
       rescue Exception => ex
-        current_execution.add_exception(ex)
+        current_execution.add_exception(ex) unless job_attempt_below_threshold?(name, attempt)
         raise
       ensure
         stop_execution
@@ -156,6 +156,15 @@ module RorVsWild
 
     def ignored_job?(name)
       config[:ignore_jobs].any? { |str_or_regex| str_or_regex === name }
+    end
+
+    # Errors of a job listed in the job_attempt_threshold option are sent only
+    # once the job reached that attempt, which reduces the noise of retries.
+    def job_attempt_below_threshold?(name, attempt)
+      return false unless attempt && (thresholds = config[:job_attempt_threshold])
+      # Keys are symbols when the option comes from config/rorvswild.yml.
+      _, threshold = thresholds.find { |key, _| (key.is_a?(Symbol) ? key.to_s : key) === name }
+      threshold ? attempt < threshold.to_i : false
     end
 
     def ignored_exception?(exception)

@@ -38,5 +38,35 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
     assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob#perform", sections[0].command)
     assert(agent.current_execution.runtime > 0)
   end
-end
 
+  def test_attempt
+    assert_equal(1, RorVsWild::Plugin::Sidekiq.attempt({"class" => "SampleJob"}))
+    assert_equal(2, RorVsWild::Plugin::Sidekiq.attempt({"class" => "SampleJob", "retry_count" => 0}))
+    assert_equal(5, RorVsWild::Plugin::Sidekiq.attempt({"class" => "SampleJob", "retry_count" => 3}))
+    wrapped = {"class" => "Wrapper", "wrapped" => "SampleJob", "args" => [{"executions" => 2}]}
+    assert_equal(3, RorVsWild::Plugin::Sidekiq.attempt(wrapped))
+    assert_equal(4, RorVsWild::Plugin::Sidekiq.attempt(wrapped.merge("retry_count" => 0)))
+  end
+
+  def test_callback_on_exception_below_attempt_threshold
+    agent.config[:job_attempt_threshold] = {"RorVsWild::Plugin::SidekiqTest::SampleJob" => 2}
+    agent.expects(:queue_job)
+    middleware = RorVsWild::Plugin::Sidekiq.new
+    item = {"class" => SampleJob.name, "args" => [false]}
+    assert_raises(RuntimeError) { middleware.call(SampleJob.new, item, "default") { SampleJob.new.perform(false) } }
+    refute(agent.current_execution.error, "First attempt should not send the error")
+  ensure
+    agent.config.delete(:job_attempt_threshold)
+  end
+
+  def test_callback_on_exception_at_attempt_threshold
+    agent.config[:job_attempt_threshold] = {"RorVsWild::Plugin::SidekiqTest::SampleJob" => 2}
+    agent.expects(:queue_job)
+    middleware = RorVsWild::Plugin::Sidekiq.new
+    item = {"class" => SampleJob.name, "args" => [false], "retry_count" => 0}
+    assert_raises(RuntimeError) { middleware.call(SampleJob.new, item, "default") { SampleJob.new.perform(false) } }
+    assert_equal([false], agent.current_execution.error.as_json[:parameters])
+  ensure
+    agent.config.delete(:job_attempt_threshold)
+  end
+end

@@ -39,6 +39,10 @@ production:
   ignore_jobs:
     - SecretJob
 
+  # Send errors of the following jobs only from the given attempt (reduces the noise of retries).
+  # job_attempt_threshold:
+  #   RetriedJob: 4
+
   # Do not monitor the following exceptions.
   ignore_exceptions:
     # Noisy exceptions such as ActionNotFound, UnknownHttpMethod, etc are ignored by default.

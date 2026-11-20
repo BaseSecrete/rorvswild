@@ -11,7 +11,7 @@ module RorVsWild
       end
 
       def self.around_perform(job, block)
-        RorVsWild.agent.measure_job(job.class.name, parameters: job.arguments) do
+        RorVsWild.agent.measure_job(job.class.name, parameters: job.arguments, attempt: job.executions) do
           begin
             section = RorVsWild::Section.start
             section.commands << "#{job.class}#perform"
