@@ -17,8 +17,10 @@ module RorVsWild
 
       def call(worker, item, queue, &block)
         # Wrapped contains the real class name of the ActiveJob wrapper
-        name = item["wrapped".freeze] || item["class".freeze]
-        RorVsWild.agent.measure_job(name, parameters: item["args".freeze]) do
+        name = item["wrapped"] || item["class"]
+        # Sidekiq omits retry_count on the first run, then sets it to 0 on the first retry.
+        attempt = item.key?("retry_count") ? item["retry_count"].to_i + 2 : 1
+        RorVsWild.agent.measure_job(name, parameters: item["args"], attempt: attempt) do
           RorVsWild::Section.measure do |section|
             section.commands << "#{name}#perform"
             if perform_method = worker.method(:perform)

@@ -60,4 +60,20 @@ class RorVsWild::Plugin::ActiveJobTest < Minitest::Test
     refute(agent.current_execution.error, "Retried error should be ignored")
     assert_equal("RorVsWild::Plugin::ActiveJobTest::SampleJob", agent.current_execution.name)
   end
+
+  def test_attempt_threshold_mutes_early_executions
+    agent.instance_variable_set(:@job_attempt_thresholds, [[SampleJob.name, 3]])
+    job = SampleJob.new("Error")
+    job.executions = 1
+    assert_raises { job.perform_now }
+    refute(agent.current_execution.error)
+  end
+
+  def test_attempt_threshold_reports_when_reached
+    agent.instance_variable_set(:@job_attempt_thresholds, [[SampleJob.name, 2]])
+    job = SampleJob.new("Error")
+    job.executions = 1 # perform_now increments to 2
+    assert_raises { job.perform_now }
+    assert(agent.current_execution.error)
+  end
 end

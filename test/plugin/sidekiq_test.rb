@@ -38,5 +38,32 @@ class RorVsWild::Plugin::SidekiqTest < Minitest::Test
     assert_equal("RorVsWild::Plugin::SidekiqTest::SampleJob#perform", sections[0].command)
     assert(agent.current_execution.runtime > 0)
   end
+
+  def test_attempt_threshold_mutes_first_attempt
+    @agent = initialize_agent(job_attempt_threshold: {SampleJob.name => 2})
+    agent.expects(:queue_job)
+    middleware = RorVsWild::Plugin::Sidekiq.new
+    item = {"class" => SampleJob.name, "args" => [false]}
+    assert_raises { middleware.call(SampleJob.new, item, "default") { raise "boom" } }
+    refute(agent.current_execution.error)
+  end
+
+  def test_attempt_threshold_mutes_early_retries
+    @agent = initialize_agent(job_attempt_threshold: {SampleJob.name => 3})
+    agent.expects(:queue_job)
+    middleware = RorVsWild::Plugin::Sidekiq.new
+    item = {"class" => SampleJob.name, "args" => [false], "retry_count" => 0}
+    assert_raises { middleware.call(SampleJob.new, item, "default") { raise "boom" } }
+    refute(agent.current_execution.error)
+  end
+
+  def test_attempt_threshold_reports_when_reached
+    @agent = initialize_agent(job_attempt_threshold: {SampleJob.name => 3})
+    agent.expects(:queue_job)
+    middleware = RorVsWild::Plugin::Sidekiq.new
+    item = {"class" => SampleJob.name, "args" => [false], "retry_count" => 1}
+    assert_raises { middleware.call(SampleJob.new, item, "default") { raise "boom" } }
+    assert(agent.current_execution.error)
+  end
 end
 

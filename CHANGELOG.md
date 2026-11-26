@@ -1,5 +1,15 @@
 # Changelog of RorVsWild
 
+* Mute job errors until the attempt reaches a configured threshold
+  Use `job_attempt_threshold` to delay reporting until retry N (1-indexed).
+  Keys can be a job class name or a regular expression:
+  ```yaml
+  job_attempt_threshold:
+    FooJob: 4
+    !ruby/regexp '/BarJob/': 5
+  ```
+  Supported by Active Job, Sidekiq, Delayed Job, and Faktory.
+
 ## 1.12.2 (2026-10-02)
 
 * Fix server names for Kamal and Scalingo

@@ -18,7 +18,8 @@ module RorVsWild
               else
                 job_name, job_args = job.name, job.payload_object
               end
-              RorVsWild.agent.measure_job(job_name, parameters: job_args) { block.call(job) }
+              attempt = (job.attempts || 0) + 1 # attempts is the number of prior failures
+              RorVsWild.agent.measure_job(job_name, parameters: job_args, attempt: attempt) { block.call(job) }
             end
           end
         end
