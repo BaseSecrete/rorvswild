@@ -11,6 +11,7 @@ module RorVsWild
         ignore_requests: [],
         ignore_plugins: [],
         ignore_jobs: [],
+        job_attempt_threshold: {},
       }
     end
 
@@ -26,6 +27,9 @@ module RorVsWild
 
     def initialize(config)
       @config = self.class.default_config.merge(config)
+      @job_attempt_thresholds = (@config[:job_attempt_threshold] || {}).map do |key, value|
+        [key.is_a?(Regexp) ? key : key.to_s, value.to_i]
+      end
       load_features
       @client = Client.new(@config)
       @queue = config[:queue] || Queue.new(client)
@@ -96,14 +100,14 @@ module RorVsWild
       end
     end
 
-    def measure_job(name, parameters: nil, &block)
+    def measure_job(name, parameters: nil, attempt: nil, &block)
       return measure_section(name, &block) if current_execution # For recursive jobs
       return block.call if ignored_job?(name)
       start_execution(Execution::Job.new(name, parameters))
       begin
         block.call
       rescue Exception => ex
-        current_execution.add_exception(ex)
+        current_execution.add_exception(ex) if !attempt || !muted_job_error?(name, attempt)
         raise
       ensure
         stop_execution
@@ -162,6 +166,14 @@ module RorVsWild
       return false unless config[:ignore_exceptions]
       class_name = exception.class.to_s
       config[:ignore_exceptions].any? { |str_or_regex| str_or_regex === class_name }
+    end
+
+    def muted_job_error?(name, attempt)
+      if threshold = @job_attempt_thresholds.find { |str_or_regex, _| str_or_regex === name }&.last
+        attempt < threshold
+      else
+        false
+      end
     end
 
     #######################

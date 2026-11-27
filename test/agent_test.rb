@@ -114,6 +114,27 @@ class RorVsWild::AgentTest < Minitest::Test
     refute(agent.ignored_job?("ApplicationJob"))
   end
 
+  def test_measure_job_mutes_error_below_attempt_threshold
+    @agent = initialize_agent(job_attempt_threshold: {"FooJob" => 3})
+    agent.expects(:queue_job)
+    assert_raises(RuntimeError) { agent.measure_job("FooJob", attempt: 2) { raise "boom" } }
+    refute(agent.current_execution.error)
+  end
+
+  def test_measure_job_reports_error_at_attempt_threshold
+    @agent = initialize_agent(job_attempt_threshold: {"FooJob" => 3})
+    agent.expects(:queue_job)
+    assert_raises(RuntimeError) { agent.measure_job("FooJob", attempt: 3) { raise "boom" } }
+    assert(agent.current_execution.error)
+  end
+
+  def test_measure_job_reports_error_when_attempt_unknown
+    @agent = initialize_agent(job_attempt_threshold: {"FooJob" => 3})
+    agent.expects(:queue_job)
+    assert_raises(RuntimeError) { agent.measure_job("FooJob") { raise "boom" } }
+    assert(agent.current_execution.error)
+  end
+
   def test_ignored_exception?
     agent = initialize_agent(ignore_exceptions: ["ZeroDivisionError"])
     assert(agent.ignored_exception?(ZeroDivisionError.new))

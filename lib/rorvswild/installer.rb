@@ -39,6 +39,13 @@ production:
   ignore_jobs:
     - SecretJob
 
+  # Mute job error alerts until the attempt reaches the given threshold (1-indexed).
+  # Keys can be a job class name or a regular expression.
+  # If threshold is above max attempts, no errors will be reported.
+  # job_attempt_threshold:
+  #   FooJob: 4
+  #   !ruby/regexp '/BarJob/': 5
+
   # Do not monitor the following exceptions.
   ignore_exceptions:
     # Noisy exceptions such as ActionNotFound, UnknownHttpMethod, etc are ignored by default.
