@@ -12,7 +12,7 @@ module RorVsWild
       end
 
       def call(worker_instance, job, &block)
-        custom = job["custom".freeze]
+        custom = job["custom"]
         name = (custom && custom["wrapped"]) || job["jobtype"]
         # Faktory omits failure on the first run, then sets failure.retry_count to 0 on the first retry.
         attempt = (failure = job["failure"]) ? failure["retry_count"].to_i + 2 : 1

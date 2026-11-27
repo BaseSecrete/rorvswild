@@ -41,6 +41,7 @@ production:
 
   # Mute job error alerts until the attempt reaches the given threshold (1-indexed).
   # Keys can be a job class name or a regular expression.
+  # If threshold is above max attempts, no errors will be reported.
   # job_attempt_threshold:
   #   FooJob: 4
   #   !ruby/regexp '/BarJob/': 5

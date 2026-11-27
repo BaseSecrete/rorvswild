@@ -1,7 +1,7 @@
 # Changelog of RorVsWild
 
 * Mute job errors until the attempt reaches a configured threshold
-  Use `job_attempt_threshold` to delay reporting until retry N (1-indexed).
+  Use `job_attempt_threshold` to delay reporting until attempt N.
   Keys can be a job class name or a regular expression:
   ```yaml
   job_attempt_threshold:
